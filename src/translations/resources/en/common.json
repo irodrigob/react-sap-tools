@@ -1,0 +1,124 @@
+{
+    "app": {
+        "title": "OCR de Facturas",
+        "noAuthTilesHome": "No tiene autorización para realizar ningúna acción"
+    },
+    "login": {
+        "page": {
+            "title": "Datos de acceso",
+            "lblUserName": "Usuario",
+            "PlhUserName": "Introduzca el usuario",
+            "lblPassword": "Contraseña",
+            "PlhPassword": "Introduzca la contraseña",
+            "btnSubmit": "Acceder",
+            "loginInProcess": "En proceso de autentificación..",
+            "loginNoAuth": "No tiene autorización",
+            "sessionExpired": "La sesión ha caducado, por favor, introduzca de nuevo sus credenciales",
+            "logOut": "Ha cerrado la sesión"
+        }
+    },
+    "invoice": {
+        "title": "Facturas",
+        "list": {
+            "title": "Listado de facturas",
+            "table": {
+                "header": {
+                    "fileName": "Nombre del fichero",
+                    "fileType": "Tipo de fichero",
+                    "createdDate": "Fecha creación",
+                    "userFullname": "Usuario",
+                    "statusDesc": "Status",
+                    "IDFile": "ID de fichero",
+                    "actions": "Acciones"
+                },
+                "pageOptions": {
+                    "all": "Todas",
+                    "rowPerPage": "Filas por página"
+                },
+                "noData": "No hay facturas"
+            },
+            "addInvoice": {
+                "success": "Se ha añadido la factura: &1"
+            },
+            "toolbar": {
+                "lblInvSelected": "Facturas seleccionada(s)",
+                "title": "Factura(s)",
+                "buttons": {
+                    "add": "Nueva factura",
+                    "delete": "Borrado de facturas",
+                    "refresh": "Refresco de nuevas facturas"
+                }
+            }
+        },
+        "upload": {
+            "title": "Nueva factura",
+            "textDropZone": "Arrastre y suelte una imagen aquí o haga click"
+        },
+        "training": {
+            "title": "Entrenamiento de la factura: &1",
+            "toolbar": {
+                "docId": "Doc ID:",
+                "buttons": {
+                    "delete": "Borrado de factura"
+                }
+            }
+        },
+        "popup": {
+            "delete": {
+                "title": "Borrado de facturas",
+                "mainText": "¿Estas seguro que desea borrar las &1 factura(s)?",
+                "singleMainText": "¿Estas seguro que desea borrar la factura?"
+            },
+            "button": {
+                "confirm": "Confirmar",
+                "cancel": "Cancelar"
+            }
+        },
+        "deleted": {
+            "ok": "Se ha borrado correctamente la factura '&1'"
+        },
+        "idInvoiceNotExist": "El ID de factura '&1' no existe"
+    },
+    "custo": {
+        "title": "Parametrización general"
+    },
+    "error": {
+        "extendedText": "Texto ampliado"
+    },
+    "containerTiles": {
+        "btnGoTile": "Ir a"
+    },
+    "topToolbar": {
+        "logout": "Cerrar sesión"
+    },
+    "authContext": {
+        "noAuthErrorPage": {
+            "title": "Sin autorización",
+            "message": "No tiene autorización para la págna '&1'",
+            "returnText": "Volver a la página inicial"
+        }
+    },
+    "handlerServiceError": {
+        "forbidden": {
+            "title": "Error al llamar el servicio: &1",
+            "mainText": "La llamada al servicio '&1' ha devuelto el siguiente mensaje de error: &2",
+            "returnText": "Volver a la página de autentificación"
+        },
+        "serverError": {
+            "title": "Error al llamar el servicio: &1",
+            "mainText": "La llamada al servicio '&1' ha devuelto el siguiente mensaje de error: &2",
+            "returnText": "Volver a la página de autentificación"
+        },
+        "backendDown": {
+            "message": "El sistema de backend no esta disponible."
+        }
+    },
+    "pagesTiles": {
+        "home": "Inicio",
+        "admin": "Administración",
+        "custo": "Parametrización",
+        "invoice": "Facturas",
+        "invoiceTrainingList": "Listado de facturas",
+        "invoiceTraining": "Entrenamiento de factura"
+    }
+}
