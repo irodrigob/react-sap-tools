@@ -1,3 +1,5 @@
+import { ValueState } from "@ui5/webcomponents-react";
+
 // Campos fijos en las propiedas de las columnas o catalogo de campos.
 export const COLUMN_PROPERTIES = {
   EDIT: "edit",
@@ -8,8 +10,11 @@ export const COLUMN_PROPERTIES = {
 export const INTERNAL_FIELDS_DATA = {
   EDITABLE: "catbl_editable",
   DELETABLE: "catbl_deletable",
-  ROW_EDITING: "catbl_row_editing",
-  ROW_TABIX: "catbl_row_tabix",
+  EDITING: "catbl_editing",
+  TABIX: "catbl_tabix",
+  ERROR: "catbl_errors",
+  PREFIX_VALUE_STATE: "catbl_valueState_",
+  PREFIX_VALUE_STATE_MESSAGE: "catbl_valueStateMessage_",
   PREFIX_ORIGINAL_VALUE: "catbl_original_value_",
   SUFFIX_EDIT: "_edit",
 };
@@ -40,4 +45,12 @@ export const ANALYTIC_TABLE = {
     ERROR: "Error",
     INFORMATION: "Information",
   },
+};
+
+// Estructura de campos para los errores a nivel de fila o columna con sus valores por defecto.
+export const DEFAULT_ROW_ERROR = {
+  tabix: 0,
+  column: "",
+  state: ValueState.None,
+  message: "",
 };

@@ -6,7 +6,6 @@ import {
   Icon,
   Input,
   ValueState,
-  Popover,
 } from "@ui5/webcomponents-react";
 import { styled } from "@mui/material/styles";
 import { TextField } from "@mui/material";
@@ -27,21 +26,14 @@ export default function CellEdit(props) {
   const { cell, row } = instance;
   const [valueState, setValueState] = useState(ValueState.None);
   const [valueStateMessage, setValueStateMessage] = useState("");
-  const [openValueState, setOpenValueState] = useState(false);
-  const [inputID, setInputID] = useState("");
-  const idUnique = useId();
+  const fieldCellValueState = `${INTERNAL_FIELDS_DATA.PREFIX_VALUE_STATE}${instance.cell.column.id}`;
+  const fieldCellValueStateMessage = `${INTERNAL_FIELDS_DATA.PREFIX_VALUE_STATE_MESSAGE}${instance.cell.column.id}`;
   // El ancho del input es la longitud de la columna - 20 para que quepa mejor en la celda.
   const inputWidth = useMemo(() => {
     return cell.column.originalWidth - 40;
   }, [cell.column.originalWidth]);
 
-  useEffect(() => {
-    if (valueState === ValueState.None) setOpenValueState(false);
-    else setOpenValueState(true);
-  }, [valueState]);
   /*
-
-
            
 <InputCustom
           value={cell.value}
@@ -58,20 +50,19 @@ export default function CellEdit(props) {
   */
   return (
     <>
-      {!row.original[INTERNAL_FIELDS_DATA.ROW_EDITING] && (
+      {!row.original[INTERNAL_FIELDS_DATA.EDITING] && (
         <Label>{cell.value}</Label>
       )}
-      {row.original[INTERNAL_FIELDS_DATA.ROW_EDITING] && (
+      {row.original[INTERNAL_FIELDS_DATA.EDITING] && (
         <Input
-          id={`${cell.column.id}_${idUnique}`}
           value={cell.value}
           required={required}
-          valueState={valueState}
-          valueStateMessage={<div>{valueStateMessage}</div>}
+          valueState={instance.row.original[fieldCellValueState]}
+          valueStateMessage={<Label>{"hola"}</Label>}
           onChange={(e) => {
             onChange(instance, e.target.value);
-            setValueState(ValueState.Error);
-            setValueStateMessage("campo obligatorio");
+            //setValueState(ValueState.Error);
+            //setValueStateMessage("campo obligatorio");
           }}
           style={{ minWidth: `${inputWidth}px` }}
         />

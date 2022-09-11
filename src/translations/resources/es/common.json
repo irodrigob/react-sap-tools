@@ -134,6 +134,9 @@
                 "confirmTooltip": "Confirmar",
                 "cancelTooltip": "Cancelar",
                 "deleteTooltip": "Borrar"
+            },
+            "validations": {
+                "fieldMandatory": "Campo obligatorio"
             }
         }
     }

@@ -1,4 +1,5 @@
 import { useCallback, useState } from "react";
+import { ValueState } from "@ui5/webcomponents-react";
 import {
   COLUMN_PROPERTIES,
   DEFAULT_TABLE_PROPS,
@@ -40,7 +41,7 @@ export default function useDataManager() {
       var newRow = {
         ...row,
       };
-      newRow[INTERNAL_FIELDS_DATA.ROW_TABIX] = tabix;
+      newRow[INTERNAL_FIELDS_DATA.TABIX] = tabix;
       tabix += 1;
 
       // Si el campo que permite indicar el borrado de la fila la añado en base a la prop global
@@ -53,7 +54,7 @@ export default function useDataManager() {
       // Si es editable y además hay columnas que son editables se añaden los siguientes campos al modelo
       if (tableProps.allowEdit && editColumns.length > 0) {
         // Campo para indicar si la fila se esta editando.
-        newRow = { ...newRow, [INTERNAL_FIELDS_DATA.ROW_EDITING]: false };
+        newRow = { ...newRow, [INTERNAL_FIELDS_DATA.EDITING]: false };
 
         // Campo que indica si la fila puede ser editable. Esto servirá para mostrar o no el icono de edición
         if (INTERNAL_FIELDS_DATA.EDITABLE in newRow === false)
@@ -71,6 +72,8 @@ export default function useDataManager() {
           };
       }
 
+      newRow = { ...newRow, [INTERNAL_FIELDS_DATA.ERRORS]: [] };
+
       // Pongo las propiedades según los valores de la tabla
 
       if (newRow[INTERNAL_FIELDS_DATA.EDITABLE])
@@ -85,14 +88,20 @@ export default function useDataManager() {
         newValuesProperties.showRowHighLight = true;
 
       editColumns.forEach((column) => {
-        // Se añade un campo con el mismo nombre el cual editable añadiendo el sufijo "_edit" y
-        // el campo con el valor original
+        // Se añade un campo con el mismo nombre al cual se le añádira el sufijo "_edit", esto permitira
+        // en el modo edición saber si se tiene que poner un campo input.
+        // Otro campo para tener el valor original
+        // Dos campos para controlar si hay error en esos campos.
         newRow = {
           ...newRow,
           [column.accessor + INTERNAL_FIELDS_DATA.SUFFIX_EDIT]:
             column[COLUMN_PROPERTIES.EDIT],
           [INTERNAL_FIELDS_DATA.PREFIX_ORIGINAL_VALUE + column.accessor]:
             newRow[column.accessor],
+          [INTERNAL_FIELDS_DATA.PREFIX_VALUE_STATE + column.accessor]:
+            ValueState.None,
+          [INTERNAL_FIELDS_DATA.PREFIX_VALUE_STATE_MESSAGE + column.accessor]:
+            "",
         };
       });
 
@@ -147,7 +156,7 @@ export default function useDataManager() {
    */
   const disableRowEditing = useCallback((data, index) => {
     let newTable = [...data];
-    newTable[index][INTERNAL_FIELDS_DATA.ROW_EDITING] = false;
+    newTable[index][INTERNAL_FIELDS_DATA.EDITING] = false;
     return newTable;
   }, []);
 
@@ -159,7 +168,7 @@ export default function useDataManager() {
    */
   const enabledRowEditing = useCallback((data, index) => {
     let newTable = [...data];
-    newTable[index][INTERNAL_FIELDS_DATA.ROW_EDITING] = true;
+    newTable[index][INTERNAL_FIELDS_DATA.EDITING] = true;
     return newTable;
   }, []);
 

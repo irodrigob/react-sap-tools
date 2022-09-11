@@ -121,17 +121,11 @@ export default function useCustomAnalyticTable() {
                 instance={instance}
                 required={newColumn[COLUMN_PROPERTIES.REQUIRED]}
                 onChange={(instance, cellValue) => {
-                  cellValidations(
-                    tableValues,
-                    instance,
-                    instance.row.original[INTERNAL_FIELDS_DATA.ROW_TABIX],
-                    instance.cell.column.id,
-                    cellValue
-                  );
+                  cellValidations(instance, cellValue);
                   //setTableValues();
                   updateCellValue(
                     tableValues,
-                    instance.row.original[INTERNAL_FIELDS_DATA.ROW_TABIX],
+                    instance.row.original[INTERNAL_FIELDS_DATA.TABIX],
                     instance.cell.column.id,
                     cellValue
                   );
@@ -204,7 +198,7 @@ export default function useCustomAnalyticTable() {
       setTableValues(
         enabledRowEditing(
           tableValues,
-          instance.row.original[INTERNAL_FIELDS_DATA.ROW_TABIX]
+          instance.row.original[INTERNAL_FIELDS_DATA.TABIX]
         )
       );
     },
@@ -224,11 +218,11 @@ export default function useCustomAnalyticTable() {
           disableRowEditing(
             undoRowDataChanged(
               tableValues,
-              instance.row.original[INTERNAL_FIELDS_DATA.ROW_TABIX]
+              instance.row.original[INTERNAL_FIELDS_DATA.TABIX]
             ),
-            instance.row.original[INTERNAL_FIELDS_DATA.ROW_TABIX]
+            instance.row.original[INTERNAL_FIELDS_DATA.TABIX]
           ),
-          instance.row.original[INTERNAL_FIELDS_DATA.ROW_TABIX],
+          instance.row.original[INTERNAL_FIELDS_DATA.TABIX],
           ANALYTIC_TABLE.ROW_HIGHLIGHT.NONE
         )
       );
@@ -251,9 +245,9 @@ export default function useCustomAnalyticTable() {
       //let newTable = [...tableValues];
 
       let originalRow =
-        originalValues[instance.row.original[INTERNAL_FIELDS_DATA.ROW_TABIX]];
+        originalValues[instance.row.original[INTERNAL_FIELDS_DATA.TABIX]];
       let changedRow =
-        tableValues[instance.row.original[INTERNAL_FIELDS_DATA.ROW_TABIX]];
+        tableValues[instance.row.original[INTERNAL_FIELDS_DATA.TABIX]];
       let updateRow = {};
 
       for (const key in originalRow) {
@@ -268,11 +262,11 @@ export default function useCustomAnalyticTable() {
               disableRowEditing(
                 updateOriginalData(
                   tableValues,
-                  instance.row.original[INTERNAL_FIELDS_DATA.ROW_TABIX]
+                  instance.row.original[INTERNAL_FIELDS_DATA.TABIX]
                 ),
-                instance.row.original[INTERNAL_FIELDS_DATA.ROW_TABIX]
+                instance.row.original[INTERNAL_FIELDS_DATA.TABIX]
               ),
-              instance.row.original[INTERNAL_FIELDS_DATA.ROW_TABIX],
+              instance.row.original[INTERNAL_FIELDS_DATA.TABIX],
               ANALYTIC_TABLE.ROW_HIGHLIGHT.NONE
             )
           );
@@ -281,7 +275,7 @@ export default function useCustomAnalyticTable() {
           setTableValues(
             setStatusRow(
               tableValues,
-              instance.row.original[INTERNAL_FIELDS_DATA.ROW_TABIX],
+              instance.row.original[INTERNAL_FIELDS_DATA.TABIX],
               ANALYTIC_TABLE.ROW_HIGHLIGHT.ERROR
             )
           );

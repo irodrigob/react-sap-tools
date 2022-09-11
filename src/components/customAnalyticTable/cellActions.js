@@ -15,18 +15,18 @@ export default function CellActions(props) {
   return (
     <FlexBox>
       {row.original[INTERNAL_FIELDS_DATA.EDITABLE] &&
-        !row.original[INTERNAL_FIELDS_DATA.ROW_EDITING] && (
+        !row.original[INTERNAL_FIELDS_DATA.EDITING] && (
           <IconInteractive
             name="edit"
             onClick={onClickEdit}
             showTooltip={true}
             accessibleName={getI18nText(
-              "customAnalyticTable.localization.editRow.editTooltip"
+              "customAnalyticTable.localization.body.editRow.editTooltip"
             )}
           />
         )}
       {row.original[INTERNAL_FIELDS_DATA.DELETABLE] &&
-        !row.original[INTERNAL_FIELDS_DATA.ROW_EDITING] && (
+        !row.original[INTERNAL_FIELDS_DATA.EDITING] && (
           <IconInteractive
             name="delete"
             onClick={() => {}}
@@ -37,7 +37,7 @@ export default function CellActions(props) {
             )}
           />
         )}
-      {row.original[INTERNAL_FIELDS_DATA.ROW_EDITING] && (
+      {row.original[INTERNAL_FIELDS_DATA.EDITING] && (
         <IconInteractive
           name="accept"
           onClick={onClickAccept}
@@ -47,7 +47,7 @@ export default function CellActions(props) {
           )}
         />
       )}
-      {row.original[INTERNAL_FIELDS_DATA.ROW_EDITING] && (
+      {row.original[INTERNAL_FIELDS_DATA.EDITING] && (
         <IconInteractive
           name="decline"
           onClick={onClickDecline}
