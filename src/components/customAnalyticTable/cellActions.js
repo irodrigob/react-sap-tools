@@ -21,7 +21,7 @@ export default function CellActions(props) {
             onClick={onClickEdit}
             showTooltip={true}
             accessibleName={getI18nText(
-              "customAnalyticTable.localization.body.editRow.editTooltip"
+              "customAnalyticTable.localization.editRow.editTooltip"
             )}
           />
         )}

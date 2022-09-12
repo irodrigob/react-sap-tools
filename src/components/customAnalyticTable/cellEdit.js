@@ -26,8 +26,14 @@ export default function CellEdit(props) {
   const { cell, row } = instance;
   const [valueState, setValueState] = useState(ValueState.None);
   const [valueStateMessage, setValueStateMessage] = useState("");
-  const fieldCellValueState = `${INTERNAL_FIELDS_DATA.PREFIX_VALUE_STATE}${instance.cell.column.id}`;
-  const fieldCellValueStateMessage = `${INTERNAL_FIELDS_DATA.PREFIX_VALUE_STATE_MESSAGE}${instance.cell.column.id}`;
+
+  const fieldCellValueState = useMemo(() => {
+    return `${INTERNAL_FIELDS_DATA.PREFIX_VALUE_STATE}${instance.cell.column.id}`;
+  }, []);
+  const fieldCellValueStateMessage = useMemo(() => {
+    return `${INTERNAL_FIELDS_DATA.PREFIX_VALUE_STATE_MESSAGE}${instance.cell.column.id}`;
+  }, []);
+
   // El ancho del input es la longitud de la columna - 20 para que quepa mejor en la celda.
   const inputWidth = useMemo(() => {
     return cell.column.originalWidth - 40;
@@ -58,7 +64,7 @@ export default function CellEdit(props) {
           value={cell.value}
           required={required}
           valueState={instance.row.original[fieldCellValueState]}
-          valueStateMessage={<Label>{"hola"}</Label>}
+          valueStateMessage={<Label>{fieldCellValueStateMessage}</Label>}
           onChange={(e) => {
             onChange(instance, e.target.value);
             //setValueState(ValueState.Error);

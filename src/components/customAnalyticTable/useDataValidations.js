@@ -3,7 +3,7 @@ import { ValueState } from "@ui5/webcomponents-react";
 import {
   COLUMN_PROPERTIES,
   INTERNAL_FIELDS_DATA,
-  DEFAULT_ROW_ERROR,
+  DEFAULT_ROW_VALIDATIONS,
 } from "./constants";
 import { useTranslations } from "translations/i18nContext";
 
@@ -17,7 +17,10 @@ export default function useDataValidations() {
    * @returns Objeto con el resultado de la validación
    */
   const cellValidations = useCallback((instance, cellValue) => {
-    let cellError = { ...DEFAULT_ROW_ERROR, column: instance.cell.column.id };
+    let cellValidation = {
+      ...DEFAULT_ROW_VALIDATIONS,
+      column: instance.cell.column.id,
+    };
 
     /*
     La estructura de error que tiene que devolver las funciones que se llaman son muy simple:
@@ -37,11 +40,11 @@ export default function useDataValidations() {
     ) {
       // Siguientes validaciones
     } else {
-      cellError.state = validationReturn.state;
-      cellError.message = validationReturn.message;
+      cellValidation.state = validationReturn.state;
+      cellValidation.message = validationReturn.message;
     }
 
-    return cellError;
+    return cellValidation;
   }, []);
 
   const fieldMandatory = useCallback((instance, cellValue) => {

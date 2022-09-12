@@ -1,4 +1,5 @@
 import { useState, useCallback, useEffect } from "react";
+import { ValueState } from "@ui5/webcomponents-react";
 import CellActions from "./cellActions";
 import CellEdit from "./cellEdit";
 import {
@@ -27,6 +28,8 @@ export default function useCustomAnalyticTable() {
     enabledRowEditing,
     updateOriginalData,
     setStatusRow,
+    getTabix,
+    propagateValidation,
   } = useDataManager();
   const { cellValidations } = useDataValidations();
 
@@ -121,14 +124,25 @@ export default function useCustomAnalyticTable() {
                 instance={instance}
                 required={newColumn[COLUMN_PROPERTIES.REQUIRED]}
                 onChange={(instance, cellValue) => {
-                  cellValidations(instance, cellValue);
-                  //setTableValues();
-                  updateCellValue(
-                    tableValues,
-                    instance.row.original[INTERNAL_FIELDS_DATA.TABIX],
-                    instance.cell.column.id,
-                    cellValue
+                  let returnValidations = cellValidations(instance, cellValue);
+
+                  setTableValues(
+                    propagateValidation(
+                      tableValues,
+                      getTabix(instance),
+                      returnValidations
+                    )
                   );
+
+                  if (returnValidations.state != ValueState.Error)
+                    setTableValues(
+                      updateCellValue(
+                        tableValues,
+                        getTabix(instance),
+                        instance.cell.column.id,
+                        cellValue
+                      )
+                    );
                 }}
               />
             );
@@ -195,12 +209,7 @@ export default function useCustomAnalyticTable() {
    */
   const actionActiveEditRow = useCallback(
     (instance) => {
-      setTableValues(
-        enabledRowEditing(
-          tableValues,
-          instance.row.original[INTERNAL_FIELDS_DATA.TABIX]
-        )
-      );
+      setTableValues(enabledRowEditing(tableValues, getTabix(instance)));
     },
     [tableValues]
   );
@@ -216,13 +225,10 @@ export default function useCustomAnalyticTable() {
       setTableValues(
         setStatusRow(
           disableRowEditing(
-            undoRowDataChanged(
-              tableValues,
-              instance.row.original[INTERNAL_FIELDS_DATA.TABIX]
-            ),
-            instance.row.original[INTERNAL_FIELDS_DATA.TABIX]
+            undoRowDataChanged(tableValues, getTabix(instance)),
+            getTabix(instance)
           ),
-          instance.row.original[INTERNAL_FIELDS_DATA.TABIX],
+          getTabix(instance),
           ANALYTIC_TABLE.ROW_HIGHLIGHT.NONE
         )
       );
@@ -244,10 +250,8 @@ export default function useCustomAnalyticTable() {
     (instance, propsEditable) => {
       //let newTable = [...tableValues];
 
-      let originalRow =
-        originalValues[instance.row.original[INTERNAL_FIELDS_DATA.TABIX]];
-      let changedRow =
-        tableValues[instance.row.original[INTERNAL_FIELDS_DATA.TABIX]];
+      let originalRow = originalValues[getTabix(instance)];
+      let changedRow = tableValues[getTabix(instance)];
       let updateRow = {};
 
       for (const key in originalRow) {
@@ -260,13 +264,10 @@ export default function useCustomAnalyticTable() {
           setTableValues(
             setStatusRow(
               disableRowEditing(
-                updateOriginalData(
-                  tableValues,
-                  instance.row.original[INTERNAL_FIELDS_DATA.TABIX]
-                ),
-                instance.row.original[INTERNAL_FIELDS_DATA.TABIX]
+                updateOriginalData(tableValues, getTabix(instance)),
+                getTabix(instance)
               ),
-              instance.row.original[INTERNAL_FIELDS_DATA.TABIX],
+              getTabix(instance),
               ANALYTIC_TABLE.ROW_HIGHLIGHT.NONE
             )
           );
@@ -275,7 +276,7 @@ export default function useCustomAnalyticTable() {
           setTableValues(
             setStatusRow(
               tableValues,
-              instance.row.original[INTERNAL_FIELDS_DATA.TABIX],
+              getTabix(instance),
               ANALYTIC_TABLE.ROW_HIGHLIGHT.ERROR
             )
           );

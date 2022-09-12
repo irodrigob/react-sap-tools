@@ -72,7 +72,7 @@ export default function useDataManager() {
           };
       }
 
-      newRow = { ...newRow, [INTERNAL_FIELDS_DATA.ERRORS]: [] };
+      newRow = { ...newRow, [INTERNAL_FIELDS_DATA.VALIDATIONS]: [] };
 
       // Pongo las propiedades según los valores de la tabla
 
@@ -174,8 +174,8 @@ export default function useDataManager() {
 
   /**
    * Actualiza los datos original con los datos modificados.
-   * @param {array} data
-   * @param {number} index
+   * @param {array} data | Valores
+   * @param {number} index | Indice
    * @returns Array con los valores actualizados
    */
   const updateOriginalData = useCallback(
@@ -197,8 +197,8 @@ export default function useDataManager() {
 
   /**
    * Informa un status en una fila en concreto.
-   * @param {array} data
-   * @param {number} index
+   * @param {array} data | Valores
+   * @param {number} index | Indice
    * @param {string} status
    * @returns Array con los valores actualizados
    */
@@ -211,6 +211,51 @@ export default function useDataManager() {
     );
   };
 
+  /**
+   * Propaga la validación en el registro de la tabla de datos
+   * @param {Array} data | Valores
+   * @param {number} index | Indice
+   * @param {object} returnValidation
+   * @returns Array con los valores actualizados
+   */
+  const propagateValidation = (data, index, returnValidation) => {
+    let newTable = [...data];
+    let newRow = newTable[index];
+
+    // Primero vamos a borrar los registros existentes para la columna (si esta en blanco es a nivel general)
+    let findIndex = 0;
+    while (index != -1) {
+      findIndex = newTable[index][INTERNAL_FIELDS_DATA.VALIDATIONS].findIndex(
+        (row) => row.column == returnValidation.column
+      );
+      if (findIndex != -1)
+        newTable[index][INTERNAL_FIELDS_DATA.VALIDATIONS].splice(
+          findIndex,
+          findIndex >= 0 ? 1 : 0
+        );
+    }
+
+    // Por último añadimos si el estado es distinto de note
+    if (returnValidation.state != ValueState.None) {
+      newTable[index][INTERNAL_FIELDS_DATA.VALIDATIONS].push(returnValidation);
+      const fieldCellValueState = `${INTERNAL_FIELDS_DATA.PREFIX_VALUE_STATE}${returnValidation.column}`;
+      const fieldCellValueStateMessage = `${INTERNAL_FIELDS_DATA.PREFIX_VALUE_STATE_MESSAGE}${returnValidation.column}`;
+      newTable[index][fieldCellValueState] = returnValidation.state;
+      newTable[index][fieldCellValueStateMessage] = returnValidation.message;
+    }
+
+    return newTable;
+  };
+
+  /**
+   *
+   * @param {object} instance | Objeto con todos los datos de la tabla
+   * @returns Indice del registro.
+   */
+  const getTabix = (instance) => {
+    return instance.row.original[INTERNAL_FIELDS_DATA.TABIX];
+  };
+
   return {
     fillData,
     updateCellValue,
@@ -220,5 +265,7 @@ export default function useDataManager() {
     enabledRowEditing,
     updateOriginalData,
     setStatusRow,
+    getTabix,
+    propagateValidation,
   };
 }

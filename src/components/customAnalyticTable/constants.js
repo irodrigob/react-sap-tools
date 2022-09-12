@@ -12,7 +12,7 @@ export const INTERNAL_FIELDS_DATA = {
   DELETABLE: "catbl_deletable",
   EDITING: "catbl_editing",
   TABIX: "catbl_tabix",
-  ERROR: "catbl_errors",
+  ERROR: "catbl_validations",
   PREFIX_VALUE_STATE: "catbl_valueState_",
   PREFIX_VALUE_STATE_MESSAGE: "catbl_valueStateMessage_",
   PREFIX_ORIGINAL_VALUE: "catbl_original_value_",
@@ -48,8 +48,7 @@ export const ANALYTIC_TABLE = {
 };
 
 // Estructura de campos para los errores a nivel de fila o columna con sus valores por defecto.
-export const DEFAULT_ROW_ERROR = {
-  tabix: 0,
+export const DEFAULT_ROW_VALIDATIONS = {
   column: "",
   state: ValueState.None,
   message: "",
