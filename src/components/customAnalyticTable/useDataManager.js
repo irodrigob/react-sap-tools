@@ -224,7 +224,7 @@ export default function useDataManager() {
 
     // Primero vamos a borrar los registros existentes para la columna (si esta en blanco es a nivel general)
     let findIndex = 0;
-    while (index != -1) {
+    while (findIndex != -1) {
       findIndex = newTable[index][INTERNAL_FIELDS_DATA.VALIDATIONS].findIndex(
         (row) => row.column == returnValidation.column
       );

@@ -53,3 +53,5 @@ export const DEFAULT_ROW_VALIDATIONS = {
   state: ValueState.None,
   message: "",
 };
+
+export const DEFAULT_SINGLE_VALIDATION = { state: "", message: "" };

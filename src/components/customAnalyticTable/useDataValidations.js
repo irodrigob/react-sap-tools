@@ -4,6 +4,7 @@ import {
   COLUMN_PROPERTIES,
   INTERNAL_FIELDS_DATA,
   DEFAULT_ROW_VALIDATIONS,
+  DEFAULT_SINGLE_VALIDATION,
 } from "./constants";
 import { useTranslations } from "translations/i18nContext";
 
@@ -29,10 +30,11 @@ export default function useDataValidations() {
       message:"" --> Campos string
     }
     */
-    let validationReturn = { state: "", message: "" };
+    let validationReturn = DEFAULT_SINGLE_VALIDATION;
 
-    if (instance.cell.column.required)
-      validationReturn = fieldMandatory(instance, cellValue);
+    if (instance.cell.column.required === true) {
+      fieldMandatory(instance, cellValue);
+    }
 
     if (
       validationReturn.state === "" ||
@@ -48,14 +50,14 @@ export default function useDataValidations() {
   }, []);
 
   const fieldMandatory = useCallback((instance, cellValue) => {
-    if (cellValue == "") {
+    if (cellValue == "")
       return {
         state: ValueState.Error,
         message: getI18nText(
           "customAnalyticTable.localization.validations.fieldMandatory"
         ),
       };
-    }
+    else return DEFAULT_SINGLE_VALIDATION;
   }, []);
 
   return { cellValidations };
