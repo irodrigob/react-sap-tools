@@ -1,16 +1,13 @@
 import { useCallback, useEffect, useRef } from "react";
 import AppBar from "@mui/material/AppBar";
 import Toolbar from "@mui/material/Toolbar";
-import Typography from "@mui/material/Typography";
 import { Button, Text } from "@ui5/webcomponents-react";
 import "@ui5/webcomponents-icons/dist/menu2";
 import "@ui5/webcomponents-icons/dist/account";
 import Grid from "@mui/material/Unstable_Grid2";
-import { toast } from "react-toastify";
 import UserAvatar from "./userAvatar";
 import SystemSelect2 from "components/systemSelect/systemSelect2";
 import { useSession } from "auth/authProvider";
-import useSystems from "hooks/useSystems";
 import { useTranslations } from "translations/i18nContext";
 
 export default function AppTopToolbar() {

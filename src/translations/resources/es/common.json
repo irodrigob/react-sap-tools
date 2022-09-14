@@ -136,7 +136,8 @@
                 "deleteTooltip": "Borrar"
             },
             "validations": {
-                "fieldMandatory": "Campo obligatorio"
+                "fieldMandatory": "Campo obligatorio",
+                "rowWithErrors": "Debe corregir los errores de la fila antes de poder grabar"
             }
         }
     }

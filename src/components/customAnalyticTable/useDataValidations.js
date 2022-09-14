@@ -33,7 +33,7 @@ export default function useDataValidations() {
     let validationReturn = DEFAULT_SINGLE_VALIDATION;
 
     if (instance.cell.column.required === true) {
-      fieldMandatory(instance, cellValue);
+      validationReturn = fieldMandatory(instance, cellValue);
     }
 
     if (

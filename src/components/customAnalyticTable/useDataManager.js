@@ -218,7 +218,7 @@ export default function useDataManager() {
    * @param {object} returnValidation
    * @returns Array con los valores actualizados
    */
-  const propagateValidation = (data, index, returnValidation) => {
+  const propagateValidation = useCallback((data, index, returnValidation) => {
     let newTable = [...data];
     let newRow = newTable[index];
 
@@ -245,6 +245,20 @@ export default function useDataManager() {
     }
 
     return newTable;
+  }, []);
+  /**
+   *
+   * @param {object} instance | Instancia con los datos de la tabla
+   * @returns | Booleano indicando si hay error.
+   */
+  const existErrorInRow = (instance) => {
+    if (
+      instance.row.original[INTERNAL_FIELDS_DATA.VALIDATIONS].find(
+        (row) => row.state === ValueState.Error
+      )
+    )
+      return true;
+    else return false;
   };
 
   /**
@@ -253,7 +267,8 @@ export default function useDataManager() {
    * @returns Indice del registro.
    */
   const getTabix = (instance) => {
-    return instance.row.original[INTERNAL_FIELDS_DATA.TABIX];
+    //instance.row.original[INTERNAL_FIELDS_DATA.TABIX]
+    return instance.cell.row.index;
   };
 
   return {
@@ -267,5 +282,6 @@ export default function useDataManager() {
     setStatusRow,
     getTabix,
     propagateValidation,
+    existErrorInRow,
   };
 }

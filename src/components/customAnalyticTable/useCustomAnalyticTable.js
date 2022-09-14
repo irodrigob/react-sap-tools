@@ -6,10 +6,10 @@ import {
   COLUMN_PROPERTIES,
   DEFAULT_TABLE_PROPS,
   DEFAULT_VALUES_PROPERTIES,
-  INTERNAL_FIELDS_DATA,
   ANALYTIC_TABLE,
 } from "./constants";
 import { useTranslations } from "translations/i18nContext";
+import { showToast, MESSAGE } from "utils/general/message";
 import useDataManager from "./useDataManager";
 import useDataValidations from "./useDataValidations";
 
@@ -30,6 +30,7 @@ export default function useCustomAnalyticTable() {
     setStatusRow,
     getTabix,
     propagateValidation,
+    existErrorInRow,
   } = useDataManager();
   const { cellValidations } = useDataValidations();
 
@@ -248,39 +249,46 @@ export default function useCustomAnalyticTable() {
 
   const actionConfirmEditRow = useCallback(
     (instance, propsEditable) => {
-      //let newTable = [...tableValues];
+      if (existErrorInRow(instance)) {
+        showToast(
+          getI18nText(
+            "customAnalyticTable.localization.validations.rowWithErrors"
+          ),
+          MESSAGE.TYPE.INFO
+        );
+      } else {
+        let originalRow = originalValues[getTabix(instance)];
+        let changedRow = tableValues[getTabix(instance)];
+        let updateRow = {};
 
-      let originalRow = originalValues[getTabix(instance)];
-      let changedRow = tableValues[getTabix(instance)];
-      let updateRow = {};
-
-      for (const key in originalRow) {
-        // Los campos que comiencen por "__" son internos de objeto y no voy a copiarlo.
-        if (key.substring(0, 2) != "__") updateRow[key] = changedRow[key];
+        for (const key in originalRow) {
+          // Los campos que comiencen por "__" son internos de objeto y no voy a copiarlo.
+          if (key.substring(0, 2) != "__") updateRow[key] = changedRow[key];
+        }
+        propsEditable
+          .onRowUpdate(updateRow, originalRow)
+          .then((result) => {
+            setTableValues(
+              setStatusRow(
+                disableRowEditing(
+                  updateOriginalData(tableValues, getTabix(instance)),
+                  getTabix(instance)
+                ),
+                getTabix(instance),
+                ANALYTIC_TABLE.ROW_HIGHLIGHT.NONE
+              )
+            );
+          })
+          .catch((reason) => {
+            setTableValues(
+              setStatusRow(
+                tableValues,
+                getTabix(instance),
+                ANALYTIC_TABLE.ROW_HIGHLIGHT.ERROR
+              )
+            );
+          });
       }
-      propsEditable
-        .onRowUpdate(updateRow, originalRow)
-        .then((result) => {
-          setTableValues(
-            setStatusRow(
-              disableRowEditing(
-                updateOriginalData(tableValues, getTabix(instance)),
-                getTabix(instance)
-              ),
-              getTabix(instance),
-              ANALYTIC_TABLE.ROW_HIGHLIGHT.NONE
-            )
-          );
-        })
-        .catch((reason) => {
-          setTableValues(
-            setStatusRow(
-              tableValues,
-              getTabix(instance),
-              ANALYTIC_TABLE.ROW_HIGHLIGHT.ERROR
-            )
-          );
-        });
     },
     [tableValues, fieldCatalog, originalValues]
   );
