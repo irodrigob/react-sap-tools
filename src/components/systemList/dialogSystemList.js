@@ -50,7 +50,6 @@ export default function DialogSystemList(props) {
         edit: true,
         required: true,
         width: 270,
-        defaultCanSort: true,
       },
       {
         Header: getI18nText("systems.labelHOST"),

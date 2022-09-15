@@ -3,12 +3,19 @@ import "@ui5/webcomponents-icons/dist/edit";
 import "@ui5/webcomponents-icons/dist/delete";
 import "@ui5/webcomponents-icons/dist/accept";
 import "@ui5/webcomponents-icons/dist/decline";
+import "@ui5/webcomponents-icons/dist/alert";
 import IconInteractive from "components/general/iconInteractive/iconInteractive";
 import { INTERNAL_FIELDS_DATA } from "./constants";
 import { useTranslations } from "translations/i18nContext";
 
 export default function CellActions(props) {
-  const { instance, onClickEdit, onClickDecline, onClickAccept } = props;
+  const {
+    instance,
+    onClickEdit,
+    onClickDecline,
+    onClickAccept,
+    onClickShowMessages,
+  } = props;
   const { cell, row } = instance;
   const { getI18nText } = useTranslations();
 
@@ -55,6 +62,17 @@ export default function CellActions(props) {
           showTooltip={true}
           accessibleName={getI18nText(
             "customAnalyticTable.localization.editRow.cancelTooltip"
+          )}
+        />
+      )}
+      {row.original[INTERNAL_FIELDS_DATA.MESSAGES].length > 0 && (
+        <IconInteractive
+          name="alert"
+          onClick={onClickShowMessages}
+          style={{ marginLeft: "1rem" }}
+          showTooltip={true}
+          accessibleName={getI18nText(
+            "customAnalyticTable.localization.editRow.messagesTooltip"
           )}
         />
       )}

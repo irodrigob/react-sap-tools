@@ -133,7 +133,8 @@
                 "editTooltip": "Editar",
                 "confirmTooltip": "Confirmar",
                 "cancelTooltip": "Cancelar",
-                "deleteTooltip": "Borrar"
+                "deleteTooltip": "Borrar",
+                "messagesTooltip": "Mensajes"
             },
             "validations": {
                 "fieldMandatory": "Campo obligatorio",

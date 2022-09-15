@@ -12,7 +12,7 @@ export const INTERNAL_FIELDS_DATA = {
   DELETABLE: "catbl_deletable",
   EDITING: "catbl_editing",
   TABIX: "catbl_tabix",
-  VALIDATIONS: "catbl_validations",
+  MESSAGES: "catbl_messages",
   PREFIX_VALUE_STATE: "catbl_valueState_",
   PREFIX_VALUE_STATE_MESSAGE: "catbl_valueStateMessage_",
   PREFIX_ORIGINAL_VALUE: "catbl_original_value_",
@@ -29,6 +29,7 @@ export const DEFAULT_TABLE_PROPS = {
 export const DEFAULT_VALUES_PROPERTIES = {
   actionDelete: false,
   actionEdit: false,
+  actionMessages: false,
   showRowHighLight: false,
 };
 

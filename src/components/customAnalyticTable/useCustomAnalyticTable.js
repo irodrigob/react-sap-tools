@@ -64,6 +64,7 @@ export default function useCustomAnalyticTable() {
 
       if (valuesProps.actionDelete) buttonNumbers += 1;
       if (valuesProps.actionEdit) buttonNumbers += 1;
+      if (valuesProps.actionMessages) buttonNumbers += 1;
 
       if (buttonNumbers > 0)
         return {
@@ -80,6 +81,9 @@ export default function useCustomAnalyticTable() {
                 onClickAccept={() => {
                   actionConfirmEditRow(instance, propsEditable);
                 }}
+                onClickShowMessages={() => {
+                  actionShowMessagesRow(instance);
+                }}
               />
             );
           },
@@ -87,7 +91,7 @@ export default function useCustomAnalyticTable() {
           headerTooltip: getI18nText("systems.labelActions"),
           disableFilters: true,
           disableGroupBy: true,
-          disableResizing: true,
+          disableResizing: false,
           disableSortBy: true,
           id: "actions",
           width: buttonNumbers * 40,
@@ -292,6 +296,13 @@ export default function useCustomAnalyticTable() {
     },
     [tableValues, fieldCatalog, originalValues]
   );
+
+  /**
+   * Función que mostrará los mensajes que hay a nivel de fila
+   * @param {object} instance | Instancia con los datos de la fila que devuelve UI5
+   */
+
+  const actionShowMessagesRow = useCallback((instance) => {}, []);
 
   /**
    * Rellena la estructura de las propiedades de la tabla que no son las propias del control de ui5.

@@ -72,7 +72,7 @@ export default function useDataManager() {
           };
       }
 
-      newRow = { ...newRow, [INTERNAL_FIELDS_DATA.VALIDATIONS]: [] };
+      newRow = { ...newRow, [INTERNAL_FIELDS_DATA.MESSAGES]: [] };
 
       // Pongo las propiedades según los valores de la tabla
 
@@ -81,6 +81,9 @@ export default function useDataManager() {
 
       if (newRow[INTERNAL_FIELDS_DATA.DELETABLE])
         newValuesProperties.actionDelete = true;
+
+      if (newRow[INTERNAL_FIELDS_DATA.MESSAGES] > 0)
+        newValuesProperties.actionMessages = true;
 
       // El campo para indicar si se mostrará los highLight puede ser forzado, por que hay campos editables, o viene de serie
       // porque en la tabla ya viene informado.
@@ -225,21 +228,24 @@ export default function useDataManager() {
     // Primero vamos a borrar los registros existentes para la columna (si esta en blanco es a nivel general)
     let findIndex = 0;
     while (findIndex != -1) {
-      findIndex = newTable[index][INTERNAL_FIELDS_DATA.VALIDATIONS].findIndex(
+      findIndex = newTable[index][INTERNAL_FIELDS_DATA.MESSAGES].findIndex(
         (row) => row.column == returnValidation.column
       );
       if (findIndex != -1)
-        newTable[index][INTERNAL_FIELDS_DATA.VALIDATIONS].splice(
+        newTable[index][INTERNAL_FIELDS_DATA.MESSAGES].splice(
           findIndex,
           findIndex >= 0 ? 1 : 0
         );
     }
 
     // Por último añadimos si el estado es distinto de note
+    const fieldCellValueState = `${INTERNAL_FIELDS_DATA.PREFIX_VALUE_STATE}${returnValidation.column}`;
+    const fieldCellValueStateMessage = `${INTERNAL_FIELDS_DATA.PREFIX_VALUE_STATE_MESSAGE}${returnValidation.column}`;
+    newTable[index][fieldCellValueState] = returnValidation.state;
+    newTable[index][fieldCellValueStateMessage] = returnValidation.message;
+
     if (returnValidation.state != ValueState.None) {
-      newTable[index][INTERNAL_FIELDS_DATA.VALIDATIONS].push(returnValidation);
-      const fieldCellValueState = `${INTERNAL_FIELDS_DATA.PREFIX_VALUE_STATE}${returnValidation.column}`;
-      const fieldCellValueStateMessage = `${INTERNAL_FIELDS_DATA.PREFIX_VALUE_STATE_MESSAGE}${returnValidation.column}`;
+      newTable[index][INTERNAL_FIELDS_DATA.MESSAGES].push(returnValidation);
       newTable[index][fieldCellValueState] = returnValidation.state;
       newTable[index][fieldCellValueStateMessage] = returnValidation.message;
     }
@@ -253,10 +259,21 @@ export default function useDataManager() {
    */
   const existErrorInRow = (instance) => {
     if (
-      instance.row.original[INTERNAL_FIELDS_DATA.VALIDATIONS].find(
+      instance.row.original[INTERNAL_FIELDS_DATA.MESSAGES].find(
         (row) => row.state === ValueState.Error
       )
     )
+      return true;
+    else return false;
+  };
+
+  /**
+   *
+   * @param {object} instance | Instancia con los datos de la tabla
+   * @returns | Booleano indicando si hay error.
+   */
+  const existMessagesInRow = (instance) => {
+    if (instance.row.original[INTERNAL_FIELDS_DATA.MESSAGES].length > 0)
       return true;
     else return false;
   };
@@ -283,5 +300,6 @@ export default function useDataManager() {
     getTabix,
     propagateValidation,
     existErrorInRow,
+    existMessagesInRow,
   };
 }
