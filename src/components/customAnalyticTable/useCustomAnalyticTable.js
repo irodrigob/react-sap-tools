@@ -7,6 +7,7 @@ import {
   DEFAULT_TABLE_PROPS,
   DEFAULT_VALUES_PROPERTIES,
   ANALYTIC_TABLE,
+  INTERNAL_FIELDS_DATA,
 } from "./constants";
 import { useTranslations } from "translations/i18nContext";
 import { showToast, MESSAGE } from "utils/general/message";
@@ -102,6 +103,12 @@ export default function useCustomAnalyticTable() {
   );
 
   /**
+   * Calcula el numero de botones según las propiedades de los valores
+   * @param {object} valuesProps | Propiedades segun datos
+   */
+  const calculateNumberActionButton = (valuesProps) => {};
+
+  /**
    * Añado para las columnas editables
    * @param {Array} columns | Configuración de columnas de la tabla.
    * @returns {Array} | Columnas con la propiedad Cell añadida con el control deseado
@@ -148,6 +155,8 @@ export default function useCustomAnalyticTable() {
                         cellValue
                       )
                     );
+
+                  recalculatePropsFromMessages();
                 }}
               />
             );
@@ -187,6 +196,18 @@ export default function useCustomAnalyticTable() {
     },
     [tableProps]
   );
+  /**
+   * Recalculo las propiedades en base a los valores de la tabla
+   */
+  const recalculatePropsFromMessages = () => {
+    let newValuesProperties = [...valuesProperties];
+
+    if (tableValues.some((o) => o[INTERNAL_FIELDS_DATA].length > 0))
+      newValuesProperties.actionMessages = true;
+    else newValuesProperties.actionMessages = false;
+  };
+
+  const updateWidthActions = () => {};
 
   /**
    * Guarda los valores pasados por parámetros. Aunque esos valores se ajustan para el funcionamiento de la tabla

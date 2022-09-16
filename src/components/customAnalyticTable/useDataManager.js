@@ -82,6 +82,8 @@ export default function useDataManager() {
       if (newRow[INTERNAL_FIELDS_DATA.DELETABLE])
         newValuesProperties.actionDelete = true;
 
+      // Nota: En teoria el campo de mensajes no viene informado de inicio, pero no lo descarto para
+      // futuras mejoras.
       if (newRow[INTERNAL_FIELDS_DATA.MESSAGES] > 0)
         newValuesProperties.actionMessages = true;
 
