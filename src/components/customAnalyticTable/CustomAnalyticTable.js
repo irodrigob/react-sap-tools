@@ -54,8 +54,6 @@ export default function CustomAnalyticTable(props) {
     setShowRowHighLight(valuesProps.showRowHighLight);
   }, [data, columns, props]);
 
-  useEffect(() => {}, [tableValues]);
-
   return (
     <AnalyticalTable
       columns={fieldCatalog}

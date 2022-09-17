@@ -67,8 +67,7 @@ export default function useDataManager() {
         if (ANALYTIC_TABLE.COLUMNS.ROW_HIGHLIGHT in newRow === false)
           newRow = {
             ...newRow,
-            [ANALYTIC_TABLE.COLUMNS.ROW_HIGHLIGHT]:
-              ANALYTIC_TABLE.ROW_HIGHLIGHT.NONE,
+            [ANALYTIC_TABLE.COLUMNS.ROW_HIGHLIGHT]: ValueState.None,
           };
       }
 
@@ -146,6 +145,11 @@ export default function useDataManager() {
             newTable[index][
               INTERNAL_FIELDS_DATA.PREFIX_ORIGINAL_VALUE + column.accessor
             ];
+          const fieldCellValueState = `${INTERNAL_FIELDS_DATA.PREFIX_VALUE_STATE}${column.accessor}`;
+          const fieldCellValueStateMessage = `${INTERNAL_FIELDS_DATA.PREFIX_VALUE_STATE_MESSAGE}${column.accessor}`;
+          newTable[index][INTERNAL_FIELDS_DATA.MESSAGES] = [];
+          newTable[index][fieldCellValueState] = ValueState.None;
+          newTable[index][fieldCellValueStateMessage] = "";
         });
 
       return newTable;
@@ -252,8 +256,33 @@ export default function useDataManager() {
       newTable[index][fieldCellValueStateMessage] = returnValidation.message;
     }
 
+    newTable[index][ANALYTIC_TABLE.COLUMNS.ROW_HIGHLIGHT] =
+      determineHighLightfromMessages(
+        newTable[index][INTERNAL_FIELDS_DATA.MESSAGES]
+      );
+
     return newTable;
   }, []);
+
+  /**
+   * Determine el estado que saldrá en la columna de HighLight en base al campo de mensaje de la fila
+   * @param {array} Mensajes
+   * @returns | Nuevo estado
+   */
+  const determineHighLightfromMessages = useCallback((messages) => {
+    if (messages.length === 0) return ValueState.None;
+    else if (messages.findIndex((o) => o.state === ValueState.Error) != -1)
+      return ValueState.Error;
+    else if (messages.findIndex((o) => o.state === ValueState.Warning) != -1)
+      return ValueState.Warning;
+    else if (messages.findIndex((o) => o.state === ValueState.Success) != -1)
+      return ValueState.Success;
+    else if (
+      messages.findIndex((o) => o.state === ValueState.Information) != -1
+    )
+      return ValueState.Information;
+  }, []);
+
   /**
    *
    * @param {object} instance | Instancia con los datos de la tabla

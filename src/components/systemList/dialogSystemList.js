@@ -77,7 +77,21 @@ export default function DialogSystemList(props) {
 
   /*
 
-  */
+
+<CustomAnalyticTable
+        columns={columns}
+        data={systemsList}
+        visibleRows={5}
+        allowDelete={true}
+        editable={{
+          onRowUpdate: (newData, oldData) => {
+            return new Promise((resolve, reject) => {
+              reject();
+            });
+          },
+        }}
+      />
+   */
   return (
     <Dialog
       open={open}
@@ -92,19 +106,7 @@ export default function DialogSystemList(props) {
         />
       }
     >
-      <CustomAnalyticTable
-        columns={columns}
-        data={systemsList}
-        visibleRows={5}
-        allowDelete={true}
-        editable={{
-          onRowUpdate: (newData, oldData) => {
-            return new Promise((resolve, reject) => {
-              reject();
-            });
-          },
-        }}
-      />
+      <AnalyticalTable visibleRows={5} columns={columns} data={systemsList} />
     </Dialog>
   );
 }

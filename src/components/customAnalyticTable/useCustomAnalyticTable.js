@@ -8,6 +8,7 @@ import {
   DEFAULT_VALUES_PROPERTIES,
   ANALYTIC_TABLE,
   INTERNAL_FIELDS_DATA,
+  COLUMN_ACTION,
 } from "./constants";
 import { useTranslations } from "translations/i18nContext";
 import { showToast, MESSAGE } from "utils/general/message";
@@ -50,6 +51,16 @@ export default function useCustomAnalyticTable() {
     setFieldCatalogDataManager(fieldCatalog);
   }, [fieldCatalog]);
 
+  /**
+   * Efecto que cuando se cambian los valores de la tabla se recalcula
+   * props internas y catalogo de campos para adpatarlo a los nuevos valores.
+   * La cosa principal que hace es mirar si el icono de mensajes aparece en alguna fila
+   * para recalcular el ancho de la columna y se vea.
+   */
+  useEffect(() => {
+    if (tableValues.length > 0) recalculatePropsFromMessages();
+  }, [tableValues]);
+
   /*************************************
    * Funciones
    ************************************/
@@ -61,11 +72,7 @@ export default function useCustomAnalyticTable() {
    */
   const addColumnActions = useCallback(
     (valuesProps, propsEditable) => {
-      let buttonNumbers = 0;
-
-      if (valuesProps.actionDelete) buttonNumbers += 1;
-      if (valuesProps.actionEdit) buttonNumbers += 1;
-      if (valuesProps.actionMessages) buttonNumbers += 1;
+      let buttonNumbers = calculateNumberActionButton(valuesProps);
 
       if (buttonNumbers > 0)
         return {
@@ -94,8 +101,8 @@ export default function useCustomAnalyticTable() {
           disableGroupBy: true,
           disableResizing: false,
           disableSortBy: true,
-          id: "actions",
-          width: buttonNumbers * 40,
+          id: COLUMN_PROPERTIES.ACTIONS,
+          width: buttonNumbers * COLUMN_ACTION.WIDTH_ICON,
         };
       else return null;
     },
@@ -105,8 +112,17 @@ export default function useCustomAnalyticTable() {
   /**
    * Calcula el numero de botones según las propiedades de los valores
    * @param {object} valuesProps | Propiedades segun datos
+   * @returns {integer} | Numero de botones
    */
-  const calculateNumberActionButton = (valuesProps) => {};
+  const calculateNumberActionButton = (valuesProps) => {
+    let buttonNumbers = 0;
+
+    if (valuesProps.actionDelete) buttonNumbers += 1;
+    if (valuesProps.actionEdit) buttonNumbers += 1;
+    if (valuesProps.actionMessages) buttonNumbers += 1;
+
+    return buttonNumbers;
+  };
 
   /**
    * Añado para las columnas editables
@@ -155,8 +171,6 @@ export default function useCustomAnalyticTable() {
                         cellValue
                       )
                     );
-
-                  recalculatePropsFromMessages();
                 }}
               />
             );
@@ -197,17 +211,39 @@ export default function useCustomAnalyticTable() {
     [tableProps]
   );
   /**
-   * Recalculo las propiedades en base a los valores de la tabla
+   * Recalcula las propiedades en base a los valores de la tabla y lanza
+   * los procesos que usan dichas propiedas para calcular o pintar cosas.
    */
-  const recalculatePropsFromMessages = () => {
-    let newValuesProperties = [...valuesProperties];
+  const recalculatePropsFromMessages = useCallback(() => {
+    let newValuesProperties = { ...valuesProperties };
 
-    if (tableValues.some((o) => o[INTERNAL_FIELDS_DATA].length > 0))
+    if (tableValues.some((o) => o[INTERNAL_FIELDS_DATA.MESSAGES].length > 0))
       newValuesProperties.actionMessages = true;
     else newValuesProperties.actionMessages = false;
-  };
 
-  const updateWidthActions = () => {};
+    setValuesProperties(newValuesProperties);
+
+    updateWidthActions(newValuesProperties);
+  }, [valuesProperties, tableValues, fieldCatalog]);
+
+  /**
+   * Actualiza el ancho de la columna de acciones en base a los botones que se muestran
+   */
+  const updateWidthActions = useCallback(
+    (valuesProperties) => {
+      let newFieldCatalog = [...fieldCatalog];
+
+      let index = fieldCatalog.findIndex(
+        (row) => row.id === COLUMN_PROPERTIES.ACTIONS
+      );
+      newFieldCatalog[index].width =
+        calculateNumberActionButton(valuesProperties) *
+        COLUMN_ACTION.WIDTH_ICON;
+
+      setFieldCatalog(newFieldCatalog);
+    },
+    [fieldCatalog]
+  );
 
   /**
    * Guarda los valores pasados por parámetros. Aunque esos valores se ajustan para el funcionamiento de la tabla
@@ -255,7 +291,7 @@ export default function useCustomAnalyticTable() {
             getTabix(instance)
           ),
           getTabix(instance),
-          ANALYTIC_TABLE.ROW_HIGHLIGHT.NONE
+          ValueState.None
         )
       );
     },
@@ -306,11 +342,7 @@ export default function useCustomAnalyticTable() {
           })
           .catch((reason) => {
             setTableValues(
-              setStatusRow(
-                tableValues,
-                getTabix(instance),
-                ANALYTIC_TABLE.ROW_HIGHLIGHT.ERROR
-              )
+              setStatusRow(tableValues, getTabix(instance), ValueState.Error)
             );
           });
       }

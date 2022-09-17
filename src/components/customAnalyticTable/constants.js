@@ -4,6 +4,11 @@ import { ValueState } from "@ui5/webcomponents-react";
 export const COLUMN_PROPERTIES = {
   EDIT: "edit",
   REQUIRED: "required",
+  ACTIONS: "actions",
+};
+
+export const COLUMN_ACTION = {
+  WIDTH_ICON: 40,
 };
 
 // Campos o partes de campos internos que se añadirán a los valores pasados a la tabla
@@ -38,13 +43,6 @@ export const ANALYTIC_TABLE = {
   COLUMNS: {
     CELL_COMPONENT: "Cell",
     ROW_HIGHLIGHT: "status",
-  },
-  ROW_HIGHLIGHT: {
-    NONE: "None",
-    SUCCESS: "Success",
-    WARNING: "Warning",
-    ERROR: "Error",
-    INFORMATION: "Information",
   },
 };
 
