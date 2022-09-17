@@ -58,7 +58,6 @@ export default function CustomAnalyticTable(props) {
     <AnalyticalTable
       columns={fieldCatalog}
       data={tableValues}
-      visibleRows={5}
       withRowHighlight={showRowHighLight}
       {...others}
     />
