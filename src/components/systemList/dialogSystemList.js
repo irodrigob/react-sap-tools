@@ -88,11 +88,10 @@ export default function DialogSystemList(props) {
       <CustomAnalyticTable
         columns={columns}
         data={systemsList}
-        allowDelete={true}
         editable={{
           onRowUpdate: (newData, oldData) => {
             return new Promise((resolve, reject) => {
-              reject();
+              reject("prueba de mensaje");
             });
           },
         }}

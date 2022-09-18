@@ -1,4 +1,11 @@
-import { FlexBox } from "@ui5/webcomponents-react";
+import { useRef } from "react";
+import {
+  FlexBox,
+  ValueState,
+  ResponsivePopover,
+  Title,
+  Label,
+} from "@ui5/webcomponents-react";
 import "@ui5/webcomponents-icons/dist/edit";
 import "@ui5/webcomponents-icons/dist/delete";
 import "@ui5/webcomponents-icons/dist/accept";
@@ -18,64 +25,73 @@ export default function CellActions(props) {
   } = props;
   const { cell, row } = instance;
   const { getI18nText } = useTranslations();
+  const ref = useRef();
+  const messageViewRef = useRef();
 
   return (
-    <FlexBox>
-      {row.original[INTERNAL_FIELDS_DATA.EDITABLE] &&
-        !row.original[INTERNAL_FIELDS_DATA.EDITING] && (
+    <>
+      <FlexBox>
+        {row.original[INTERNAL_FIELDS_DATA.EDITABLE] &&
+          !row.original[INTERNAL_FIELDS_DATA.EDITING] && (
+            <IconInteractive
+              name="edit"
+              onClick={onClickEdit}
+              showTooltip={true}
+              accessibleName={getI18nText(
+                "customAnalyticTable.localization.editRow.editTooltip"
+              )}
+            />
+          )}
+        {row.original[INTERNAL_FIELDS_DATA.DELETABLE] &&
+          !row.original[INTERNAL_FIELDS_DATA.EDITING] && (
+            <IconInteractive
+              name="delete"
+              onClick={() => {}}
+              style={{ marginLeft: "1rem" }}
+              showTooltip={true}
+              accessibleName={getI18nText(
+                "customAnalyticTable.localization.editRow.deleteTooltip"
+              )}
+            />
+          )}
+        {row.original[INTERNAL_FIELDS_DATA.EDITING] && (
           <IconInteractive
-            name="edit"
-            onClick={onClickEdit}
+            name="accept"
+            onClick={onClickAccept}
             showTooltip={true}
             accessibleName={getI18nText(
-              "customAnalyticTable.localization.editRow.editTooltip"
+              "customAnalyticTable.localization.editRow.confirmTooltip"
             )}
           />
         )}
-      {row.original[INTERNAL_FIELDS_DATA.DELETABLE] &&
-        !row.original[INTERNAL_FIELDS_DATA.EDITING] && (
+        {row.original[INTERNAL_FIELDS_DATA.EDITING] && (
           <IconInteractive
-            name="delete"
-            onClick={() => {}}
+            name="decline"
+            onClick={onClickDecline}
             style={{ marginLeft: "1rem" }}
             showTooltip={true}
             accessibleName={getI18nText(
-              "customAnalyticTable.localization.editRow.deleteTooltip"
+              "customAnalyticTable.localization.editRow.cancelTooltip"
             )}
           />
         )}
-      {row.original[INTERNAL_FIELDS_DATA.EDITING] && (
-        <IconInteractive
-          name="accept"
-          onClick={onClickAccept}
-          showTooltip={true}
-          accessibleName={getI18nText(
-            "customAnalyticTable.localization.editRow.confirmTooltip"
-          )}
-        />
-      )}
-      {row.original[INTERNAL_FIELDS_DATA.EDITING] && (
-        <IconInteractive
-          name="decline"
-          onClick={onClickDecline}
-          style={{ marginLeft: "1rem" }}
-          showTooltip={true}
-          accessibleName={getI18nText(
-            "customAnalyticTable.localization.editRow.cancelTooltip"
-          )}
-        />
-      )}
-      {row.original[INTERNAL_FIELDS_DATA.MESSAGES].length > 0 && (
-        <IconInteractive
-          name="alert"
-          onClick={onClickShowMessages}
-          style={{ marginLeft: "1rem" }}
-          showTooltip={true}
-          accessibleName={getI18nText(
-            "customAnalyticTable.localization.editRow.messagesTooltip"
-          )}
-        />
-      )}
-    </FlexBox>
+        {row.original[INTERNAL_FIELDS_DATA.MESSAGES].length > 0 && (
+          <IconInteractive
+            name="alert"
+            onClick={(e) => {
+              ref.current.showAt(e.target);
+            }}
+            style={{ marginLeft: "1rem" }}
+            showTooltip={true}
+            accessibleName={getI18nText(
+              "customAnalyticTable.localization.editRow.messagesTooltip"
+            )}
+          />
+        )}
+      </FlexBox>
+      <ResponsivePopover ref={ref} headerText="Messages">
+        <Label>Prueba</Label>
+      </ResponsivePopover>
+    </>
   );
 }

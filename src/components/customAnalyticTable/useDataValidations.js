@@ -3,7 +3,7 @@ import { ValueState } from "@ui5/webcomponents-react";
 import {
   COLUMN_PROPERTIES,
   INTERNAL_FIELDS_DATA,
-  DEFAULT_ROW_VALIDATIONS,
+  DEFAULT_ROW_MESSAGE,
   DEFAULT_SINGLE_VALIDATION,
 } from "./constants";
 import { useTranslations } from "translations/i18nContext";
@@ -19,7 +19,7 @@ export default function useDataValidations() {
    */
   const cellValidations = useCallback((instance, cellValue) => {
     let cellValidation = {
-      ...DEFAULT_ROW_VALIDATIONS,
+      ...DEFAULT_ROW_MESSAGE,
       column: instance.cell.column.id,
     };
 

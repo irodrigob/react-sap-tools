@@ -18,8 +18,10 @@ import { useTranslations } from "translations/i18nContext";
  * --> allowEdit: Booleano permite a nivel global si la tabla es editable.Si no se informa por defecto es true.
  * --> allowDelete: Booleano permite a nivel global si se pueden borrar registros.Si no se informa por defecto es true.
  * --> editable: Objeto JSON donde se informan las funciones que se ejecutarán en el proceso de edición. El objeto tendrá los siguientes campos:
- * ----> onRowUpdate: Se le pasara la función que se ejecutara cuando una fila se edite. La función deberá devolver un promise.
- * ----> onRowDelete: Se le pasara la función que se ejecutara cuando una fila se borre. La función deberá devolver un promise.
+ * ----> onRowUpdate: Se le pasara la función que se ejecutara cuando una fila se edite. La función deberá devolver un promise. El reject de la promise
+ * se enviará un texto con el error producido.
+ * ----> onRowDelete: Se le pasara la función que se ejecutara cuando una fila se borre. La función deberá devolver un promise. El reject de la promise
+ * se enviará un texto con el error producido.
  */
 export default function CustomAnalyticTable(props) {
   const {
@@ -27,6 +29,7 @@ export default function CustomAnalyticTable(props) {
     data,
     editable: propsEditable,
     withRowHighlight,
+    allowDelete, // Para evitar el warning en la consola, aunque no lo use directamente aquí
     ...others
   } = props;
   const {

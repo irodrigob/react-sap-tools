@@ -9,6 +9,7 @@ import {
   ANALYTIC_TABLE,
   INTERNAL_FIELDS_DATA,
   COLUMN_ACTION,
+  DEFAULT_ROW_MESSAGE,
 } from "./constants";
 import { useTranslations } from "translations/i18nContext";
 import { showToast, MESSAGE } from "utils/general/message";
@@ -33,6 +34,7 @@ export default function useCustomAnalyticTable() {
     getTabix,
     propagateValidation,
     existErrorInRow,
+    addMessage,
   } = useDataManager();
   const { cellValidations } = useDataValidations();
 
@@ -58,7 +60,8 @@ export default function useCustomAnalyticTable() {
    * para recalcular el ancho de la columna y se vea.
    */
   useEffect(() => {
-    if (tableValues.length > 0) recalculatePropsFromMessages();
+    if (Array.isArray(tableValues) && tableValues.length > 0)
+      recalculatePropsFromMessages();
   }, [tableValues]);
 
   /*************************************
@@ -342,7 +345,11 @@ export default function useCustomAnalyticTable() {
           })
           .catch((reason) => {
             setTableValues(
-              setStatusRow(tableValues, getTabix(instance), ValueState.Error)
+              addMessage(tableValues, getTabix(instance), {
+                ...DEFAULT_ROW_MESSAGE,
+                state: ValueState.Error,
+                message: reason,
+              })
             );
           });
       }

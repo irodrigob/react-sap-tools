@@ -24,8 +24,6 @@ const InputCustom = styled(TextField)({
 export default function CellEdit(props) {
   const { instance, onChange, required } = props;
   const { cell, row } = instance;
-  const [valueState, setValueState] = useState(ValueState.None);
-  const [valueStateMessage, setValueStateMessage] = useState("");
 
   const fieldCellValueState = useMemo(() => {
     return `${INTERNAL_FIELDS_DATA.PREFIX_VALUE_STATE}${instance.cell.column.id}`;
@@ -67,8 +65,6 @@ export default function CellEdit(props) {
           valueStateMessage={<Label>{fieldCellValueStateMessage}</Label>}
           onChange={(e) => {
             onChange(instance, e.target.value);
-            //setValueState(ValueState.Error);
-            //setValueStateMessage("campo obligatorio");
           }}
           style={{ minWidth: `${inputWidth}px` }}
         />

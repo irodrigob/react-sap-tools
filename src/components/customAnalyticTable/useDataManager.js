@@ -224,7 +224,7 @@ export default function useDataManager() {
    * Propaga la validación en el registro de la tabla de datos
    * @param {Array} data | Valores
    * @param {number} index | Indice
-   * @param {object} returnValidation
+   * @param {object} | returnValidation
    * @returns Array con los valores actualizados
    */
   const propagateValidation = useCallback((data, index, returnValidation) => {
@@ -255,6 +255,25 @@ export default function useDataManager() {
       newTable[index][fieldCellValueState] = returnValidation.state;
       newTable[index][fieldCellValueStateMessage] = returnValidation.message;
     }
+
+    newTable[index][ANALYTIC_TABLE.COLUMNS.ROW_HIGHLIGHT] =
+      determineHighLightfromMessages(
+        newTable[index][INTERNAL_FIELDS_DATA.MESSAGES]
+      );
+
+    return newTable;
+  }, []);
+
+  /**
+   * Propaga la validación en el registro de la tabla de datos
+   * @param {Array} data | Valores
+   * @param {number} index | Indice
+   * @param {object} | Mensajes
+   * @returns Array con los valores actualizados
+   */
+  const addMessage = useCallback((data, index, messages) => {
+    const newTable = [...data];
+    newTable[index][INTERNAL_FIELDS_DATA.MESSAGES].push(messages);
 
     newTable[index][ANALYTIC_TABLE.COLUMNS.ROW_HIGHLIGHT] =
       determineHighLightfromMessages(
@@ -332,5 +351,6 @@ export default function useDataManager() {
     propagateValidation,
     existErrorInRow,
     existMessagesInRow,
+    addMessage,
   };
 }

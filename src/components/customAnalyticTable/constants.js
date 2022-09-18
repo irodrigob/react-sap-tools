@@ -47,7 +47,7 @@ export const ANALYTIC_TABLE = {
 };
 
 // Estructura de campos para los errores a nivel de fila o columna con sus valores por defecto.
-export const DEFAULT_ROW_VALIDATIONS = {
+export const DEFAULT_ROW_MESSAGE = {
   column: "",
   state: ValueState.None,
   message: "",
