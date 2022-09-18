@@ -136,9 +136,19 @@
                 "deleteTooltip": "Borrar",
                 "messagesTooltip": "Mensajes"
             },
+            "actions": {
+                "lblColumnActions": "Acciones",
+                "lblColumnActionsToolTip": "Acciones"
+            },
             "validations": {
                 "fieldMandatory": "Campo obligatorio",
                 "rowWithErrors": "Debe corregir los errores de la fila antes de poder grabar"
+            },
+            "dialogMessages": {
+                "title": "Mensajes",
+                "footer": {
+                    "btnClose": "Cerrar"
+                }
             }
         }
     }

@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Dialog, Button, Bar, AnalyticalTable } from "@ui5/webcomponents-react";
+import { Dialog, Button, Bar } from "@ui5/webcomponents-react";
 import CustomAnalyticTable from "components/customAnalyticTable/CustomAnalyticTable";
 import { useTranslations } from "translations/i18nContext";
 import { useGlobalData } from "context/globalDataContext";

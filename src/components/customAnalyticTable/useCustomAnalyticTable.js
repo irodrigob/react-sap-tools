@@ -98,8 +98,12 @@ export default function useCustomAnalyticTable() {
               />
             );
           },
-          Header: getI18nText("systems.labelActions"),
-          headerTooltip: getI18nText("systems.labelActions"),
+          Header: getI18nText(
+            "customAnalyticTable.localization.actions.lblColumnActions"
+          ),
+          headerTooltip: getI18nText(
+            "customAnalyticTable.localization.actions.lblColumnActionsToolTip"
+          ),
           disableFilters: true,
           disableGroupBy: true,
           disableResizing: false,

@@ -1,17 +1,12 @@
-import { useRef } from "react";
-import {
-  FlexBox,
-  ValueState,
-  ResponsivePopover,
-  Title,
-  Label,
-} from "@ui5/webcomponents-react";
+import { useRef, useState } from "react";
+import { FlexBox, ResponsivePopover, Label } from "@ui5/webcomponents-react";
 import "@ui5/webcomponents-icons/dist/edit";
 import "@ui5/webcomponents-icons/dist/delete";
 import "@ui5/webcomponents-icons/dist/accept";
 import "@ui5/webcomponents-icons/dist/decline";
 import "@ui5/webcomponents-icons/dist/alert";
 import IconInteractive from "components/general/iconInteractive/iconInteractive";
+import DialogMessages from "./dialogMessages";
 import { INTERNAL_FIELDS_DATA } from "./constants";
 import { useTranslations } from "translations/i18nContext";
 
@@ -23,10 +18,9 @@ export default function CellActions(props) {
     onClickAccept,
     onClickShowMessages,
   } = props;
-  const { cell, row } = instance;
+  const { row } = instance;
   const { getI18nText } = useTranslations();
-  const ref = useRef();
-  const messageViewRef = useRef();
+  const [openMessages, setOpenMessages] = useState(false);
 
   return (
     <>
@@ -79,7 +73,7 @@ export default function CellActions(props) {
           <IconInteractive
             name="alert"
             onClick={(e) => {
-              ref.current.showAt(e.target);
+              setOpenMessages(true);
             }}
             style={{ marginLeft: "1rem" }}
             showTooltip={true}
@@ -89,9 +83,13 @@ export default function CellActions(props) {
           />
         )}
       </FlexBox>
-      <ResponsivePopover ref={ref} headerText="Messages">
-        <Label>Prueba</Label>
-      </ResponsivePopover>
+      <DialogMessages
+        open={openMessages}
+        onClose={() => {
+          setOpenMessages(false);
+        }}
+        messages={row.original[INTERNAL_FIELDS_DATA.MESSAGES]}
+      />
     </>
   );
 }
