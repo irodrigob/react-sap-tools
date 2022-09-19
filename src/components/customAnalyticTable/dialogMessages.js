@@ -1,4 +1,10 @@
-import { Dialog, Button, Bar } from "@ui5/webcomponents-react";
+import {
+  Dialog,
+  Button,
+  Bar,
+  MessageView,
+  MessageItem,
+} from "@ui5/webcomponents-react";
 import { useTranslations } from "translations/i18nContext";
 
 const FooterDialog = (props) => {
@@ -26,22 +32,42 @@ const FooterDialog = (props) => {
 
 export default function DialogMessages(props) {
   const { open, onClose, messages } = props;
+  const { getI18nText } = useTranslations();
+  /*
 
+*/
   return (
-    <Dialog
-      open={open}
-      headerText={"customAnalyticTable.localization.dialogMessages.title"}
-      draggable={true}
-      resizable={true}
-      footer={
-        <FooterDialog
-          onClose={() => {
-            onClose();
-          }}
-        />
-      }
-    >
-      <p>prueba</p>
-    </Dialog>
+    <>
+      {messages.length > 0 && (
+        <Dialog
+          open={open}
+          headerText={getI18nText(
+            "customAnalyticTable.localization.dialogMessages.title"
+          )}
+          draggable={true}
+          resizable={true}
+          footer={
+            <FooterDialog
+              onClose={() => {
+                onClose();
+              }}
+            />
+          }
+        >
+          <MessageView>
+            {messages.map((row, index) => {
+              return (
+                <MessageItem
+                  key={index}
+                  titleText={row.titleText}
+                  subtitleText={row.subtitleText}
+                  type={row.type}
+                />
+              );
+            })}
+          </MessageView>
+        </Dialog>
+      )}
+    </>
   );
 }

@@ -5,6 +5,7 @@ import {
   Input,
   Label,
 } from "@ui5/webcomponents-react";
+import DialogMessages from "./dialogMessages";
 import { AnalyticalTableHooks } from "@ui5/webcomponents-react";
 import useCustomAnalyticTable from "./useCustomAnalyticTable";
 import { useTranslations } from "translations/i18nContext";
@@ -38,6 +39,9 @@ export default function CustomAnalyticTable(props) {
     setData,
     tableValues,
     setTableProperties,
+    openPopupMessages,
+    actionCloseShowMessagesRow,
+    rowMessages,
   } = useCustomAnalyticTable();
   const [showRowHighLight, setShowRowHighLight] = useState();
 
@@ -58,11 +62,20 @@ export default function CustomAnalyticTable(props) {
   }, [data, columns, props]);
 
   return (
-    <AnalyticalTable
-      columns={fieldCatalog}
-      data={tableValues}
-      withRowHighlight={showRowHighLight}
-      {...others}
-    />
+    <>
+      <AnalyticalTable
+        columns={fieldCatalog}
+        data={tableValues}
+        withRowHighlight={showRowHighLight}
+        {...others}
+      />
+      <DialogMessages
+        open={openPopupMessages}
+        onClose={() => {
+          actionCloseShowMessagesRow();
+        }}
+        messages={rowMessages}
+      />
+    </>
   );
 }

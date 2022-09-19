@@ -37,6 +37,8 @@ export default function useCustomAnalyticTable() {
     addMessage,
   } = useDataManager();
   const { cellValidations } = useDataValidations();
+  const [openPopupMessages, setOpenPopupMessages] = useState(false);
+  const [rowMessages, setRowMessages] = useState([]);
 
   // Aquí voy a guardar propiedases que me servirán para construir la tabla
   const [valuesProperties, setValuesProperties] = useState({
@@ -93,7 +95,7 @@ export default function useCustomAnalyticTable() {
                   actionConfirmEditRow(instance, propsEditable);
                 }}
                 onClickShowMessages={() => {
-                  actionShowMessagesRow(instance);
+                  actionOpenShowMessagesRow(instance);
                 }}
               />
             );
@@ -366,7 +368,28 @@ export default function useCustomAnalyticTable() {
    * @param {object} instance | Instancia con los datos de la fila que devuelve UI5
    */
 
-  const actionShowMessagesRow = useCallback((instance) => {}, []);
+  const actionOpenShowMessagesRow = useCallback((instance) => {
+    let messagesPopup = [];
+    messagesPopup = instance.row.original[INTERNAL_FIELDS_DATA.MESSAGES].map(
+      (message) => {
+        return {
+          titleText:
+            message.column === ""
+              ? message.message
+              : instance.columns.find((column) => column.id === message.column)
+                  .Header,
+          subtitleText: message.column != "" ? message.message : "",
+          type: message.state,
+        };
+      }
+    );
+    setRowMessages(messagesPopup);
+    setOpenPopupMessages(true);
+  }, []);
+  const actionCloseShowMessagesRow = useCallback(() => {
+    setRowMessages([]);
+    setOpenPopupMessages(false);
+  }, []);
 
   /**
    * Rellena la estructura de las propiedades de la tabla que no son las propias del control de ui5.
@@ -393,5 +416,8 @@ export default function useCustomAnalyticTable() {
     setData,
     tableProps,
     setTableProperties,
+    openPopupMessages,
+    actionCloseShowMessagesRow,
+    rowMessages,
   };
 }
