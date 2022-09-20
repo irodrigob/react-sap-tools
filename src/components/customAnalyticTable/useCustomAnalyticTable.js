@@ -38,6 +38,8 @@ export default function useCustomAnalyticTable() {
   } = useDataManager();
   const { cellValidations } = useDataValidations();
   const [openPopupMessages, setOpenPopupMessages] = useState(false);
+  const [openPopupConfirmDelete, setOpenPopupConfirmDelete] = useState(false);
+  const [instanceToDelete,setInstanceToDelete]=useState({})
   const [rowMessages, setRowMessages] = useState([]);
 
   // Aquí voy a guardar propiedases que me servirán para construir la tabla
@@ -97,6 +99,7 @@ export default function useCustomAnalyticTable() {
                 onClickShowMessages={() => {
                   actionOpenShowMessagesRow(instance);
                 }}
+                onClickDelete={()=>{actionDeleteRow(instance)}}
               />
             );
           },
@@ -362,7 +365,16 @@ export default function useCustomAnalyticTable() {
     },
     [tableValues, fieldCatalog, originalValues]
   );
+  /**
+   * Función que se lanzará cuando se pulse el botón de eliminar.
+   * @param {object} instance | Instancia con los datos de la fila que devuelve UI5
+   */
+  const actionDeleteRow = useCallback((instance)=>{
+    setInstanceToDelete(instance)
+    setOpenPopupConfirmDelete(true)
+  },[])
 
+  const actionConfirmDeleteRow=useCallback((instance)=>{},[]) 
   /**
    * Función que mostrará los mensajes que hay a nivel de fila
    * @param {object} instance | Instancia con los datos de la fila que devuelve UI5
@@ -419,5 +431,6 @@ export default function useCustomAnalyticTable() {
     openPopupMessages,
     actionCloseShowMessagesRow,
     rowMessages,
+    openPopupConfirmDelete
   };
 }

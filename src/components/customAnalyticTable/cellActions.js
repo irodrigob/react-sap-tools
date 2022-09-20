@@ -16,6 +16,7 @@ export default function CellActions(props) {
     onClickDecline,
     onClickAccept,
     onClickShowMessages,
+    onClickDelete
   } = props;
   const { row } = instance;
   const { getI18nText } = useTranslations();
@@ -37,7 +38,7 @@ export default function CellActions(props) {
         !row.original[INTERNAL_FIELDS_DATA.EDITING] && (
           <IconInteractive
             name="delete"
-            onClick={() => {}}
+            onClick={onClickDelete}
             style={{ marginLeft: "1rem" }}
             showTooltip={true}
             accessibleName={getI18nText(
