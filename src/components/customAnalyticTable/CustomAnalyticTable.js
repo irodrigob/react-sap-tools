@@ -3,10 +3,11 @@ import {
   AnalyticalTable,
   FlexBox,
   Input,
-  Label,
+  Label
 } from "@ui5/webcomponents-react";
 import DialogMessages from "./dialogMessages";
 import { AnalyticalTableHooks } from "@ui5/webcomponents-react";
+import DialogConfirmDeleteRow from "./dialogConfirmDeleteRow";
 import useCustomAnalyticTable from "./useCustomAnalyticTable";
 import { useTranslations } from "translations/i18nContext";
 
@@ -42,6 +43,10 @@ export default function CustomAnalyticTable(props) {
     openPopupMessages,
     actionCloseShowMessagesRow,
     rowMessages,
+    openPopupConfirmDelete,
+    actionConfirmDeleteRow,
+    actionCancelDeleteRow,
+    actionCloseConfirmDeleteRow
   } = useCustomAnalyticTable();
   const [showRowHighLight, setShowRowHighLight] = useState();
 
@@ -76,6 +81,7 @@ export default function CustomAnalyticTable(props) {
         }}
         messages={rowMessages}
       />
+      <DialogConfirmDeleteRow open={openPopupConfirmDelete} onClose={actionCloseConfirmDeleteRow}/>
     </>
   );
 }

@@ -11,6 +11,7 @@ import {
   COLUMN_ACTION,
   DEFAULT_ROW_MESSAGE,
 } from "./constants";
+import DialogConfirmDeleteRow from "./dialogConfirmDeleteRow";
 import { useTranslations } from "translations/i18nContext";
 import { showToast, MESSAGE } from "utils/general/message";
 import useDataManager from "./useDataManager";
@@ -373,8 +374,26 @@ export default function useCustomAnalyticTable() {
     setInstanceToDelete(instance)
     setOpenPopupConfirmDelete(true)
   },[])
+/**
+   * Función que se lanzará cuando se confirme el borrado de la fila
+   * @param {object} instance | Instancia con los datos de la fila que devuelve UI5
+   */
+  const actionConfirmDeleteRow=useCallback(()=>{},[instanceToDelete]) 
 
-  const actionConfirmDeleteRow=useCallback((instance)=>{},[]) 
+  /**
+   * Función que se lanzará cuando se confirme el borrado de la fila
+   * @param {object} instance | Instancia con los datos de la fila que devuelve UI5
+   */
+   const actionCancelDeleteRow=useCallback(()=>{
+    setInstanceToDelete({})
+    setOpenPopupConfirmDelete(false)
+   },[]) 
+
+
+   const actionCloseConfirmDeleteRow=useCallback((event)=>{
+    debugger
+   },[]) 
+
   /**
    * Función que mostrará los mensajes que hay a nivel de fila
    * @param {object} instance | Instancia con los datos de la fila que devuelve UI5
@@ -431,6 +450,9 @@ export default function useCustomAnalyticTable() {
     openPopupMessages,
     actionCloseShowMessagesRow,
     rowMessages,
-    openPopupConfirmDelete
+    openPopupConfirmDelete,
+    actionConfirmDeleteRow,
+    actionCancelDeleteRow,
+    actionCloseConfirmDeleteRow
   };
 }
