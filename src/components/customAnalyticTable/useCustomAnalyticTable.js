@@ -40,7 +40,7 @@ export default function useCustomAnalyticTable() {
   const { cellValidations } = useDataValidations();
   const [openPopupMessages, setOpenPopupMessages] = useState(false);
   const [openPopupConfirmDelete, setOpenPopupConfirmDelete] = useState(false);
-  const [instanceToDelete,setInstanceToDelete]=useState({})
+  const [instanceToDelete, setInstanceToDelete] = useState({});
   const [rowMessages, setRowMessages] = useState([]);
 
   // Aquí voy a guardar propiedases que me servirán para construir la tabla
@@ -100,7 +100,9 @@ export default function useCustomAnalyticTable() {
                 onClickShowMessages={() => {
                   actionOpenShowMessagesRow(instance);
                 }}
-                onClickDelete={()=>{actionDeleteRow(instance)}}
+                onClickDelete={() => {
+                  actionDeleteRow(instance);
+                }}
               />
             );
           },
@@ -370,29 +372,35 @@ export default function useCustomAnalyticTable() {
    * Función que se lanzará cuando se pulse el botón de eliminar.
    * @param {object} instance | Instancia con los datos de la fila que devuelve UI5
    */
-  const actionDeleteRow = useCallback((instance)=>{
-    setInstanceToDelete(instance)
-    setOpenPopupConfirmDelete(true)
-  },[])
-/**
+  const actionDeleteRow = useCallback((instance) => {
+    setInstanceToDelete(instance);
+    setOpenPopupConfirmDelete(true);
+  }, []);
+  /**
    * Función que se lanzará cuando se confirme el borrado de la fila
    * @param {object} instance | Instancia con los datos de la fila que devuelve UI5
    */
-  const actionConfirmDeleteRow=useCallback(()=>{},[instanceToDelete]) 
+  const actionConfirmDeleteRow = useCallback(() => {}, [instanceToDelete]);
 
   /**
    * Función que se lanzará cuando se confirme el borrado de la fila
    * @param {object} instance | Instancia con los datos de la fila que devuelve UI5
    */
-   const actionCancelDeleteRow=useCallback(()=>{
-    setInstanceToDelete({})
-    setOpenPopupConfirmDelete(false)
-   },[]) 
+  const actionCancelDeleteRow = useCallback(() => {
+    setInstanceToDelete({});
+    setOpenPopupConfirmDelete(false);
+  }, []);
 
-
-   const actionCloseConfirmDeleteRow=useCallback((event)=>{
-    debugger
-   },[]) 
+  const actionCloseConfirmDeleteRow = useCallback((event) => {
+    switch (event.detail.action) {
+      case "OK":
+        break;
+      case "Cancel":
+        break;
+    }
+    setInstanceToDelete({});
+    setOpenPopupConfirmDelete(false);
+  }, []);
 
   /**
    * Función que mostrará los mensajes que hay a nivel de fila
@@ -453,6 +461,6 @@ export default function useCustomAnalyticTable() {
     openPopupConfirmDelete,
     actionConfirmDeleteRow,
     actionCancelDeleteRow,
-    actionCloseConfirmDeleteRow
+    actionCloseConfirmDeleteRow,
   };
 }
