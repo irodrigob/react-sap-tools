@@ -66,10 +66,10 @@ export default function DialogSystemList(props) {
   }, []);
 
   /*
-
-
-
-      <AnalyticalTable visibleRows={5} columns={columns} data={systemsList} />
+onCellValidation: (newData, column, value) => {
+            if (column === "name" && value === "YO")
+              return { state: "Error", message: "El valor yo no es valido." };
+          },
    */
   return (
     <Dialog

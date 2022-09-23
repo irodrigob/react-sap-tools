@@ -11,7 +11,6 @@ import {
   COLUMN_ACTION,
   DEFAULT_ROW_MESSAGE,
 } from "./constants";
-import DialogConfirmDeleteRow from "./dialogConfirmDeleteRow";
 import { useTranslations } from "translations/i18nContext";
 import { showToast, MESSAGE } from "utils/general/message";
 import useDataManager from "./useDataManager";
@@ -23,6 +22,7 @@ export default function useCustomAnalyticTable() {
   const [tableValues, setTableValues] = useState([]);
   const [originalValues, setOriginalValues] = useState([]);
   const [tableProps, setTableProps] = useState({ ...DEFAULT_TABLE_PROPS });
+  const [propsEditable, setPropsEditable] = useState({});
   const {
     fillData,
     updateCellValue,
@@ -36,6 +36,8 @@ export default function useCustomAnalyticTable() {
     propagateValidation,
     existErrorInRow,
     addMessage,
+    originalFields,
+    setOriginalFields,
   } = useDataManager();
   const { cellValidations } = useDataValidations();
   const [openPopupMessages, setOpenPopupMessages] = useState(false);
@@ -167,7 +169,12 @@ export default function useCustomAnalyticTable() {
                 instance={instance}
                 required={newColumn[COLUMN_PROPERTIES.REQUIRED]}
                 onChange={(instance, cellValue) => {
-                  let returnValidations = cellValidations(instance, cellValue);
+                  const { onCellValidation } = propsEditable;
+                  let returnValidations = cellValidations(
+                    instance,
+                    cellValue,
+                    onCellValidation
+                  );
 
                   setTableValues(
                     propagateValidation(
@@ -195,7 +202,7 @@ export default function useCustomAnalyticTable() {
       });
       return newColumns;
     },
-    [tableValues, fieldCatalog]
+    [tableValues, fieldCatalog, propsEditable]
   );
 
   /**
@@ -222,6 +229,7 @@ export default function useCustomAnalyticTable() {
       }
 
       setFieldCatalog(newFieldCatalog);
+      setOriginalFields(columns);
     },
     [tableProps]
   );
@@ -368,6 +376,7 @@ export default function useCustomAnalyticTable() {
     },
     [tableValues, fieldCatalog, originalValues]
   );
+
   /**
    * Función que se lanzará cuando se pulse el botón de eliminar.
    * @param {object} instance | Instancia con los datos de la fila que devuelve UI5
@@ -462,5 +471,6 @@ export default function useCustomAnalyticTable() {
     actionConfirmDeleteRow,
     actionCancelDeleteRow,
     actionCloseConfirmDeleteRow,
+    setPropsEditable,
   };
 }

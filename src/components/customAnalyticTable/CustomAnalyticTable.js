@@ -3,7 +3,7 @@ import {
   AnalyticalTable,
   FlexBox,
   Input,
-  Label
+  Label,
 } from "@ui5/webcomponents-react";
 import DialogMessages from "./dialogMessages";
 import { AnalyticalTableHooks } from "@ui5/webcomponents-react";
@@ -20,10 +20,19 @@ import { useTranslations } from "translations/i18nContext";
  * --> allowEdit: Booleano permite a nivel global si la tabla es editable.Si no se informa por defecto es true.
  * --> allowDelete: Booleano permite a nivel global si se pueden borrar registros.Si no se informa por defecto es true.
  * --> editable: Objeto JSON donde se informan las funciones que se ejecutarán en el proceso de edición. El objeto tendrá los siguientes campos:
- * ----> onRowUpdate: Se le pasara la función que se ejecutara cuando una fila se edite. La función deberá devolver un promise. El reject de la promise
- * se enviará un texto con el error producido.
- * ----> onRowDelete: Se le pasara la función que se ejecutara cuando una fila se borre. La función deberá devolver un promise. El reject de la promise
- * se enviará un texto con el error producido.
+ * ----> onRowUpdate: Se le pasara una función que se ejecutara cuando una fila se edite. La función deberá devolver un promise. El reject de la promise
+ * se enviará un texto con el error producido. Los parámetros de la función son:
+ * newData ->JSON con la fila de datos modificada
+ * oldData --> JSON con los datos originales de la fila
+ * ----> onRowDelete: Se le pasara una función que se ejecutara cuando una fila se borre. La función deberá devolver un promise. El reject de la promise
+ * se enviará un texto con el error producido. Los parámetros de la función son: oldData --> JSON con los datos originales de la fila
+ * ----> onCellValidation: Se le pasará la función donde permitirá validar los de la celda modifica. Los parámetros de entrada son:
+ * newData -> Datos de la fila modificada
+ * column -> Nombre de la columna
+ * value -> Valor de la celda
+ * La función deberá devolver la siguiente estructura JSON:
+ * state -> Estado de la validación. Los valores posibles son: "None","Warning","Error","Success","Information"
+ * message -> Texto libre
  */
 export default function CustomAnalyticTable(props) {
   const {
@@ -46,7 +55,8 @@ export default function CustomAnalyticTable(props) {
     openPopupConfirmDelete,
     actionConfirmDeleteRow,
     actionCancelDeleteRow,
-    actionCloseConfirmDeleteRow
+    actionCloseConfirmDeleteRow,
+    setPropsEditable,
   } = useCustomAnalyticTable();
   const [showRowHighLight, setShowRowHighLight] = useState();
 
@@ -59,6 +69,7 @@ export default function CustomAnalyticTable(props) {
    * nuevos valores o nuevo catalogo de campos
    */
   useEffect(() => {
+    setPropsEditable(propsEditable); // Props para la edición
     const tableProps = setTableProperties(props); // Propiedades globales
     const valuesProps = setData(columns, data, tableProps); // Adaptacion de los valores
     buildFieldCatalog(columns, valuesProps, propsEditable); // Catalogo de campos
@@ -81,7 +92,10 @@ export default function CustomAnalyticTable(props) {
         }}
         messages={rowMessages}
       />
-      <DialogConfirmDeleteRow open={openPopupConfirmDelete} onClose={actionCloseConfirmDeleteRow}/>
+      <DialogConfirmDeleteRow
+        open={openPopupConfirmDelete}
+        onClose={actionCloseConfirmDeleteRow}
+      />
     </>
   );
 }

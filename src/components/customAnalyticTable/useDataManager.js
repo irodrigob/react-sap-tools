@@ -15,6 +15,7 @@ import {
  */
 export default function useDataManager() {
   const [fieldCatalog, setFieldCatalog] = useState([]);
+  const [originalFields, setOriginalFields] = useState([]);
 
   /**
    * Adapta los valores de la tabla añadiendole campos internos segun las columnas pasadas
@@ -352,5 +353,6 @@ export default function useDataManager() {
     existErrorInRow,
     existMessagesInRow,
     addMessage,
+    setOriginalFields,
   };
 }
