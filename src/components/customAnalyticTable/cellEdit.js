@@ -67,6 +67,7 @@ export default function CellEdit(props) {
             onChange(instance, e.target.value);
           }}
           style={{ minWidth: `${inputWidth}px` }}
+          type={props.type}
         />
       )}
     </>

@@ -36,10 +36,10 @@
         "titleEditSystem": "Editar sistema",
         "msgErrorHostInvalid": "Debe de introducir un host válido",
         "msgErrorODataSrvInvalid": "El path del nodo ICF debe comenzar por '/'",
-        "saveInProcess": "Grabación el sistema {{newSystem}} en proceso...",
+        "saveInProcess": "Grabación del sistema {{newSystem}} en proceso...",
         "deleteInProcess": "Borrado en proceso...",
         "saveSuccess": "Sistema {{newSystem}} grabado correctamente",
-        "deleteSuccess": "Sistema '&1' borrado correctamente",
+        "deleteSuccess": "Sistema {{system}} borrado correctamente",
         "serviceNewSystem": "Sistema añadido correctamente",
         "errorCallServiceNew": "Al grabar el nuevo sistema se ha producido el siguiente error: {{errorService}}"
     },
@@ -93,36 +93,6 @@
             "errorService": "El proceso de transporte de copia ha devuelto el siguiente error: &1"
         }
     },
-    "materialTable": {
-        "localization": {
-            "body": {
-                "editRow": {
-                    "deleteText": "¿Esta seguro que desea borrar el registro?",
-                    "saveTooltip": "Confirmar",
-                    "cancelTooltip": "Cancelar"
-                },
-                "toolbar": {
-                    "searchTooltip": "Buscar...",
-                    "searchPlaceholder": "Buscar.."
-                },
-                "filterRow": {
-                    "filterPlaceHolder": "Filtro",
-                    "filterTooltip": "Filtro"
-                }
-            },
-            "header": {
-                "actions": "Acciones"
-            },
-            "toolbar": {
-                "searchTooltip": "Búsqueda",
-                "searchPlaceholder": "Búsqueda",
-                "nRowsSelected": "{0} ordene(s)/tarea(s) seleccionadas"
-            }
-        },
-        "edition": {
-            "fieldMandatory": "Obligatorio"
-        }
-    },
     "messageManager": {
         "tooltipMessageIcon": "Mensajes",
         "lblAllMessages": "Todo"
@@ -134,7 +104,9 @@
                 "confirmTooltip": "Confirmar",
                 "cancelTooltip": "Cancelar",
                 "deleteTooltip": "Borrar",
-                "messagesTooltip": "Mensajes"
+                "messagesTooltip": "Mensajes",
+                "deleteText": "¿Esta seguro que desea borrar el registro?",
+                "deleteTitle": "Confirmación de borrado"
             },
             "actions": {
                 "lblColumnActions": "Acciones",

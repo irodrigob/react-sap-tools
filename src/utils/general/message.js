@@ -52,3 +52,11 @@ export function showToast(
 ) {
   return toast[pType](sMessage, pParams);
 }
+
+/**
+ * Cierra un mensaje del toast a través del ID
+ * @param {string} toastID
+ */
+export function closeToast(toastID) {
+  toast.dismiss(toastID);
+}

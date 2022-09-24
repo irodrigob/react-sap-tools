@@ -15,6 +15,7 @@ import { useTranslations } from "translations/i18nContext";
 import { showToast, MESSAGE } from "utils/general/message";
 import useDataManager from "./useDataManager";
 import useDataValidations from "./useDataValidations";
+import { convertFieldsInternalRow2External } from "./commonsUtils";
 
 export default function useCustomAnalyticTable() {
   const { getI18nText } = useTranslations();
@@ -194,6 +195,7 @@ export default function useCustomAnalyticTable() {
                       )
                     );
                 }}
+                type={column.type}
               />
             );
           };
@@ -385,31 +387,49 @@ export default function useCustomAnalyticTable() {
     setInstanceToDelete(instance);
     setOpenPopupConfirmDelete(true);
   }, []);
-  /**
-   * Función que se lanzará cuando se confirme el borrado de la fila
-   * @param {object} instance | Instancia con los datos de la fila que devuelve UI5
-   */
-  const actionConfirmDeleteRow = useCallback(() => {}, [instanceToDelete]);
 
-  /**
-   * Función que se lanzará cuando se confirme el borrado de la fila
-   * @param {object} instance | Instancia con los datos de la fila que devuelve UI5
-   */
-  const actionCancelDeleteRow = useCallback(() => {
-    setInstanceToDelete({});
-    setOpenPopupConfirmDelete(false);
-  }, []);
-
-  const actionCloseConfirmDeleteRow = useCallback((event) => {
-    switch (event.detail.action) {
-      case "OK":
-        break;
-      case "Cancel":
-        break;
-    }
-    setInstanceToDelete({});
-    setOpenPopupConfirmDelete(false);
-  }, []);
+  const actionCloseConfirmDeleteRow = useCallback(
+    (event) => {
+      switch (event.detail.action) {
+        case "OK":
+          propsEditable
+            .onRowDelete(
+              convertFieldsInternalRow2External(
+                instanceToDelete.row.original,
+                instanceToDelete.columns
+              )
+            )
+            .then((result) => {
+              /*
+          setTableValues(
+            setStatusRow(
+              disableRowEditing(
+                updateOriginalData(tableValues, getTabix(instance)),
+                getTabix(instance)
+              ),
+              getTabix(instance),
+              ANALYTIC_TABLE.ROW_HIGHLIGHT.NONE
+            )
+          );*/
+            })
+            .catch((reason) => {
+              setTableValues(
+                addMessage(tableValues, getTabix(instanceToDelete), {
+                  ...DEFAULT_ROW_MESSAGE,
+                  state: ValueState.Error,
+                  message: reason,
+                })
+              );
+            });
+          break;
+        case "Cancel":
+          break;
+      }
+      setInstanceToDelete({});
+      setOpenPopupConfirmDelete(false);
+    },
+    [instanceToDelete]
+  );
 
   /**
    * Función que mostrará los mensajes que hay a nivel de fila
@@ -468,8 +488,6 @@ export default function useCustomAnalyticTable() {
     actionCloseShowMessagesRow,
     rowMessages,
     openPopupConfirmDelete,
-    actionConfirmDeleteRow,
-    actionCancelDeleteRow,
     actionCloseConfirmDeleteRow,
     setPropsEditable,
   };

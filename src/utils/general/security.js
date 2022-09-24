@@ -6,7 +6,10 @@ var CryptoJS = require("crypto-js");
  * @returns Texto cifrado
  */
 export const encryptText = (sText) => {
-  return CryptoJS.AES.encrypt(sText, REACT_APP_SECRET_KEY).toString();
+  return CryptoJS.AES.encrypt(
+    sText,
+    process.env.REACT_APP_SECRET_KEY
+  ).toString();
 };
 /**
  * Descifra el texto
@@ -14,7 +17,7 @@ export const encryptText = (sText) => {
  * @returns Texto descifrado
  */
 export const decryptText = (sKey) => {
-  return CryptoJS.AES.decrypt(sKey, REACT_APP_SECRET_KEY).toString(
+  return CryptoJS.AES.decrypt(sKey, process.env.REACT_APP_SECRET_KEY).toString(
     CryptoJS.enc.Utf8
   );
 };

@@ -1,8 +1,16 @@
 import { useEffect, useState } from "react";
+import { useMutation } from "@apollo/client";
 import { Dialog, Button, Bar } from "@ui5/webcomponents-react";
 import CustomAnalyticTable from "components/customAnalyticTable/CustomAnalyticTable";
 import { useTranslations } from "translations/i18nContext";
 import { useGlobalData } from "context/globalDataContext";
+import useSystems, {
+  MUTATION_UPDATE_SYSTEM,
+  MUTATION_DELETE_SYSTEM,
+} from "hooks/useSystems";
+import { showToast, MESSAGE, closeToast } from "utils/general/message";
+import { encryptText } from "utils/general/security";
+import { errorHandling } from "utils/graphQL/errorHandling";
 
 const FooterDialog = (props) => {
   const { onCloseButton } = props;
@@ -30,7 +38,12 @@ export default function DialogSystemList(props) {
   const { getI18nText } = useTranslations();
   const { systemsList } = useGlobalData();
   const [columns, setColumns] = useState([]);
+  const [toastID, setToastID] = useState("");
+  const { formatterHost, updateSystem, deleteSystem } = useSystems();
 
+  /*************************************
+   * Efectos
+   ************************************/
   useEffect(() => {
     setColumns([
       {
@@ -45,32 +58,114 @@ export default function DialogSystemList(props) {
         Header: getI18nText("systems.labelHOST"),
         accessor: "host",
         headerTooltip: getI18nText("systems.labelHOST"),
-        //edit:true
+        edit: true,
+        required: true,
         width: 500,
       },
       {
         Header: getI18nText("systems.labelSAPUser"),
         accessor: "sap_user",
         headerTooltip: getI18nText("systems.labelSAPUser"),
-        //edit:true
+        edit: true,
+        required: true,
         width: 150,
       },
       {
         Header: getI18nText("systems.labelSAPPassword"),
         accessor: "sap_password",
         headerTooltip: getI18nText("systems.labelSAPPassword"),
-        //edit:true
+        edit: true,
+        required: true,
         width: 300,
+        type: "Password",
       },
     ]);
   }, []);
 
-  /*
-onCellValidation: (newData, column, value) => {
-            if (column === "name" && value === "YO")
-              return { state: "Error", message: "El valor yo no es valido." };
-          },
+  /*************************************
+   * Funciones
+   ************************************/
+
+  /*************************************
+   * GraphQL
+   ************************************/
+  /**
+   * Mutation para la actualización del sistema
    */
+  const [
+    updateSystemFunction,
+    { loading: loadingUpdateSystem, reset: resetEditSystem },
+  ] = useMutation(MUTATION_UPDATE_SYSTEM, {
+    onError: (error) => {
+      closeToast(toastID);
+      // Reseteo los estados de la mutation debido al error
+      resetEditSystem();
+
+      // Llamo a la función que me gestiona los errores de graphQL y me devuelve una estructura común independientemente del tipo de error
+      let responseError = errorHandling(error);
+
+      // Si es un error de red se produce una excepción de red (ejemplo que se pase un campo que no existe)
+      // Como se puede producir varios mensajes lo que hago es sacar el primer.
+      showToast(
+        getI18nText("editSystem.errorCallServiceNew", {
+          errorService: responseError.singleMessage,
+        }),
+        MESSAGE.TYPE.ERROR
+      );
+    },
+    onCompleted: (data) => {
+      closeToast(toastID);
+      // Actualizo el sistema
+      updateSystem(data.updateSystem);
+      // Mensaje de sistema grabado
+      showToast(
+        getI18nText("editSystem.saveSuccess", {
+          newSystem: data.updateSystem.name,
+        }),
+        MESSAGE.TYPE.SUCCCES
+      );
+    },
+  });
+
+  /**
+   * Mutation para el borrado del sistema
+   */
+  const [
+    deleteSystemFunction,
+    { loading: loadingDeleteSystem, reset: resetDeletetSystem },
+  ] = useMutation(MUTATION_DELETE_SYSTEM, {
+    onError: (error) => {
+      closeToast(toastID);
+      // Reseteo los estados de la mutation debido al error
+      resetEditSystem();
+
+      // Llamo a la función que me gestiona los errores de graphQL y me devuelve una estructura común independientemente del tipo de error
+      let responseError = errorHandling(error);
+
+      // Si es un error de red se produce una excepción de red (ejemplo que se pase un campo que no existe)
+      // Como se puede producir varios mensajes lo que hago es sacar el primer.
+      showToast(
+        getI18nText("editSystem.errorCallServiceNew", {
+          errorService: responseError.singleMessage,
+        }),
+        MESSAGE.TYPE.ERROR
+      );
+    },
+    onCompleted: (data) => {
+      closeToast(toastID);
+
+      // Actualizo el sistema
+      deleteSystem(data.deleteSystem._id);
+
+      showToast(
+        getI18nText("editSystem.deleteSuccess", {
+          system: data.updateSystem.name,
+        }),
+        MESSAGE.TYPE.SUCCCES
+      );
+    },
+  });
+
   return (
     <Dialog
       open={open}
@@ -90,9 +185,50 @@ onCellValidation: (newData, column, value) => {
         data={systemsList}
         editable={{
           onRowUpdate: (newData, oldData) => {
-            return new Promise((resolve, reject) => {
-              reject("prueba de mensaje");
+            let toastID = showToast(
+              getI18nText("editSystem.saveInProcess", {
+                newSystem: newData.name,
+              }),
+              MESSAGE.TYPE.INFO
+            );
+            setToastID(toastID);
+
+            newData.host = formatterHost(newData.host);
+            newData.sap_password = encryptText(newData.sap_password);
+
+            return updateSystemFunction({
+              variables: {
+                id: newData._id,
+                input: {
+                  user: newData.user,
+                  name: newData.name,
+                  host: newData.host,
+                  sap_password: newData.sap_password,
+                  sap_user: newData.sap_user,
+                },
+              },
             });
+          },
+          onRowDelete: (oldData) => {
+            console.log(oldData);
+
+            let toastID = showToast(
+              getI18nText("editSystem.deleteInProcess", {
+                newSystem: oldData.name,
+              }),
+              MESSAGE.TYPE.INFO
+            );
+            setToastID(toastID);
+
+            return deleteSystemFunction({
+              variables: {
+                id: oldData._id,
+              },
+            });
+
+            /* return new Promise((resolve, reject) => {
+              resolve("prueba de mensaje");
+            });*/
           },
         }}
       />

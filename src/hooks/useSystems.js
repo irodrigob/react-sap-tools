@@ -57,7 +57,8 @@ export const MUTATION_DELETE_SYSTEM = gql`
 export default function useSystems() {
   const { session } = useSession();
   const { getI18nText } = useTranslations();
-  const { systemSelected, setSystemsList, systemsList } = useGlobalData();
+  const { systemSelected, setSystemsList, systemsList, setSystemSelected } =
+    useGlobalData();
 
   /*************************************
    * Funciones
@@ -149,6 +150,58 @@ export default function useSystems() {
     [systemsList]
   );
 
+  /**
+   * Función que actualiza un sistema al modelo de datos
+   * @param sSystem | Estructura con los datos del sistema
+   */
+  const updateSystem = useCallback(
+    (sSystem) => {
+      let aSystemsAux = [...systemsList];
+      let index = aSystemsAux.findIndex((row) => row._id == sSystem._id);
+      aSystemsAux[index] = sSystem;
+      // Ordeno el array para que quede igual de ordenado como cuando se graban los datos
+      // por primera vez
+      aSystemsAux = aSystemsAux.sort(firstBy("name"));
+      setSystemsList(aSystemsAux);
+
+      // Ahora miro si el sistema seleccionado es el mismo que el modificado. Si es así, le cambio el nombre
+      if (sSystem._id == systemSelected._id) setSystemSelected(sSystem);
+    },
+    [systemsList, systemSelected]
+  );
+
+  /**
+   * Función que borra un sistema al modelo de datos
+   * @param pID | Id del registro a borrar
+   */
+  const deleteSystem = useCallback(
+    (pID) => {
+      let aSystemsAux = [...systemsList];
+
+      let index = aSystemsAux.findIndex((row) => row._id == pID);
+      aSystemsAux.splice(index, index >= 0 ? 1 : 0);
+
+      setSystemsList(aSystemsAux);
+
+      // El sistema marcado por defecto lo dejo en blanco.
+      setSystemSelected("");
+
+      // Acciones generales cuando se cambia o borra un sistema
+      deleteSystemGeneralActions();
+    },
+    [systemsList]
+  );
+
+  /**
+   * Acciones generales cuando se borra un sistema
+   */
+  const deleteSystemGeneralActions = useCallback(() => {
+    // Limpiamos las variables del transporte de ordenes
+    //clearVariablesSAPTransportOrder();
+    // Vamos a la página de inicio
+    //router.push("/");
+  }, []);
+
   /*************************************
    * Servicios GraphQL
    ************************************/
@@ -185,5 +238,7 @@ export default function useSystems() {
     formatterPath,
     addSystem,
     session,
+    updateSystem,
+    deleteSystem,
   };
 }

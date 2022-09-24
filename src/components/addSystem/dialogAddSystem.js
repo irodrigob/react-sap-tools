@@ -6,6 +6,7 @@ import TextField from "@mui/material/TextField";
 import { useTranslations } from "translations/i18nContext";
 import { useForm, Controller } from "react-hook-form";
 import useSystems, { MUTATION_NEW_SYSTEM } from "hooks/useSystems";
+import { encryptText } from "utils/general/security";
 import { showToast, MESSAGE } from "utils/general/message";
 import { errorHandling } from "utils/graphQL/errorHandling";
 
@@ -52,6 +53,7 @@ export default function DialogAddSystem(props) {
     //setBtnSaveDisabled(true);
     // Formateo del host
     data.host = formatterHost(data.host);
+    data.sap_password = encryptText(data.sap_password);
     showToast(
       getI18nText("editSystem.saveInProcess", {
         newSystem: data.name,
