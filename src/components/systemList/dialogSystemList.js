@@ -159,7 +159,7 @@ export default function DialogSystemList(props) {
 
       showToast(
         getI18nText("editSystem.deleteSuccess", {
-          system: data.updateSystem.name,
+          system: data.deleteSystem.name,
         }),
         MESSAGE.TYPE.SUCCCES
       );
@@ -194,7 +194,10 @@ export default function DialogSystemList(props) {
             setToastID(toastID);
 
             newData.host = formatterHost(newData.host);
-            newData.sap_password = encryptText(newData.sap_password);
+            // Si el password nuevo y el original son distintos es que lo ha cambio y hay que cifrarlo.
+            // En caso contrario se deja el mismo porque ya esta cifrado.
+            if (newData.sap_password != oldData.sap_password)
+              newData.sap_password = encryptText(newData.sap_password);
 
             return updateSystemFunction({
               variables: {
@@ -226,7 +229,7 @@ export default function DialogSystemList(props) {
               },
             });
 
-            /* return new Promise((resolve, reject) => {
+            /*return new Promise((resolve, reject) => {
               resolve("prueba de mensaje");
             });*/
           },

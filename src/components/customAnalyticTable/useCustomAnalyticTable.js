@@ -394,10 +394,7 @@ export default function useCustomAnalyticTable() {
         case "OK":
           propsEditable
             .onRowDelete(
-              convertFieldsInternalRow2External(
-                instanceToDelete.row.original,
-                instanceToDelete.columns
-              )
+              convertFieldsInternalRow2External(instanceToDelete.row.original)
             )
             .then((result) => {
               /*

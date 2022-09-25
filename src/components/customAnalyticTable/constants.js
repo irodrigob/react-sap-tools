@@ -11,17 +11,19 @@ export const COLUMN_ACTION = {
   WIDTH_ICON: 40,
 };
 
+export const INTERNAL_FIELD_PATTERN = "calt";
+
 // Campos o partes de campos internos que se añadirán a los valores pasados a la tabla
 export const INTERNAL_FIELDS_DATA = {
-  EDITABLE: "catbl_editable",
-  DELETABLE: "catbl_deletable",
-  EDITING: "catbl_editing",
-  TABIX: "catbl_tabix",
-  MESSAGES: "catbl_messages",
-  PREFIX_VALUE_STATE: "catbl_valueState_",
-  PREFIX_VALUE_STATE_MESSAGE: "catbl_valueStateMessage_",
-  PREFIX_ORIGINAL_VALUE: "catbl_original_value_",
-  SUFFIX_EDIT: "_edit",
+  EDITABLE: `${INTERNAL_FIELD_PATTERN}_editable`,
+  DELETABLE: `${INTERNAL_FIELD_PATTERN}_deletable`,
+  EDITING: `${INTERNAL_FIELD_PATTERN}_editing`,
+  TABIX: `${INTERNAL_FIELD_PATTERN}_tabix`,
+  MESSAGES: `${INTERNAL_FIELD_PATTERN}_messages`,
+  PREFIX_VALUE_STATE: `${INTERNAL_FIELD_PATTERN}_valueState_`,
+  PREFIX_VALUE_STATE_MESSAGE: `${INTERNAL_FIELD_PATTERN}_valueStateMessage_`,
+  PREFIX_ORIGINAL_VALUE: `${INTERNAL_FIELD_PATTERN}_original_value_`,
+  SUFFIX_EDIT: `_${INTERNAL_FIELD_PATTERN}_edit`,
 };
 
 // Propiedas por defecto de la tabla, son propiedas fuera de las estándar del propio control.

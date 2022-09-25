@@ -47,10 +47,7 @@ export default function useDataValidations() {
         // Siguientes validaciones
         if (typeof customCellValidation === "function") {
           validationCustomReturn = customCellValidation(
-            convertFieldsInternalRow2External(
-              instance.row.original,
-              instance.columns
-            ),
+            convertFieldsInternalRow2External(instance.row.original),
             instance.cell.column.id,
             cellValue
           );

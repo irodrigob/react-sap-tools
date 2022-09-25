@@ -38,23 +38,7 @@ export default function CellEdit(props) {
   }, [cell.column.originalWidth]);
 
   /*
-           
-<InputCustom
-          value={cell.value}
-          required={required}
-          error={ValueState.Error ? true : false}
-          helperText={valueStateMessage}
-          onChange={(e) => {
-            onChange(instance, e.target.value);
-            setValueState(ValueState.Error);
-            setValueStateMessage("campo obligatorio");
-          }}
-          size="small"
-        />
-  */
-  return (
-    <>
-      {!row.original[INTERNAL_FIELDS_DATA.EDITING] && (
+    {!row.original[INTERNAL_FIELDS_DATA.EDITING] && (
         <Label>{cell.value}</Label>
       )}
       {row.original[INTERNAL_FIELDS_DATA.EDITING] && (
@@ -69,7 +53,22 @@ export default function CellEdit(props) {
           style={{ minWidth: `${inputWidth}px` }}
           type={props.type}
         />
-      )}
+      )}        
+
+  */
+  return (
+    <>
+      <Input
+        value={cell.value}
+        required={required}
+        valueState={instance.row.original[fieldCellValueState]}
+        valueStateMessage={<Label>{fieldCellValueStateMessage}</Label>}
+        onChange={(e) => {
+          onChange(instance, e.target.value);
+        }}
+        style={{ minWidth: `${inputWidth}px` }}
+        type={props.type}
+      />
     </>
   );
 }
