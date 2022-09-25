@@ -276,30 +276,27 @@ export default function useCustomAnalyticTable() {
    * @param {Array} values | Array con los valores de la tabla
    * @returns {object} Propiedadess segun los valores.
    */
-  const setData = useCallback((columns, values, tableProps) => {
-    setOriginalValues(values);
-    const { data: newValues, valuesProperties: newValuesProperties } = fillData(
-      columns,
-      values,
-      tableProps
-    );
+  const setData = useCallback(
+    (columns, values, tableProps) => {
+      setOriginalValues(values);
+      const { data: newValues, valuesProperties: newValuesProperties } =
+        fillData(columns, values, tableProps);
 
-    setTableValues(newValues);
-    setValuesProperties(newValuesProperties);
+      setTableValues(newValues);
+      setValuesProperties(newValuesProperties);
 
-    return newValuesProperties;
-  }, []);
+      return newValuesProperties;
+    },
+    [tableValues]
+  );
   /**
    * Función que se lanzará cuando se pulse el botón de editar, y cancelar la fila de la tabla.
    * Esto lo que hará es marcar esa fila como editabke
    * @param {object} instance | Instancia con los datos de la fila que devuelve UI5
    */
-  const actionActiveEditRow = useCallback(
-    (instance) => {
-      setTableValues(enabledRowEditing(tableValues, getTabix(instance)));
-    },
-    [tableValues]
-  );
+  const actionActiveEditRow = useCallback((instance) => {
+    setTableValues(enabledRowEditing(instance.data, getTabix(instance)));
+  }, []);
 
   /**
    * Función que se lanzará cuando se pulse el botón de declinar el cambio. Esto aparte de dejar la

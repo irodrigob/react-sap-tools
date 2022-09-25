@@ -58,17 +58,22 @@ export default function CellEdit(props) {
   */
   return (
     <>
-      <Input
-        value={cell.value}
-        required={required}
-        valueState={instance.row.original[fieldCellValueState]}
-        valueStateMessage={<Label>{fieldCellValueStateMessage}</Label>}
-        onChange={(e) => {
-          onChange(instance, e.target.value);
-        }}
-        style={{ minWidth: `${inputWidth}px` }}
-        type={props.type}
-      />
+      {!row.original[INTERNAL_FIELDS_DATA.EDITING] && (
+        <Label>{cell.value}</Label>
+      )}
+      {row.original[INTERNAL_FIELDS_DATA.EDITING] && (
+        <Input
+          value={cell.value}
+          required={required}
+          valueState={instance.row.original[fieldCellValueState]}
+          valueStateMessage={<Label>{fieldCellValueStateMessage}</Label>}
+          onChange={(e) => {
+            onChange(instance, e.target.value);
+          }}
+          style={{ minWidth: `${inputWidth}px` }}
+          type={props.type}
+        />
+      )}
     </>
   );
 }
