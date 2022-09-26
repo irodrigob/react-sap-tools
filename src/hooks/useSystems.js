@@ -202,6 +202,14 @@ export default function useSystems() {
     //router.push("/");
   }, []);
 
+  /**
+   * Proceso de selección de sistemas. El sistema que viene por parámetro
+   * puede venir el ID o la estructura del sistema. El motivo es que se llama
+   * desde dos sitios a la vez y en cada uno de ellos hay datos de distintos
+   * @param sSystem | Sistema seleccionado
+   */
+  const processSelectedSystem = useCallback((pSystem) => {}, []);
+
   /*************************************
    * Servicios GraphQL
    ************************************/

@@ -38,6 +38,7 @@ export default function SystemSelect2(props) {
 
   useEffect(() => {
     if (systemID != "") {
+      console.log(systemID);
       let row = aSystems.find((row) => row._id == systemID);
       if (row) {
         setSystemValue(row.name);
@@ -87,9 +88,14 @@ export default function SystemSelect2(props) {
         }
         value={systemValue}
         onChange={(e) => {
-          setSystemID(
-            aSystems[e.target.Suggestions.accInfo.currentPos - 1]._id
+          let row = aSystems.find(
+            (row) => row.name == e.target.lastConfirmedValue
           );
+          if (row) {
+            setSystemValue(row.name);
+
+            setSystemID(row._id);
+          }
         }}
       >
         {haveSystems &&

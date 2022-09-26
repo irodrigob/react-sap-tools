@@ -143,125 +143,111 @@ export default function DialogAddSystem(props) {
         />
       }
     >
-      <form onSubmit={handleSubmit(onSubmitForm)}>
-        <Form
-          style={{
-            alignItems: "center",
-          }}
-        >
-          <FormItem>
-            <Controller
-              name="name"
-              control={control}
-              defaultValue=""
-              render={({
-                field: { onChange, value },
-                fieldState: { error },
-              }) => (
-                <TextField
-                  required
-                  label={getI18nText("systems.labelName")}
-                  variant="filled"
-                  value={value}
-                  onChange={onChange}
-                  error={!!error}
-                  helperText={error ? error.message : null}
-                  sx={{
-                    width: "15em",
-                    fontFamily: "var(--sapFontFamily)",
-                    fontSize: "var(--sapFontSize)",
-                  }}
-                />
-              )}
-              rules={{ required: getI18nText("general.fieldMandatory") }}
-            />
-          </FormItem>
-          <FormItem>
-            <Controller
-              name="host"
-              control={control}
-              defaultValue=""
-              render={({
-                field: { onChange, value },
-                fieldState: { error },
-              }) => (
-                <TextField
-                  required
-                  label={getI18nText("systems.labelHOST")}
-                  variant="filled"
-                  value={value}
-                  onChange={onChange}
-                  error={!!error}
-                  helperText={
-                    !!error
-                      ? error.type === "validate"
-                        ? getI18nText("editSystem.msgErrorHostInvalid")
-                        : error.message
-                      : null
-                  }
-                  sx={{ width: "30em" }}
-                />
-              )}
-              rules={{
-                required: getI18nText("general.fieldMandatory"),
-                validate: (value) => {
-                  return validateHost(value);
-                },
-              }}
-            />
-          </FormItem>
-          <FormItem>
-            <Controller
-              name="sap_user"
-              control={control}
-              defaultValue=""
-              render={({
-                field: { onChange, value },
-                fieldState: { error },
-              }) => (
-                <TextField
-                  required
-                  label={getI18nText("systems.labelSAPUser")}
-                  variant="filled"
-                  value={value}
-                  onChange={(e) => {
-                    e.target.value = e.target.value.toUpperCase();
-                    onChange(e);
-                  }}
-                  error={!!error}
-                  helperText={error ? error.message : null}
-                  sx={{ width: "15em" }}
-                />
-              )}
-              rules={{ required: getI18nText("general.fieldMandatory") }}
-            />
-          </FormItem>
-          <FormItem>
-            <Controller
-              name="sap_password"
-              control={control}
-              defaultValue=""
-              render={({
-                field: { onChange, value },
-                fieldState: { error },
-              }) => (
-                <TextField
-                  required
-                  label={getI18nText("systems.labelSAPPassword")}
-                  variant="filled"
-                  value={value}
-                  onChange={onChange}
-                  error={!!error}
-                  helperText={error ? error.message : null}
-                  sx={{ width: "15em" }}
-                  type="password"
-                />
-              )}
-              rules={{ required: getI18nText("general.fieldMandatory") }}
-            />
-          </FormItem>
-        </Form>
-      </form>
+      <Form
+        style={{
+          alignItems: "center",
+        }}
+      >
+        <FormItem>
+          <Controller
+            name="name"
+            control={control}
+            defaultValue=""
+            render={({ field: { onChange, value }, fieldState: { error } }) => (
+              <TextField
+                required
+                label={getI18nText("systems.labelName")}
+                variant="filled"
+                value={value}
+                onChange={onChange}
+                error={!!error}
+                helperText={error ? error.message : null}
+                sx={{
+                  width: "15em",
+                  fontFamily: "var(--sapFontFamily)",
+                  fontSize: "var(--sapFontSize)",
+                }}
+              />
+            )}
+            rules={{ required: getI18nText("general.fieldMandatory") }}
+          />
+        </FormItem>
+        <FormItem>
+          <Controller
+            name="host"
+            control={control}
+            defaultValue=""
+            render={({ field: { onChange, value }, fieldState: { error } }) => (
+              <TextField
+                required
+                label={getI18nText("systems.labelHOST")}
+                variant="filled"
+                value={value}
+                onChange={onChange}
+                error={!!error}
+                helperText={
+                  !!error
+                    ? error.type === "validate"
+                      ? getI18nText("editSystem.msgErrorHostInvalid")
+                      : error.message
+                    : null
+                }
+                sx={{ width: "30em" }}
+              />
+            )}
+            rules={{
+              required: getI18nText("general.fieldMandatory"),
+              validate: (value) => {
+                return validateHost(value);
+              },
+            }}
+          />
+        </FormItem>
+        <FormItem>
+          <Controller
+            name="sap_user"
+            control={control}
+            defaultValue=""
+            render={({ field: { onChange, value }, fieldState: { error } }) => (
+              <TextField
+                required
+                label={getI18nText("systems.labelSAPUser")}
+                variant="filled"
+                value={value}
+                onChange={(e) => {
+                  e.target.value = e.target.value.toUpperCase();
+                  onChange(e);
+                }}
+                error={!!error}
+                helperText={error ? error.message : null}
+                sx={{ width: "15em" }}
+              />
+            )}
+            rules={{ required: getI18nText("general.fieldMandatory") }}
+          />
+        </FormItem>
+        <FormItem>
+          <Controller
+            name="sap_password"
+            control={control}
+            defaultValue=""
+            render={({ field: { onChange, value }, fieldState: { error } }) => (
+              <TextField
+                required
+                label={getI18nText("systems.labelSAPPassword")}
+                variant="filled"
+                value={value}
+                onChange={onChange}
+                error={!!error}
+                helperText={error ? error.message : null}
+                sx={{ width: "15em" }}
+                type="password"
+              />
+            )}
+            rules={{ required: getI18nText("general.fieldMandatory") }}
+          />
+        </FormItem>
+      </Form>
     </Dialog>
   );
 }
