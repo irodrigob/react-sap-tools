@@ -15,7 +15,6 @@ import { useTranslations } from "translations/i18nContext";
 import { showToast, MESSAGE } from "utils/general/message";
 import useDataManager from "./useDataManager";
 import useDataValidations from "./useDataValidations";
-//import { convertFieldsInternalRow2External } from "./commonsUtils";
 
 export default function useCustomAnalyticTable() {
   const { getI18nText } = useTranslations();
@@ -51,15 +50,21 @@ export default function useCustomAnalyticTable() {
     ...DEFAULT_VALUES_PROPERTIES,
   });
 
+  /**
+   * Nota Iván del futuro: El tableValues sirve para alimentar el componente de la tabla de UI5 pero
+   * no lo uso internamente porque a veces no esta informado. Lo soluciono utilizando los datos que vienen en
+   * el objeto instance. Este objeto contiene toda la info de la tabla de UI5. Lo mismo aplica para las columnas
+   */
+
   /*************************************
    * Efectos
    ************************************/
   /* Cualquier cambio en el catalogo de campo se actualiza dichos valores en el
   hook de gestión de datos.
   */
-  useEffect(() => {
+  /*useEffect(() => {
     setFieldCatalogDataManager(fieldCatalog);
-  }, [fieldCatalog]);
+  }, [fieldCatalog]);*/
 
   /**
    * Efecto que cuando se cambian los valores de la tabla se recalcula

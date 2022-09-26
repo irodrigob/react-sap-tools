@@ -8,6 +8,7 @@ import {
   ANALYTIC_TABLE,
   INTERNAL_FIELD_PATTERN,
 } from "./constants";
+import { convertFieldsInternalRow2External } from "./commonsUtils";
 
 /**
  * El objetivo de este HOOK es el tratamiento de los datos, en ningún caso se guardan datos.
@@ -15,8 +16,6 @@ import {
  * Lo que si se guardan datos que son inamovibles como el catalogo de campos
  */
 export default function useDataManager() {
-  const [fieldCatalog, setFieldCatalog] = useState([]);
-
   /**
    * Adapta los valores de la tabla añadiendole campos internos segun las columnas pasadas
    * @param {Array} columns | Array con los campos a mostrar en la tabla
@@ -354,28 +353,9 @@ export default function useDataManager() {
     return instance.cell.row.index;
   };
 
-  /**
-   * Convierte los campos de un registro interno a uno externo. Esa conversión
-   * es quitar los campos de gestión
-   * @param {object} row | Fila de datos con el formato externo
-   * @returns | Fila de datos externa
-   */
-  const convertFieldsInternalRow2External = (row) => {
-    let externalRow = {};
-
-    for (const key in row) {
-      // Los campos que comiencen por "__" son internos de objeto y no voy a copiarlo.
-      if (key.indexOf(INTERNAL_FIELD_PATTERN) === -1)
-        externalRow[key] = row[key];
-    }
-
-    return externalRow;
-  };
-
   return {
     fillData,
     updateCellValue,
-    setFieldCatalog,
     undoRowDataChanged,
     disableRowEditing,
     enabledRowEditing,
