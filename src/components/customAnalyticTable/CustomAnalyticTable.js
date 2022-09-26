@@ -75,7 +75,7 @@ export default function CustomAnalyticTable(props) {
     buildFieldCatalog(columns, valuesProps, propsEditable); // Catalogo de campos
 
     setShowRowHighLight(valuesProps.showRowHighLight);
-  }, [data, columns, props]);
+  }, [data, columns]);
 
   return (
     <>

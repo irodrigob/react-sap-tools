@@ -6,6 +6,7 @@ import {
   DEFAULT_VALUES_PROPERTIES,
   INTERNAL_FIELDS_DATA,
   ANALYTIC_TABLE,
+  INTERNAL_FIELD_PATTERN,
 } from "./constants";
 
 /**
@@ -15,7 +16,6 @@ import {
  */
 export default function useDataManager() {
   const [fieldCatalog, setFieldCatalog] = useState([]);
-  const [originalFields, setOriginalFields] = useState([]);
 
   /**
    * Adapta los valores de la tabla añadiendole campos internos segun las columnas pasadas
@@ -131,32 +131,30 @@ export default function useDataManager() {
 
   /**
    * Deshace los cambios realizados en los campos editables en una fila concreta.
-   * @param {array} data
-   * @param {number} index
+   * @param {array} data | Datos de la tabla
+   * @param {array} columns | Columnas de la tabla
+   * @param {number} index | Registro a modificar
    * @returns Array con los valores actualizados
    */
-  const undoRowDataChanged = useCallback(
-    (data, index) => {
-      let newTable = [...data];
+  const undoRowDataChanged = useCallback((data, columns, index) => {
+    let newTable = [...data];
 
-      fieldCatalog
-        .filter((column) => column[COLUMN_PROPERTIES.EDIT] == true)
-        .forEach((column) => {
-          newTable[index][column.accessor] =
-            newTable[index][
-              INTERNAL_FIELDS_DATA.PREFIX_ORIGINAL_VALUE + column.accessor
-            ];
-          const fieldCellValueState = `${INTERNAL_FIELDS_DATA.PREFIX_VALUE_STATE}${column.accessor}`;
-          const fieldCellValueStateMessage = `${INTERNAL_FIELDS_DATA.PREFIX_VALUE_STATE_MESSAGE}${column.accessor}`;
-          newTable[index][INTERNAL_FIELDS_DATA.MESSAGES] = [];
-          newTable[index][fieldCellValueState] = ValueState.None;
-          newTable[index][fieldCellValueStateMessage] = "";
-        });
+    columns
+      .filter((column) => column[COLUMN_PROPERTIES.EDIT] == true)
+      .forEach((column) => {
+        newTable[index][column.id] =
+          newTable[index][
+            INTERNAL_FIELDS_DATA.PREFIX_ORIGINAL_VALUE + column.id
+          ];
+        const fieldCellValueState = `${INTERNAL_FIELDS_DATA.PREFIX_VALUE_STATE}${column.id}`;
+        const fieldCellValueStateMessage = `${INTERNAL_FIELDS_DATA.PREFIX_VALUE_STATE_MESSAGE}${column.id}`;
+        newTable[index][INTERNAL_FIELDS_DATA.MESSAGES] = [];
+        newTable[index][fieldCellValueState] = ValueState.None;
+        newTable[index][fieldCellValueStateMessage] = "";
+      });
 
-      return newTable;
-    },
-    [fieldCatalog]
-  );
+    return newTable;
+  }, []);
 
   /**
    * Desactiva el modo edición de una fila
@@ -185,25 +183,43 @@ export default function useDataManager() {
   /**
    * Actualiza los datos original con los datos modificados.
    * @param {array} data | Valores
+   * @param {array} columns | Columnas
    * @param {number} index | Indice
    * @returns Array con los valores actualizados
    */
-  const updateOriginalData = useCallback(
-    (data, index) => {
-      let newTable = [...data];
+  const updateRowOriginalData = useCallback((data, columns, index) => {
+    let newTable = [...data];
 
-      fieldCatalog
-        .filter((column) => column[COLUMN_PROPERTIES.EDIT] == true)
-        .forEach((column) => {
-          newTable[index][
-            INTERNAL_FIELDS_DATA.PREFIX_ORIGINAL_VALUE + column.accessor
-          ] = newTable[index][column.accessor];
-        });
+    columns
+      .filter((column) => column[COLUMN_PROPERTIES.EDIT] == true)
+      .forEach((column) => {
+        newTable[index][
+          INTERNAL_FIELDS_DATA.PREFIX_ORIGINAL_VALUE + column.id
+        ] = newTable[index][column.id];
+      });
 
-      return newTable;
-    },
-    [fieldCatalog]
-  );
+    return newTable;
+  }, []);
+
+  /**
+   * Devuelve una fila con los datos originales
+   * @param {array} data | Valores
+   * @param {array} columns | Columnas
+   * @param {number} index | Indice
+   * @returns Array con los valores actualizados
+   */
+  const getRowOriginalData = useCallback((data, columns, index) => {
+    let newRow = convertFieldsInternalRow2External(data[index]);
+
+    columns
+      .filter((column) => column[COLUMN_PROPERTIES.EDIT] == true)
+      .forEach((column) => {
+        newRow[column.id] =
+          data[index][INTERNAL_FIELDS_DATA.PREFIX_ORIGINAL_VALUE + column.id];
+      });
+
+    return newRow;
+  }, []);
 
   /**
    * Informa un status en una fila en concreto.
@@ -230,7 +246,6 @@ export default function useDataManager() {
    */
   const propagateValidation = useCallback((data, index, returnValidation) => {
     let newTable = [...data];
-    let newRow = newTable[index];
 
     // Primero vamos a borrar los registros existentes para la columna (si esta en blanco es a nivel general)
     let findIndex = 0;
@@ -339,6 +354,24 @@ export default function useDataManager() {
     return instance.cell.row.index;
   };
 
+  /**
+   * Convierte los campos de un registro interno a uno externo. Esa conversión
+   * es quitar los campos de gestión
+   * @param {object} row | Fila de datos con el formato externo
+   * @returns | Fila de datos externa
+   */
+  const convertFieldsInternalRow2External = (row) => {
+    let externalRow = {};
+
+    for (const key in row) {
+      // Los campos que comiencen por "__" son internos de objeto y no voy a copiarlo.
+      if (key.indexOf(INTERNAL_FIELD_PATTERN) === -1)
+        externalRow[key] = row[key];
+    }
+
+    return externalRow;
+  };
+
   return {
     fillData,
     updateCellValue,
@@ -346,13 +379,14 @@ export default function useDataManager() {
     undoRowDataChanged,
     disableRowEditing,
     enabledRowEditing,
-    updateOriginalData,
+    updateRowOriginalData,
     setStatusRow,
     getTabix,
     propagateValidation,
     existErrorInRow,
     existMessagesInRow,
     addMessage,
-    setOriginalFields,
+    getRowOriginalData,
+    convertFieldsInternalRow2External,
   };
 }

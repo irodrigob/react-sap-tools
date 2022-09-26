@@ -15,7 +15,7 @@ import { useTranslations } from "translations/i18nContext";
 import { showToast, MESSAGE } from "utils/general/message";
 import useDataManager from "./useDataManager";
 import useDataValidations from "./useDataValidations";
-import { convertFieldsInternalRow2External } from "./commonsUtils";
+//import { convertFieldsInternalRow2External } from "./commonsUtils";
 
 export default function useCustomAnalyticTable() {
   const { getI18nText } = useTranslations();
@@ -31,14 +31,14 @@ export default function useCustomAnalyticTable() {
     undoRowDataChanged,
     disableRowEditing,
     enabledRowEditing,
-    updateOriginalData,
+    updateRowOriginalData,
     setStatusRow,
     getTabix,
     propagateValidation,
     existErrorInRow,
     addMessage,
-    originalFields,
-    setOriginalFields,
+    getRowOriginalData,
+    convertFieldsInternalRow2External,
   } = useDataManager();
   const { cellValidations } = useDataValidations();
   const [openPopupMessages, setOpenPopupMessages] = useState(false);
@@ -179,7 +179,7 @@ export default function useCustomAnalyticTable() {
 
                   setTableValues(
                     propagateValidation(
-                      tableValues,
+                      instance.data,
                       getTabix(instance),
                       returnValidations
                     )
@@ -188,7 +188,7 @@ export default function useCustomAnalyticTable() {
                   if (returnValidations.state != ValueState.Error)
                     setTableValues(
                       updateCellValue(
-                        tableValues,
+                        instance.data,
                         getTabix(instance),
                         instance.cell.column.id,
                         cellValue
@@ -231,7 +231,6 @@ export default function useCustomAnalyticTable() {
       }
 
       setFieldCatalog(newFieldCatalog);
-      setOriginalFields(columns);
     },
     [tableProps]
   );
@@ -287,16 +286,19 @@ export default function useCustomAnalyticTable() {
 
       return newValuesProperties;
     },
-    [tableValues]
+    [tableValues, valuesProperties]
   );
   /**
    * Función que se lanzará cuando se pulse el botón de editar, y cancelar la fila de la tabla.
    * Esto lo que hará es marcar esa fila como editabke
    * @param {object} instance | Instancia con los datos de la fila que devuelve UI5
    */
-  const actionActiveEditRow = useCallback((instance) => {
-    setTableValues(enabledRowEditing(instance.data, getTabix(instance)));
-  }, []);
+  const actionActiveEditRow = useCallback(
+    (instance) => {
+      setTableValues(enabledRowEditing(instance.data, getTabix(instance)));
+    },
+    [tableValues]
+  );
 
   /**
    * Función que se lanzará cuando se pulse el botón de declinar el cambio. Esto aparte de dejar la
@@ -309,7 +311,11 @@ export default function useCustomAnalyticTable() {
       setTableValues(
         setStatusRow(
           disableRowEditing(
-            undoRowDataChanged(tableValues, getTabix(instance)),
+            undoRowDataChanged(
+              instance.data,
+              instance.columns,
+              getTabix(instance)
+            ),
             getTabix(instance)
           ),
           getTabix(instance),
@@ -317,7 +323,7 @@ export default function useCustomAnalyticTable() {
         )
       );
     },
-    [tableValues, fieldCatalog]
+    [tableValues, fieldCatalog, originalValues]
   );
   /**
    * Función que se lanzará cuando se pulse el botón de confirmar el cambio. Este proceso realiza los siguientes pasos:
@@ -340,21 +346,26 @@ export default function useCustomAnalyticTable() {
           MESSAGE.TYPE.INFO
         );
       } else {
-        let originalRow = originalValues[getTabix(instance)];
-        let changedRow = tableValues[getTabix(instance)];
-        let updateRow = {};
+        let originalRow = getRowOriginalData(
+          instance.data,
+          instance.columns,
+          getTabix(instance)
+        );
+        let changedRow = convertFieldsInternalRow2External(
+          instance.data[getTabix(instance)]
+        );
 
-        for (const key in originalRow) {
-          // Los campos que comiencen por "__" son internos de objeto y no voy a copiarlo.
-          if (key.substring(0, 2) != "__") updateRow[key] = changedRow[key];
-        }
         propsEditable
-          .onRowUpdate(updateRow, originalRow)
+          .onRowUpdate(changedRow, originalRow)
           .then((result) => {
             setTableValues(
               setStatusRow(
                 disableRowEditing(
-                  updateOriginalData(tableValues, getTabix(instance)),
+                  updateRowOriginalData(
+                    instance.data,
+                    instance.columns,
+                    getTabix(instance)
+                  ),
                   getTabix(instance)
                 ),
                 getTabix(instance),
@@ -364,7 +375,7 @@ export default function useCustomAnalyticTable() {
           })
           .catch((reason) => {
             setTableValues(
-              addMessage(tableValues, getTabix(instance), {
+              addMessage(instance.data, getTabix(instance), {
                 ...DEFAULT_ROW_MESSAGE,
                 state: ValueState.Error,
                 message: reason,
@@ -398,7 +409,7 @@ export default function useCustomAnalyticTable() {
           setTableValues(
             setStatusRow(
               disableRowEditing(
-                updateOriginalData(tableValues, getTabix(instance)),
+                updateRowOriginalData(tableValues, getTabix(instance)),
                 getTabix(instance)
               ),
               getTabix(instance),
