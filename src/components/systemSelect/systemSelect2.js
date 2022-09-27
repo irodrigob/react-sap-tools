@@ -1,4 +1,4 @@
-import { useCallback, useMemo, useState, useEffect, useRef } from "react";
+import { useCallback, useState, useEffect } from "react";
 import "@ui5/webcomponents-icons/dist/account";
 import "@ui5/webcomponents/dist/features/InputSuggestions.js";
 import { Input, SuggestionItem, Popover } from "@ui5/webcomponents-react";
@@ -13,7 +13,12 @@ export default function SystemSelect2(props) {
   const { getI18nText } = useTranslations();
   const { systemsList, systemSelected } = useGlobalData();
   const [haveSystems, setHaveSystems] = useState(false);
-  const { isSystemSelected, loadingSystems, srvGetUserSystems } = useSystems();
+  const {
+    isSystemSelected,
+    loadingSystems,
+    srvGetUserSystems,
+    processSelectedSystem,
+  } = useSystems();
   const { session } = useSession();
   const [openComboSystemList, setOpenComboSystemList] = useState(false);
   const [systemValue, setSystemValue] = useState("");
@@ -39,10 +44,11 @@ export default function SystemSelect2(props) {
   useEffect(() => {
     if (systemID != "") {
       console.log(systemID);
-      let row = aSystems.find((row) => row._id == systemID);
+      let row = systemsList.find((row) => row._id == systemID);
       if (row) {
         setSystemValue(row.name);
       }
+      processSelectedSystem(systemID);
     }
   }, [systemID]);
   /*************************************
@@ -59,14 +65,6 @@ export default function SystemSelect2(props) {
       </strong>
     );
   });
-
-  const aSystems = useMemo(() => {
-    if (Array.isArray(systemsList)) {
-      return systemsList;
-    } else {
-      return [];
-    }
-  }, [systemsList]);
 
   return (
     <>
@@ -88,18 +86,18 @@ export default function SystemSelect2(props) {
         }
         value={systemValue}
         onChange={(e) => {
-          let row = aSystems.find(
+          let row = systemsList.find(
             (row) => row.name == e.target.lastConfirmedValue
           );
           if (row) {
-            setSystemValue(row.name);
+            //setSystemValue(row.name);
 
             setSystemID(row._id);
           }
         }}
       >
         {haveSystems &&
-          aSystems.map((row) => {
+          systemsList.map((row) => {
             let bSystemSelected = isSystemSelected(row._id);
             return (
               <SuggestionItem

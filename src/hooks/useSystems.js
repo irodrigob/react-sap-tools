@@ -57,8 +57,13 @@ export const MUTATION_DELETE_SYSTEM = gql`
 export default function useSystems() {
   const { session } = useSession();
   const { getI18nText } = useTranslations();
-  const { systemSelected, setSystemsList, systemsList, setSystemSelected } =
-    useGlobalData();
+  const {
+    systemSelected,
+    setSystemsList,
+    systemsList,
+    setSystemSelected,
+    setShowListApps,
+  } = useGlobalData();
 
   /*************************************
    * Funciones
@@ -208,7 +213,12 @@ export default function useSystems() {
    * desde dos sitios a la vez y en cada uno de ellos hay datos de distintos
    * @param sSystem | Sistema seleccionado
    */
-  const processSelectedSystem = useCallback((pSystem) => {}, []);
+  const processSelectedSystem = useCallback((pSystem) => {
+    let sSystem = systemsList.find((row) => row._id == pSystem);
+    setSystemSelected(sSystem);
+
+    setShowListApps(true);
+  }, []);
 
   /*************************************
    * Servicios GraphQL
@@ -222,6 +232,11 @@ export default function useSystems() {
       },
       onCompleted: (data) => {
         saveSystems(data.getSystemsByUser);
+
+        // Si solo hay un sistema lo selecciono por defecto
+        if (data.getSystemsByUser.length == 1) {
+          processSelectedSystem(data.getSystemsByUser[0]._id);
+        }
       },
 
       onError: (error) => {
@@ -248,5 +263,6 @@ export default function useSystems() {
     session,
     updateSystem,
     deleteSystem,
+    processSelectedSystem,
   };
 }
