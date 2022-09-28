@@ -15,7 +15,7 @@
     "@ui5/webcomponents-fiori": "^1.7.1",
     "@ui5/webcomponents-icons": "^1.7.1",
     "@ui5/webcomponents-icons-tnt": "^1.7.1",
-    "@ui5/webcomponents-react": "^0.28.1",
+    "@ui5/webcomponents-react": "^0.28.2",
     "axios": "^0.27.2",
     "crypto-js": "^4.1.1",
     "graphql": "^16.6.0",

@@ -6,7 +6,6 @@ import {
 import { useGlobalData } from "context/globalDataContext";
 
 export default function ListApps() {
-  const { showListApps } = useGlobalData();
   return (
     <>
       <SideNavigation>
