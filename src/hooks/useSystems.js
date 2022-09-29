@@ -6,6 +6,8 @@ import { errorHandling } from "utils/graphQL/errorHandling";
 import { showToast, MESSAGE } from "utils/general/message";
 import { useTranslations } from "translations/i18nContext";
 import { useGlobalData } from "context/globalDataContext";
+import { useSAPGlobalData } from "context/sapDataContext";
+import useSAPGeneral from "./useSAPGeneral";
 
 export const MAIN_SYSTEMS_FIELDS = gql`
   fragment MainSystemsFields on Systems {
@@ -63,7 +65,10 @@ export default function useSystems() {
     systemsList,
     setSystemSelected,
     setShowListApps,
+    setConnectedToSystem,
   } = useGlobalData();
+  const { setURLODataCore } = useSAPGlobalData();
+  const { buildSAPUrl2Connect } = useSAPGeneral();
 
   /*************************************
    * Funciones
@@ -218,6 +223,13 @@ export default function useSystems() {
     setSystemSelected(sSystem);
 
     setShowListApps(true);
+
+    // Indico que no se esta conectado al sistema.
+    setConnectedToSystem(false);
+
+    // Se monta la URL completa del sistema a conectar y se graba en estado
+    let URLSystem2Connect = buildSAPUrl2Connect(sSystem.host);
+    setURLODataCore(URLSystem2Connect);
   }, []);
 
   /*************************************

@@ -9,6 +9,7 @@ import "react-toastify/dist/ReactToastify.css";
 import { ThemeProvider } from "@ui5/webcomponents-react";
 import { ThemeProvider as ThemeProviderMaterial } from "@mui/material/styles";
 import { GlobalProvider } from "context/globalDataContext";
+import { SAPProvider } from "context/sapDataContext";
 import { AuthProvider } from "./auth/authProvider";
 import { I18nProvider } from "./translations/i18nContext";
 import store from "./reduxStore/store";
@@ -31,14 +32,16 @@ root.render(
         <ApolloProvider client={apolloClient}>
           <AuthProvider client_id={process.env.REACT_APP_GOOGLE_CLIENT_ID}>
             <GlobalProvider>
-              <BrowserRouter>
-                <ThemeProviderMaterial theme={theme}>
-                  <ThemeProvider>
-                    <App />
-                    <ToastContainer />
-                  </ThemeProvider>
-                </ThemeProviderMaterial>
-              </BrowserRouter>
+              <SAPProvider>
+                <BrowserRouter>
+                  <ThemeProviderMaterial theme={theme}>
+                    <ThemeProvider>
+                      <App />
+                      <ToastContainer />
+                    </ThemeProvider>
+                  </ThemeProviderMaterial>
+                </BrowserRouter>
+              </SAPProvider>
             </GlobalProvider>
           </AuthProvider>
         </ApolloProvider>
