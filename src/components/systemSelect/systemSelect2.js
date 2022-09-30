@@ -43,7 +43,6 @@ export default function SystemSelect2(props) {
 
   useEffect(() => {
     if (systemID != "") {
-      console.log(systemID);
       let row = systemsList.find((row) => row._id == systemID);
       if (row) {
         setSystemValue(row.name);

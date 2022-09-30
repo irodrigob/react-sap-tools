@@ -213,8 +213,6 @@ export default function DialogSystemList(props) {
             });
           },
           onRowDelete: (oldData) => {
-            console.log(oldData);
-
             let toastID = showToast(
               getI18nText("editSystem.deleteInProcess", {
                 newSystem: oldData.name,

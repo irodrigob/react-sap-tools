@@ -66,9 +66,10 @@ export default function useSystems() {
     setSystemSelected,
     setShowListApps,
     setConnectedToSystem,
+    setLoadingListApps,
   } = useGlobalData();
   const { setURLODataCore } = useSAPGlobalData();
-  const { buildSAPUrl2Connect } = useSAPGeneral();
+  const { buildSAPUrl2Connect, getMetadataCore } = useSAPGeneral();
 
   /*************************************
    * Funciones
@@ -218,18 +219,42 @@ export default function useSystems() {
    * desde dos sitios a la vez y en cada uno de ellos hay datos de distintos
    * @param sSystem | Sistema seleccionado
    */
-  const processSelectedSystem = useCallback((pSystem) => {
-    let sSystem = systemsList.find((row) => row._id == pSystem);
-    setSystemSelected(sSystem);
+  const processSelectedSystem = useCallback(
+    (pSystem) => {
+      let sSystem = systemsList.find((row) => row._id == pSystem);
+      setSystemSelected(sSystem);
 
-    setShowListApps(true);
+      setShowListApps(true);
 
-    // Indico que no se esta conectado al sistema.
-    setConnectedToSystem(false);
+      // Indico que no se esta conectado al sistema.
+      setConnectedToSystem(false);
+      setLoadingListApps(true);
 
-    // Se monta la URL completa del sistema a conectar y se graba en estado
-    let URLSystem2Connect = buildSAPUrl2Connect(sSystem.host);
-    setURLODataCore(URLSystem2Connect);
+      // Se monta la URL completa del sistema a conectar y se graba en estado
+      let URLSystem2Connect = buildSAPUrl2Connect(sSystem.host);
+      setURLODataCore(URLSystem2Connect);
+
+      // Acciones generales cuando se cambia sistema
+      changeSystemGeneralActions();
+
+      // Obtención de los datos del metada
+      getMetadataCore({
+        variables: {
+          system: URLSystem2Connect,
+          sap_user: sSystem.sap_user,
+          sap_password: sSystem.sap_password,
+        },
+      });
+    },
+    [systemsList]
+  );
+
+  /**
+   * Acciones generales cuando se cambia un sistema
+   */
+  const changeSystemGeneralActions = useCallback(() => {
+    // Limpiamos las variables del transporte de ordenes
+    //clearVariablesSAPTransportOrder();
   }, []);
 
   /*************************************

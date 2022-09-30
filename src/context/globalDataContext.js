@@ -27,6 +27,7 @@ export function GlobalProvider({ children }) {
   const [systemsReaded, setSystemsReaded] = useState(false);
   const [connectedToSystem, setConnectedToSystem] = useState(false);
   const [showListApps, setShowListApps] = useState(false);
+  const [loadingListApps, setLoadingListApps] = useState(false);
   /*************************************
    * Funciones
    ************************************/
@@ -56,6 +57,8 @@ export function GlobalProvider({ children }) {
         setSystemsList,
         showListApps,
         setShowListApps,
+        loadingListApps,
+        setLoadingListApps,
       }}
     >
       {children}
