@@ -26,31 +26,29 @@ export default function AppTopToolbar() {
   return (
     <>
       {session && (
-        <>
-          <AppBar
-            position="fixed"
-            sx={{ backgroundColor: "var(--sapShellColor)" }}
-          >
-            <Toolbar variant="dense">
-              <Grid container flexGrow={1} spacing={2}>
-                <Grid xs="auto">
-                  <SelectApp />
-                </Grid>
-                <Grid xs={6} display="flex" justifyContent="flex-start">
-                  <SystemSelect2 />
-                </Grid>
-                <Grid
-                  xs={4}
-                  display="flex"
-                  justifyContent="flex-end"
-                  flexGrow={1}
-                >
-                  <UserAvatar />
-                </Grid>
+        <AppBar
+          position="fixed"
+          sx={{ backgroundColor: "var(--sapShellColor)" }}
+        >
+          <Toolbar variant="dense">
+            <Grid container flexGrow={1} spacing={2}>
+              <Grid xs="auto">
+                <SelectApp />
               </Grid>
-            </Toolbar>
-          </AppBar>
-        </>
+              <Grid xs={6} display="flex" justifyContent="flex-start">
+                <SystemSelect2 />
+              </Grid>
+              <Grid
+                xs={4}
+                display="flex"
+                justifyContent="flex-end"
+                flexGrow={1}
+              >
+                <UserAvatar />
+              </Grid>
+            </Grid>
+          </Toolbar>
+        </AppBar>
       )}
     </>
   );

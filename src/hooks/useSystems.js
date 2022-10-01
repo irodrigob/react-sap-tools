@@ -224,11 +224,11 @@ export default function useSystems() {
       let sSystem = systemsList.find((row) => row._id == pSystem);
       setSystemSelected(sSystem);
 
-      setShowListApps(true);
-
       // Indico que no se esta conectado al sistema.
       setConnectedToSystem(false);
       setLoadingListApps(true);
+
+      setShowListApps(true);
 
       // Se monta la URL completa del sistema a conectar y se graba en estado
       let URLSystem2Connect = buildSAPUrl2Connect(sSystem.host);

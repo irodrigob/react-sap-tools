@@ -1,6 +1,8 @@
 {
     "app": {
-        "title": "Herramientas para SAP"
+        "title": "Herramientas para SAP",
+        "instructions1": "Si es la primera vez que entras debes añadir un sistema a través del selector de sistemas.",
+        "instructions2": "Si ya has añadido un sistema debe seleccionar para que se te abra el selector de aplicaciones."
     },
     "login": {
         "page": {
@@ -58,7 +60,8 @@
         "tooltipButtonClose": "Ocultar listado aplicaciones"
     },
     "listApps": {
-        "title": "Aplicaciones"
+        "title": "Aplicaciones",
+        "systemNotSelected": "Debe seleccionar un sistema"
     },
     "general": {
         "btnTxtCancel": "Cancelar",
