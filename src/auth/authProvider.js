@@ -57,7 +57,7 @@ export const AuthProvider = ({ client_id, children }) => {
   const loginSuccess = (credentials) => {
     setStatus(STATUS.AUTH);
     setSession(credentials);
-    console.log(credentials);
+    //console.log(credentials);
   };
 
   /**

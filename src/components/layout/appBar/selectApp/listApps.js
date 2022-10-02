@@ -4,6 +4,7 @@ import {
   BusyIndicator,
 } from "@ui5/webcomponents-react";
 import "@ui5/webcomponents-icons/dist/shipping-status";
+
 import { useGlobalData } from "context/globalDataContext";
 import { useTranslations } from "translations/i18nContext";
 import { useSAPGlobalData } from "context/sapDataContext";
