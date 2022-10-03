@@ -1,3 +1,4 @@
+import { useNavigate } from "react-router-dom";
 import {
   SideNavigation,
   SideNavigationItem,
@@ -20,8 +21,10 @@ const getIcon = (sApp) => {
 
 export default function ListApps() {
   const { getI18nText } = useTranslations();
-  const { loadingListApps, setLoadingListApps } = useGlobalData();
+  const { loadingListApps, setLoadingListApps, setShowListApps } =
+    useGlobalData();
   const { appsList } = useSAPGlobalData();
+  const navigate = useNavigate();
 
   return (
     <>
@@ -29,7 +32,13 @@ export default function ListApps() {
         active={loadingListApps}
         text={getI18nText("systemSelect.loadingSystemData")}
       >
-        <SideNavigation sx={{ border: "0px" }}>
+        <SideNavigation
+          sx={{ border: "0px" }}
+          onSelectionChange={(event) => {
+            setShowListApps(false);
+            navigate(event.detail.item.id);
+          }}
+        >
           {appsList &&
             appsList.map((row) => {
               return (
@@ -37,6 +46,7 @@ export default function ListApps() {
                   key={row.app}
                   text={row.appDesc == "" ? row.app : row.appDesc}
                   icon={getIcon(row.app)}
+                  id={row.frontendPage}
                 />
               );
             })}

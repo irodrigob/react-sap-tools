@@ -1,13 +1,21 @@
 import { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import { Text } from "@ui5/webcomponents-react";
 import Grid from "@mui/material/Unstable_Grid2";
 import { useTranslations } from "../../translations/i18nContext";
+import { useGlobalData } from "context/globalDataContext";
 
-export default function TransportOrder(props) {
+export default function MainTransportOrder(props) {
   const { getI18nText } = useTranslations();
+  const { systemSelected } = useGlobalData();
+  const navigate = useNavigate();
+
+  /*************************************
+   * Efectos
+   ************************************/
 
   useEffect(() => {
-    document.title = getI18nText("app.title");
+    console.log("componente");
   }, []);
   return (
     <Grid
@@ -19,10 +27,9 @@ export default function TransportOrder(props) {
       style={{ minHeight: "40vh" }}
     >
       <Grid item xs={6} style={{ marginTop: "2rem" }}>
-        <Text>{getI18nText("app.instructions1")}</Text>
+        <Text>Página de transporte de ordenes</Text>
         <br></br>
         <br></br>
-        <Text>{getI18nText("app.instructions2")}</Text>;
       </Grid>
     </Grid>
   );

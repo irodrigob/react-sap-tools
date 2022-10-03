@@ -1,8 +1,8 @@
 import { Routes, Route, Navigate } from "react-router-dom";
 import Main from "./pages/main/main";
 import Login from "./pages/login/login";
-import MainLayout from "./components/layout/mainLayout";
-import TransportOrder from "components/transportOrder/transportOrder";
+import MainLayout from "./components/layout/main/mainLayout";
+import TransportOrder from "pages/transportOrder/transportOrder";
 import { AuthGuard } from "./auth/authGuard";
 function App() {
   return (

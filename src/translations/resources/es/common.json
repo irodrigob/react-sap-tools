@@ -73,6 +73,7 @@
         }
     },
     "transportOrder": {
+        "title": "Transporte de ordenes",
         "loadingOrder": "Leyendo ordenes del usuario",
         "tableOrder": {
             "labelStatusTask": "Status",
