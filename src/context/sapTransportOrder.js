@@ -7,7 +7,6 @@ export function SAPTransportOrderProvider({ children }) {
   /*************************************
    * Variables
    ************************************/
-  const {} = useGlobalData();
 
   // Listado de sistemas a los que se puede transportar
   const [systemsTransport, setSstemsTransport] = useState([]);

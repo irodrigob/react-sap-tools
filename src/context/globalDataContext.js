@@ -6,12 +6,6 @@ import React, {
   useRef,
   useCallback,
 } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import {
-  actionIconLoader,
-  actionShowLoader,
-  actionTextLoader,
-} from "reduxStore/generalActions";
 
 // Aquí se crea el contexto. Que se se declará en el fichero ráiz "_app.js" para que los datos sean globales
 const GlobalContext = createContext({});

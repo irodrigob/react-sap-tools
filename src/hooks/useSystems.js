@@ -1,4 +1,5 @@
 import { useCallback, useState, useMemo, useEffect } from "react";
+import { useLocation } from "react-router-dom";
 import { useSession } from "auth/authProvider";
 import { useLazyQuery, gql } from "@apollo/client";
 import { firstBy } from "thenby";
@@ -70,6 +71,7 @@ export default function useSystems() {
   } = useGlobalData();
   const { setURLODataCore } = useSAPGlobalData();
   const { buildSAPUrl2Connect, getMetadataCore } = useSAPGeneral();
+  const location = useLocation();
 
   /*************************************
    * Funciones
@@ -226,9 +228,12 @@ export default function useSystems() {
 
       // Indico que no se esta conectado al sistema.
       setConnectedToSystem(false);
-      setLoadingListApps(true);
 
-      setShowListApps(true);
+      // Si se esta en el raíz se muestra el popup de sistemas. Si ya se esta en un aplicación
+      // no se muestra.
+      if (location.pathname === "/") setShowListApps(true);
+
+      setLoadingListApps(true);
 
       // Se monta la URL completa del sistema a conectar y se graba en estado
       let URLSystem2Connect = buildSAPUrl2Connect(sSystem.host);

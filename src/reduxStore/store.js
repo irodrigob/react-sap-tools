@@ -1,8 +1,8 @@
 import { configureStore } from "@reduxjs/toolkit";
-import generalReducer from "./generalSlice";
+import SAPTransportOrderReducer from "./sapTransportOrderSlice";
 
 export default configureStore({
   reducer: {
-    general: generalReducer,
+    SAPTransportOrderReducer: SAPTransportOrderReducer,
   },
 });
