@@ -5,6 +5,7 @@ export const SAPTransportOrderSlice = createSlice({
   initialState: {
     orderTaskSelected: [],
     userOrderList: [],
+    userOrderListFromService: [],
     refreshUserOrders: false,
     systemTransportCopy: "",
     systemsTransportCopy: [],
@@ -14,6 +15,9 @@ export const SAPTransportOrderSlice = createSlice({
       state.orderTaskSelected = action.payload;
     },
     userOrderList: (state, action) => {
+      state.userOrderList = action.payload;
+    },
+    userOrderListFromService: (state, action) => {
       state.userOrderList = action.payload;
     },
     refreshUserOrders: (state, action) => {
@@ -34,6 +38,7 @@ export const {
   refreshUserOrders,
   systemTransportCopy,
   systemsTransportCopy,
+  userOrderListFromService,
 } = SAPTransportOrderSlice.actions;
 
 export default SAPTransportOrderSlice.reducer;

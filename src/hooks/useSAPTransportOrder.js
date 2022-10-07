@@ -9,8 +9,11 @@ import { useGlobalData } from "context/globalDataContext";
 import useSAPGeneral from "hooks/useSAPGeneral";
 import {
   systemsTransportCopy,
-  systemTransportCopy,
+  userOrderListFromService,
 } from "reduxStore/sapTransportOrderSlice";
+
+const _ = require("lodash");
+
 export const QUERY_USER_ORDERS = gql`
   query Query(
     $system: String!
@@ -32,6 +35,8 @@ export const QUERY_USER_ORDERS = gql`
       task
       orderTypeDesc
       orderType
+      orderStatusDesc
+      orderStatus
       orderUser
       orderDesc
       order
@@ -99,8 +104,8 @@ export default function useSAPTransportOrder() {
       notifyOnNetworkStatusChange: true,
       onCompleted: (data) => {
         if (data.getUserOrderList != null) {
-          console.log(data.getUserOrderList);
-          //   dispatch(actionUserOrderList(data.getUserOrderList));
+          adaptSAPOrders2TreeTable(data.getUserOrderList);
+          dispatch(userOrderListFromService(data.getUserOrderList));
         }
       },
       onError: (error) => {
@@ -171,6 +176,56 @@ export default function useSAPTransportOrder() {
       },
     });
   }, [systemSelected]);
+
+  const adaptSAPOrders2TreeTable = useCallback((aSAPOrders) => {
+    // Se agrupa la lista de ordenes por la orden
+    let orderGroups = _.groupBy(aSAPOrders, "order");
+    let id = 1;
+
+    let newData = [];
+    for (const order in orderGroups) {
+      // Datos de la orden
+      let idParent = id;
+      let orderData = {
+        id: id,
+        orderTask: order,
+        description: orderGroups[order][0].orderDesc,
+        status: orderGroups[order][0].orderStatus,
+        statusDesc: orderGroups[order][0].orderStatusDesc,
+        type: orderGroups[order][0].orderType,
+        typeDesc: orderGroups[order][0].orderTypeDesc,
+        user: orderGroups[order][0].orderUser,
+        subRows: [],
+      };
+
+      id += 1;
+
+      // Datos de la tarea
+      orderGroups[order].forEach((task) => {
+        // Solo se añade las tareas que tienen numero informadas. Si esta en blanco
+        // son ordenes sin tareas.
+        if (task.task != "") {
+          let taskData = {
+            id: id,
+            orderTask: task.task,
+            description: task.orderDesc,
+            status: task.taskStatus,
+            statusDesc: task.taskStatusDesc,
+            type: task.taskType,
+            typeDesc: task.taskTypeDesc,
+            user: task.taskUser,
+            //            parentId: idParent,
+          };
+          orderData.subRows.push(taskData);
+          id += 1;
+        }
+      });
+
+      newData.push(orderData);
+    }
+
+    return newData;
+  }, []);
 
   return { loadInitialData };
 }
