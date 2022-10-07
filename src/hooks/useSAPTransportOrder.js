@@ -10,6 +10,7 @@ import useSAPGeneral from "hooks/useSAPGeneral";
 import {
   systemsTransportCopy,
   userOrderListFromService,
+  userOrderList,
 } from "reduxStore/sapTransportOrderSlice";
 
 const _ = require("lodash");
@@ -104,7 +105,9 @@ export default function useSAPTransportOrder() {
       notifyOnNetworkStatusChange: true,
       onCompleted: (data) => {
         if (data.getUserOrderList != null) {
-          adaptSAPOrders2TreeTable(data.getUserOrderList);
+          dispatch(
+            userOrderList(adaptSAPOrders2TreeTable(data.getUserOrderList))
+          );
           dispatch(userOrderListFromService(data.getUserOrderList));
         }
       },

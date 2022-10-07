@@ -18,7 +18,7 @@ export const SAPTransportOrderSlice = createSlice({
       state.userOrderList = action.payload;
     },
     userOrderListFromService: (state, action) => {
-      state.userOrderList = action.payload;
+      state.userOrderListFromService = action.payload;
     },
     refreshUserOrders: (state, action) => {
       state.refreshUserOrders = action.payload;

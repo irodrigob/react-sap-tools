@@ -265,9 +265,9 @@ export default function useCustomAnalyticTable() {
       let index = fieldCatalog.findIndex(
         (row) => row.id === COLUMN_PROPERTIES.ACTIONS
       );
-      newFieldCatalog[index].width =
-        calculateNumberActionButton(valuesProperties) *
-        COLUMN_ACTION.WIDTH_ICON;
+      let numberButtons = calculateNumberActionButton(valuesProperties);
+      if (numberButtons > 0)
+        newFieldCatalog[index].width = numberButtons * COLUMN_ACTION.WIDTH_ICON;
 
       setFieldCatalog(newFieldCatalog);
     },

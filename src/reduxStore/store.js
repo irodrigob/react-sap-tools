@@ -3,6 +3,6 @@ import SAPTransportOrderReducer from "./sapTransportOrderSlice";
 
 export default configureStore({
   reducer: {
-    SAPTransportOrderReducer: SAPTransportOrderReducer,
+    SAPTransportOrder: SAPTransportOrderReducer,
   },
 });

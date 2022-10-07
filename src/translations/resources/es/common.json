@@ -78,7 +78,7 @@
         "instructions_wo_system": "Seleccione un sistema para poder ver las ordenes de transporte.",
         "instructions2_wo_system": "Leyendo datos del sistema.",
         "tableOrder": {
-            "labelStatusTask": "Status",
+            "labelStatus": "Status",
             "labelUser": "Usuario",
             "labelOrderType": "Tipo",
             "labelDescription": "Descripción",
