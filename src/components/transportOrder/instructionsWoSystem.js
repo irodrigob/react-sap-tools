@@ -20,9 +20,6 @@ export default function InstructionsWoSystem(props) {
         {!systemSelected.name && (
           <Text>{getI18nText("transportOrder.instructions_wo_system")}</Text>
         )}
-        {!connectedToSystem && (
-          <Text>{getI18nText("transportOrder.instructions2_wo_system")}</Text>
-        )}
         <br></br>
         <br></br>
       </Grid>

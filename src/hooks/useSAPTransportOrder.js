@@ -11,6 +11,7 @@ import {
   systemsTransportCopy,
   userOrderListFromService,
   userOrderList,
+  loadingOrders,
 } from "reduxStore/sapTransportOrderSlice";
 
 const _ = require("lodash");
@@ -81,12 +82,8 @@ export const QUERY_DO_TRANSPORT = gql`
 
 export default function useSAPTransportOrder() {
   const { getI18nText, language } = useTranslations();
-  const {
-    systemURL2Connect,
-    systemSelected,
-    setOpenSystemsDrawer,
-    setConnectedToSystem,
-  } = useGlobalData();
+  const { systemURL2Connect, systemSelected, setConnectedToSystem } =
+    useGlobalData();
   const { buildSAPUrl2Connect } = useSAPGeneral();
   const dispatch = useDispatch();
 
@@ -98,31 +95,30 @@ export default function useSAPTransportOrder() {
    * Nota: fetchPolicy: "cache-and-network" --> Hace que entre en el evento oncompleted
    * aunque los datos recuperados sean iguales a los que tiene en el cache
    */
-  const [srvGetUserOrdersList, { loading: loadingOrders }] = useLazyQuery(
-    QUERY_USER_ORDERS,
-    {
-      fetchPolicy: "network-only",
-      notifyOnNetworkStatusChange: true,
-      onCompleted: (data) => {
-        if (data.getUserOrderList != null) {
-          dispatch(
-            userOrderList(adaptSAPOrders2TreeTable(data.getUserOrderList))
-          );
-          dispatch(userOrderListFromService(data.getUserOrderList));
-        }
-      },
-      onError: (error) => {
-        // Llamo a la función que me gestiona los errores de graphQL y me devuelve una estructura común independientemente del tipo de error
-        let responseError = errorHandling(error);
-        showToast(
-          getI18nText("systemSelect.errorCallServiceRead", {
-            errorService: responseError.singleMessage,
-          }),
-          MESSAGE.TYPE.ERROR
+  const [srvGetUserOrdersList] = useLazyQuery(QUERY_USER_ORDERS, {
+    fetchPolicy: "network-only",
+    notifyOnNetworkStatusChange: true,
+    onCompleted: (data) => {
+      dispatch(loadingOrders(false));
+      if (data.getUserOrderList != null) {
+        dispatch(
+          userOrderList(adaptSAPOrders2TreeTable(data.getUserOrderList))
         );
-      },
-    }
-  );
+        dispatch(userOrderListFromService(data.getUserOrderList));
+      }
+    },
+    onError: (error) => {
+      dispatch(loadingOrders(false));
+
+      let responseError = errorHandling(error);
+      showToast(
+        getI18nText("systemSelect.errorCallServiceRead", {
+          errorService: responseError.singleMessage,
+        }),
+        MESSAGE.TYPE.ERROR
+      );
+    },
+  });
 
   /**
    * Servicio que obtiene los sistemas a donde se puede transportar
@@ -153,6 +149,7 @@ export default function useSAPTransportOrder() {
    * Proceso de lectura de datos de las ordenes del usuario
    */
   const loadInitialData = useCallback(() => {
+    dispatch(loadingOrders(true));
     let url2Service = buildSAPUrl2Connect(
       systemSelected.host,
       GATEWAY_CONF.ODATA_TRANSP_SERVICE

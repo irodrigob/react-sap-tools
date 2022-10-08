@@ -137,15 +137,19 @@ export default function useCustomAnalyticTable() {
    * @param {object} valuesProps | Propiedades segun datos
    * @returns {integer} | Numero de botones
    */
-  const calculateNumberActionButton = (valuesProps) => {
-    let buttonNumbers = 0;
+  const calculateNumberActionButton = useCallback(
+    (valuesProps) => {
+      let buttonNumbers = 0;
 
-    if (valuesProps.actionDelete) buttonNumbers += 1;
-    if (valuesProps.actionEdit) buttonNumbers += 1;
-    if (valuesProps.actionMessages) buttonNumbers += 1;
+      if (valuesProps.actionDelete) buttonNumbers += 1;
+      if (valuesProps.actionEdit) buttonNumbers += 1;
+      if (valuesProps.actionMessages) buttonNumbers += 1;
+      if (tableProps.isTreeTable) buttonNumbers += 1;
 
-    return buttonNumbers;
-  };
+      return buttonNumbers;
+    },
+    [tableProps]
+  );
 
   /**
    * Añado para las columnas editables
@@ -253,25 +257,28 @@ export default function useCustomAnalyticTable() {
     setValuesProperties(newValuesProperties);
 
     updateWidthActions(newValuesProperties);
-  }, [valuesProperties, tableValues, fieldCatalog]);
+  }, [valuesProperties, tableValues, fieldCatalog, tableProps]);
 
   /**
    * Actualiza el ancho de la columna de acciones en base a los botones que se muestran
    */
   const updateWidthActions = useCallback(
     (valuesProperties) => {
-      let newFieldCatalog = [...fieldCatalog];
-
       let index = fieldCatalog.findIndex(
         (row) => row.id === COLUMN_PROPERTIES.ACTIONS
       );
-      let numberButtons = calculateNumberActionButton(valuesProperties);
-      if (numberButtons > 0)
-        newFieldCatalog[index].width = numberButtons * COLUMN_ACTION.WIDTH_ICON;
+      if (index !== -1) {
+        let newFieldCatalog = [...fieldCatalog];
 
-      setFieldCatalog(newFieldCatalog);
+        let numberButtons = calculateNumberActionButton(valuesProperties);
+        if (numberButtons > 0)
+          newFieldCatalog[index].width =
+            numberButtons * COLUMN_ACTION.WIDTH_ICON;
+
+        setFieldCatalog(newFieldCatalog);
+      }
     },
-    [fieldCatalog]
+    [fieldCatalog, tableProps]
   );
 
   /**
@@ -481,6 +488,9 @@ export default function useCustomAnalyticTable() {
       newTableProps.allowDelete = props.allowDelete;
 
     if (props.allowEdit != undefined) newTableProps.allowEdit = props.allowEdit;
+
+    if (props.isTreeTable != undefined)
+      newTableProps.isTreeTable = props.isTreeTable;
 
     setTableProps(newTableProps);
 

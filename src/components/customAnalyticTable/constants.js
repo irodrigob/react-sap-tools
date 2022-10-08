@@ -30,6 +30,7 @@ export const INTERNAL_FIELDS_DATA = {
 export const DEFAULT_TABLE_PROPS = {
   allowDelete: true,
   allowEdit: true,
+  isTreeTable: false,
 };
 
 // Propiedades según los valores de la tabla.

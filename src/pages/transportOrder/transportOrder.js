@@ -12,8 +12,8 @@ export default function TransportOrder(props) {
 
   return (
     <SAPTransportOrderLayout>
-      {(!systemSelected.name || !connectedToSystem) && <InstructionsWoSystem />}
-      {systemSelected.name && connectedToSystem && <MainTransportOrder />}
+      {!systemSelected.name && <InstructionsWoSystem />}
+      {connectedToSystem && <MainTransportOrder />}
     </SAPTransportOrderLayout>
   );
 }

@@ -75,8 +75,8 @@
     "transportOrder": {
         "title": "Transporte de ordenes",
         "loadingOrder": "Leyendo ordenes del usuario",
+        "noData": "No se han encontrado ordenes",
         "instructions_wo_system": "Seleccione un sistema para poder ver las ordenes de transporte.",
-        "instructions2_wo_system": "Leyendo datos del sistema.",
         "tableOrder": {
             "labelStatus": "Status",
             "labelUser": "Usuario",

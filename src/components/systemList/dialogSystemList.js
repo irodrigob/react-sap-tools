@@ -166,6 +166,14 @@ export default function DialogSystemList(props) {
     },
   });
 
+  /*return new Promise((resolve, reject) => {
+              resolve("prueba de mensaje");
+            });*/
+
+  /*
+
+
+  */
   return (
     <Dialog
       open={open}
@@ -226,10 +234,6 @@ export default function DialogSystemList(props) {
                 id: oldData._id,
               },
             });
-
-            /*return new Promise((resolve, reject) => {
-              resolve("prueba de mensaje");
-            });*/
           },
         }}
       />
