@@ -97,6 +97,9 @@
                 "msgTransportInProcess": "Transporte de copia en proceso..."
             },
             "errorService": "El proceso de transporte de copia ha devuelto el siguiente error: &1"
+        },
+        "filters": {
+            "type": "Tipo de orden"
         }
     },
     "messageManager": {

@@ -1,23 +1,24 @@
 import { useEffect, useState, useMemo, useRef } from "react";
 import { useSelector } from "react-redux";
+import ToolbarOrdersTable from "components/transportOrder/toolbarOrdersTable";
 import CustomAnalyticTable from "components/customAnalyticTable/CustomAnalyticTable";
-import { AnalyticalTableHooks } from "@ui5/webcomponents-react";
 import { useTranslations } from "translations/i18nContext";
 import { useGlobalData } from "context/globalDataContext";
 import useSAPTransportOrder from "hooks/useSAPTransportOrder";
 
+/*
 export const useStartExpanded = (hooks) => {
   hooks.useInstance.push(useInstance);
 };
 useStartExpanded.pluginName = "useStartExpanded";
 
 const useInstance = (instance) => {
-  /* const {
+  const {
     state: { startExpanded },
     toggleAllRowsExpanded,
-  } = instance;*/
+  } = instance;
   // toggleAllRowsExpanded(true);
-};
+};*/
 
 export default function MainTransportOrder(props) {
   const refTable = useRef();
@@ -88,17 +89,17 @@ export default function MainTransportOrder(props) {
   useEffect(() => {
     if (systemSelected.name) loadInitialData();
   }, [systemSelected]);
-
+  //  tableHooks={[useInstance]}
   return (
     <>
       <CustomAnalyticTable
+        header={<ToolbarOrdersTable />}
         columns={columns}
         data={valuesTable}
         isTreeTable={true}
         filterable={true}
         allowDelete={false}
         tableInstance={refTable}
-        tableHooks={[useInstance]}
         loading={loadingOrders || !connectedToSystem}
         noDataText={
           loadingOrders || !connectedToSystem
