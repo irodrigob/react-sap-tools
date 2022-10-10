@@ -8,10 +8,10 @@ import { GATEWAY_CONF, MSG_SAP_2_MSG_APP } from "utils/sap/constans";
 import { useGlobalData } from "context/globalDataContext";
 import useSAPGeneral from "hooks/useSAPGeneral";
 import {
-  systemsTransportCopy,
-  userOrderListFromService,
-  userOrderList,
-  loadingOrders,
+  systemsTransportCopyAction,
+  userOrderListFromServiceAction,
+  userOrderListAction,
+  loadingOrdersAction,
 } from "reduxStore/sapTransportOrderSlice";
 
 const _ = require("lodash");
@@ -99,16 +99,16 @@ export default function useSAPTransportOrder() {
     fetchPolicy: "network-only",
     notifyOnNetworkStatusChange: true,
     onCompleted: (data) => {
-      dispatch(loadingOrders(false));
+      dispatch(loadingOrdersAction(false));
       if (data.getUserOrderList != null) {
         dispatch(
-          userOrderList(adaptSAPOrders2TreeTable(data.getUserOrderList))
+          userOrderListAction(adaptSAPOrders2TreeTable(data.getUserOrderList))
         );
-        dispatch(userOrderListFromService(data.getUserOrderList));
+        dispatch(userOrderListFromServiceAction(data.getUserOrderList));
       }
     },
     onError: (error) => {
-      dispatch(loadingOrders(false));
+      dispatch(loadingOrdersAction(false));
 
       let responseError = errorHandling(error);
       showToast(
@@ -127,7 +127,7 @@ export default function useSAPTransportOrder() {
     fetchPolicy: "network-only",
     onCompleted: (data) => {
       if (data.getSystemsTransport != null) {
-        dispatch(systemsTransportCopy(data.getSystemsTransport));
+        dispatch(systemsTransportCopyAction(data.getSystemsTransport));
       }
     },
     onError: (error) => {
@@ -149,7 +149,7 @@ export default function useSAPTransportOrder() {
    * Proceso de lectura de datos de las ordenes del usuario
    */
   const loadInitialData = useCallback(() => {
-    dispatch(loadingOrders(true));
+    dispatch(loadingOrdersAction(true));
     let url2Service = buildSAPUrl2Connect(
       systemSelected.host,
       GATEWAY_CONF.ODATA_TRANSP_SERVICE

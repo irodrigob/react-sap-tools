@@ -99,7 +99,14 @@
             "errorService": "El proceso de transporte de copia ha devuelto el siguiente error: &1"
         },
         "filters": {
-            "type": "Tipo de orden"
+            "type": {
+                "label": "Tipo de orden",
+                "values": {
+                    "workbench": "Workbench",
+                    "customizing": "Customizing",
+                    "transportCopies": "Transporte de copias"
+                }
+            }
         }
     },
     "messageManager": {

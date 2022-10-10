@@ -93,7 +93,9 @@ export default function MainTransportOrder(props) {
   return (
     <>
       <CustomAnalyticTable
-        header={<ToolbarOrdersTable />}
+        header={
+          valuesTable && valuesTable.length > 0 ? <ToolbarOrdersTable /> : null
+        }
         columns={columns}
         data={valuesTable}
         isTreeTable={true}
@@ -101,11 +103,7 @@ export default function MainTransportOrder(props) {
         allowDelete={false}
         tableInstance={refTable}
         loading={loadingOrders || !connectedToSystem}
-        noDataText={
-          loadingOrders || !connectedToSystem
-            ? getI18nText("transportOrder.loadingOrder")
-            : getI18nText("transportOrder.noData")
-        }
+        noDataText={getI18nText("transportOrder.noData")}
         reactTableOptions={{
           initialState: {
             expanded: expandedRows,

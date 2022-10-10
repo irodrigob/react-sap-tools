@@ -10,40 +10,45 @@ export const SAPTransportOrderSlice = createSlice({
     systemTransportCopy: "",
     systemsTransportCopy: [],
     loadingOrders: false,
+    toolbarFilters: { type: [] },
   },
   reducers: {
-    orderTaskSelected: (state, action) => {
+    orderTaskSelectedAction: (state, action) => {
       state.orderTaskSelected = action.payload;
     },
-    userOrderList: (state, action) => {
+    userOrderListAction: (state, action) => {
       state.userOrderList = action.payload;
     },
-    userOrderListFromService: (state, action) => {
+    userOrderListFromServiceAction: (state, action) => {
       state.userOrderListFromService = action.payload;
     },
-    refreshUserOrders: (state, action) => {
+    refreshUserOrdersAction: (state, action) => {
       state.refreshUserOrders = action.payload;
     },
-    systemTransportCopy: (state, action) => {
+    systemTransportCopyAction: (state, action) => {
       state.systemTransportCopy = action.payload;
     },
-    systemsTransportCopy: (state, action) => {
+    systemsTransportCopyAction: (state, action) => {
       state.systemsTransportCopy = action.payload;
     },
-    loadingOrders: (state, action) => {
+    loadingOrdersAction: (state, action) => {
       state.loadingOrders = action.payload;
+    },
+    toolbarFiltersAction: (state, action) => {
+      state.toolbarFilters = action.payload;
     },
   },
 });
 
 export const {
-  orderTaskSelected,
-  userOrderList,
-  refreshUserOrders,
-  systemTransportCopy,
-  systemsTransportCopy,
-  userOrderListFromService,
-  loadingOrders,
+  orderTaskSelectedAction,
+  userOrderListAction,
+  refreshUserOrdersAction,
+  systemTransportCopyAction,
+  systemsTransportCopyAction,
+  userOrderListFromServiceAction,
+  loadingOrdersAction,
+  toolbarFiltersAction,
 } = SAPTransportOrderSlice.actions;
 
 export default SAPTransportOrderSlice.reducer;
