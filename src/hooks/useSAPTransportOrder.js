@@ -7,11 +7,13 @@ import { showToast, MESSAGE } from "utils/general/message";
 import { GATEWAY_CONF, MSG_SAP_2_MSG_APP } from "utils/sap/constans";
 import { useGlobalData } from "context/globalDataContext";
 import useSAPGeneral from "hooks/useSAPGeneral";
+import useFilterValues from "components/transportOrder/useFilterValues";
 import {
   systemsTransportCopyAction,
   userOrderListFromServiceAction,
   userOrderListAction,
   loadingOrdersAction,
+  toolbarFiltersAction,
 } from "reduxStore/sapTransportOrderSlice";
 
 const _ = require("lodash");
@@ -85,6 +87,7 @@ export default function useSAPTransportOrder() {
   const { systemURL2Connect, systemSelected, setConnectedToSystem } =
     useGlobalData();
   const { buildSAPUrl2Connect } = useSAPGeneral();
+  const { getDefaultFilters } = useFilterValues();
   const dispatch = useDispatch();
 
   /*************************************
@@ -150,6 +153,10 @@ export default function useSAPTransportOrder() {
    */
   const loadInitialData = useCallback(() => {
     dispatch(loadingOrdersAction(true));
+
+    let filterValues = getDefaultFilters();
+    dispatch(toolbarFiltersAction(filterValues));
+
     let url2Service = buildSAPUrl2Connect(
       systemSelected.host,
       GATEWAY_CONF.ODATA_TRANSP_SERVICE

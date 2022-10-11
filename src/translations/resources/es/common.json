@@ -100,11 +100,18 @@
         },
         "filters": {
             "type": {
-                "label": "Tipo de orden",
+                "label": "Tipo",
                 "values": {
                     "workbench": "Workbench",
                     "customizing": "Customizing",
                     "transportCopies": "Transporte de copias"
+                }
+            },
+            "status": {
+                "label": "Estado",
+                "values": {
+                    "changeable": "Modificable",
+                    "released": "Liberada"
                 }
             }
         }
