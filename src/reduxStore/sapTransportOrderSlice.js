@@ -10,7 +10,10 @@ export const SAPTransportOrderSlice = createSlice({
     systemTransportCopy: "",
     systemsTransportCopy: [],
     loadingOrders: false,
-    toolbarFilters: { types: [], status: [] },
+    toolbarFilters: {
+      orderTypes: [],
+      orderStatus: [],
+    },
   },
   reducers: {
     orderTaskSelectedAction: (state, action) => {

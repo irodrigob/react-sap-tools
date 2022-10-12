@@ -24,12 +24,16 @@ export const QUERY_USER_ORDERS = gql`
     $sap_user: String!
     $sap_password: String!
     $user: String!
+    $orderStatus: [inputStatus]
+    $orderTypes: [inputTypes]
   ) {
     getUserOrderList(
       system: $system
       sap_user: $sap_user
       sap_password: $sap_password
       user: $user
+      orderStatus: $orderStatus
+      orderTypes: $orderTypes
     ) {
       taskStatusDesc
       taskStatus
@@ -87,7 +91,7 @@ export default function useSAPTransportOrder() {
   const { systemURL2Connect, systemSelected, setConnectedToSystem } =
     useGlobalData();
   const { buildSAPUrl2Connect } = useSAPGeneral();
-  const { getDefaultFilters } = useFilterValues();
+  const { getDefaultFilters, convertFilter2paramsGraphql } = useFilterValues();
   const dispatch = useDispatch();
 
   /*************************************
@@ -157,6 +161,8 @@ export default function useSAPTransportOrder() {
     let filterValues = getDefaultFilters();
     dispatch(toolbarFiltersAction(filterValues));
 
+    let paramsService = convertFilter2paramsGraphql(filterValues);
+
     let url2Service = buildSAPUrl2Connect(
       systemSelected.host,
       GATEWAY_CONF.ODATA_TRANSP_SERVICE
@@ -169,6 +175,7 @@ export default function useSAPTransportOrder() {
         sap_user: systemSelected.sap_user,
         sap_password: systemSelected.sap_password,
         user: systemSelected.sap_user,
+        ...paramsService,
       },
     });
 

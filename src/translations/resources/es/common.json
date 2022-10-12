@@ -100,7 +100,7 @@
         },
         "filters": {
             "type": {
-                "label": "Tipo",
+                "labelOrder": "Tipo de orden/tarea",
                 "values": {
                     "workbench": "Workbench",
                     "customizing": "Customizing",
@@ -108,7 +108,7 @@
                 }
             },
             "status": {
-                "label": "Estado",
+                "labelOrder": "Estado de la orden/tarea",
                 "values": {
                     "changeable": "Modificable",
                     "released": "Liberada"
