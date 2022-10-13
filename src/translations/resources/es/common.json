@@ -113,6 +113,9 @@
                     "changeable": "Modificable",
                     "released": "Liberada"
                 }
+            },
+            "releaseDate": {
+                "label": "Liberado desde"
             }
         }
     },

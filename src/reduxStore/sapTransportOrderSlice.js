@@ -13,6 +13,7 @@ export const SAPTransportOrderSlice = createSlice({
     toolbarFilters: {
       orderTypes: [],
       orderStatus: [],
+      releaseDateFrom: null,
     },
   },
   reducers: {

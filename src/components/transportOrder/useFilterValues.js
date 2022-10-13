@@ -2,6 +2,7 @@ import { useCallback } from "react";
 import { useDispatch } from "react-redux";
 import { useTranslations } from "translations/i18nContext";
 import { TYPE, STATUS } from "utils/sap/transportOrder";
+import { formatDate, getPreviousDay } from "utils/general/dates";
 
 export default function useFilterValues(props) {
   const dispatch = useDispatch();
@@ -18,17 +19,17 @@ export default function useFilterValues(props) {
       {
         code: TYPE.WORKBENCH,
         text: getI18nText("transportOrder.filters.type.values.workbench"),
-        defaultSelected: true,
+        selected: true,
       },
       {
         code: TYPE.CUSTOMIZING,
         text: getI18nText("transportOrder.filters.type.values.customizing"),
-        defaultSelected: true,
+        selected: true,
       },
       {
         code: TYPE.TRANSPORT_COPIES,
         text: getI18nText("transportOrder.filters.type.values.transportCopies"),
-        defaultSelected: false,
+        selected: false,
       },
     ];
 
@@ -37,18 +38,22 @@ export default function useFilterValues(props) {
       {
         code: STATUS.CHANGEABLE,
         text: getI18nText("transportOrder.filters.status.values.changeable"),
-        defaultSelected: true,
+        selected: true,
       },
       {
         code: STATUS.RELEASED,
         text: getI18nText("transportOrder.filters.status.values.released"),
-        defaultSelected: false,
+        selected: false,
       },
     ];
+
+    // Fecha de liberación
+    let previousDate = formatDate(getPreviousDay());
 
     return {
       orderTypes: types,
       orderStatus: status,
+      releaseDateFrom: previousDate,
     };
   }, []);
   /**
@@ -59,12 +64,12 @@ export default function useFilterValues(props) {
   const convertFilter2paramsGraphql = useCallback((filtersValues) => {
     return {
       orderTypes: filtersValues.orderTypes
-        .filter((row) => row.defaultSelected)
+        .filter((row) => row.selected)
         .map((values) => {
           return { type: values.code };
         }),
       orderStatus: filtersValues.orderStatus
-        .filter((row) => row.defaultSelected)
+        .filter((row) => row.selected)
         .map((values) => {
           return { status: values.code };
         }),

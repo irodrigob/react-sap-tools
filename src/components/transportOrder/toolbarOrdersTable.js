@@ -4,12 +4,13 @@ import {
   FilterGroupItem,
   MultiComboBox,
   MultiComboBoxItem,
-  Panel,
+  DatePicker,
 } from "@ui5/webcomponents-react";
 import "@ui5/webcomponents-icons/dist/filter";
 import { useTranslations } from "translations/i18nContext";
 import useFilterValues from "components/transportOrder/useFilterValues";
 import { toolbarFiltersAction } from "reduxStore/sapTransportOrderSlice";
+import { STATUS } from "utils/sap/transportOrder";
 
 export default function ToolbarOrdersTable(props) {
   const dispatch = useDispatch();
@@ -22,8 +23,8 @@ export default function ToolbarOrdersTable(props) {
 
     newFilterValues[e.target.id] = newFilterValues[e.target.id].map((row) => {
       if (e.detail.items.find((item) => item.id == row.code))
-        return { ...row, defaultSelected: true };
-      else return { ...row, defaultSelected: false };
+        return { ...row, selected: true };
+      else return { ...row, selected: false };
     });
     dispatch(toolbarFiltersAction(newFilterValues));
   };
@@ -40,7 +41,7 @@ export default function ToolbarOrdersTable(props) {
             return (
               <MultiComboBoxItem
                 text={row.text}
-                selected={row.defaultSelected}
+                selected={row.selected}
                 key={row.code}
                 id={row.code}
               />
@@ -58,7 +59,7 @@ export default function ToolbarOrdersTable(props) {
             return (
               <MultiComboBoxItem
                 text={row.text}
-                selected={row.defaultSelected}
+                selected={row.selected}
                 key={row.code}
                 id={row.code}
               />
@@ -66,6 +67,28 @@ export default function ToolbarOrdersTable(props) {
           })}
         </MultiComboBox>
       </FilterGroupItem>
+      {toolbarFilters.orderStatus.find(
+        (row) => row.code == STATUS.RELEASED && row.selected == true
+      ) && (
+        <FilterGroupItem
+          active
+          label={getI18nText("transportOrder.filters.releaseDate.label")}
+          required
+        >
+          <DatePicker
+            hideWeekNumbers={true}
+            formatPattern="dd.MM.yyyy"
+            onChange={(e) => {
+              let newFilterValues = {
+                ...toolbarFilters,
+                releaseDateFrom: e.detail.value,
+              };
+              dispatch(toolbarFiltersAction(newFilterValues));
+            }}
+            value={toolbarFilters.releaseDateFrom}
+          />
+        </FilterGroupItem>
+      )}
     </FilterBar>
   );
 }
