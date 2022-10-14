@@ -21,6 +21,9 @@ import theme from "./theme";
 import "@ui5/webcomponents-theming/dist/Assets.js";
 import "@ui5/webcomponents/dist/generated/json-imports/Themes";
 import "@ui5/webcomponents-fiori/dist/generated/json-imports/Themes";
+// Esto hará muchas cosas pero una de ellas es cargar textos en los idiomas en los componentes. Si no
+// Se carga al inicio salen en ingles.
+import "@ui5/webcomponents-react/dist/Assets";
 
 const apolloClient = createApolloClient();
 

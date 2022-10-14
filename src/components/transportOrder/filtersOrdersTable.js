@@ -9,14 +9,16 @@ import {
 import "@ui5/webcomponents-icons/dist/filter";
 import { useTranslations } from "translations/i18nContext";
 import useFilterValues from "components/transportOrder/useFilterValues";
-import { toolbarFiltersAction } from "reduxStore/sapTransportOrderSlice";
+import useSAPTransportOrder from "hooks/useSAPTransportOrder";
 import { STATUS } from "utils/sap/transportOrder";
+import { toolbarFiltersAction } from "reduxStore/sapTransportOrderSlice";
 
-export default function ToolbarOrdersTable(props) {
+export default function FiltersOrdersTable(props) {
   const dispatch = useDispatch();
   const { getI18nText } = useTranslations();
-  const {} = useFilterValues();
+  const { getDefaultFilters } = useFilterValues();
   const { toolbarFilters } = useSelector((state) => state.SAPTransportOrder);
+  const { reloadUserOrders } = useSAPTransportOrder();
 
   const onFilterChange = (e) => {
     let newFilterValues = { ...toolbarFilters };
@@ -30,7 +32,19 @@ export default function ToolbarOrdersTable(props) {
   };
 
   return (
-    <FilterBar hideToolbar={false} style={{ marginBottom: "0.4rem" }}>
+    <FilterBar
+      hideToolbar={true}
+      style={{ marginBottom: "0.4rem" }}
+      showGoOnFB
+      showRestoreOnFB
+      hideFilterConfiguration={false}
+      onGo={(e) => {
+        reloadUserOrders();
+      }}
+      onRestore={() => {
+        dispatch(toolbarFiltersAction(getDefaultFilters()));
+      }}
+    >
       <FilterGroupItem
         active
         label={getI18nText("transportOrder.filters.type.labelOrder")}

@@ -3,6 +3,7 @@ import { Button, Popover } from "@ui5/webcomponents-react";
 import { useGlobalData } from "context/globalDataContext";
 import { useTranslations } from "translations/i18nContext";
 import { showToast, MESSAGE } from "utils/general/message";
+import "@ui5/webcomponents-icons/dist/AllIcons.js";
 import ListApps from "./listApps";
 
 export default function SelectApp() {

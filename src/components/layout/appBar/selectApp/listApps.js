@@ -4,8 +4,7 @@ import {
   SideNavigationItem,
   BusyIndicator,
 } from "@ui5/webcomponents-react";
-import "@ui5/webcomponents-icons/dist/shipping-status";
-
+import "@ui5/webcomponents-icons/dist/AllIcons.js";
 import { useGlobalData } from "context/globalDataContext";
 import { useTranslations } from "translations/i18nContext";
 import { useSAPGlobalData } from "context/sapDataContext";

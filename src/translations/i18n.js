@@ -13,7 +13,7 @@ const SUPPORTED_LANGUAGES = {
   },
   es: {
     translation: translationES,
-    code: "es",
+    code: "ES",
   },
 };
 
@@ -37,6 +37,7 @@ i18n
     react: {
       useSuspense: false,
     },
+    lng: "es",
     fallbackLng: "es",
   });
 

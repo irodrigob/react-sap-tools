@@ -6,6 +6,7 @@ import { useTranslations } from "translations/i18nContext";
 import { showToast, MESSAGE } from "utils/general/message";
 import { GATEWAY_CONF, MSG_SAP_2_MSG_APP } from "utils/sap/constans";
 import { useGlobalData } from "context/globalDataContext";
+import { useSAPTransportOrderData } from "context/sapTransportOrder";
 import useSAPGeneral from "hooks/useSAPGeneral";
 import useFilterValues from "components/transportOrder/useFilterValues";
 import {
@@ -88,11 +89,12 @@ export const QUERY_DO_TRANSPORT = gql`
 
 export default function useSAPTransportOrder() {
   const { getI18nText, language } = useTranslations();
-  const { systemURL2Connect, systemSelected, setConnectedToSystem } =
-    useGlobalData();
+  const { systemSelected } = useGlobalData();
+  const { URLOData, setURLOData } = useSAPTransportOrderData();
   const { buildSAPUrl2Connect } = useSAPGeneral();
   const { getDefaultFilters, convertFilter2paramsGraphql } = useFilterValues();
   const dispatch = useDispatch();
+  const { toolbarFilters } = useSelector((state) => state.SAPTransportOrder);
 
   /*************************************
    * Servicios GraphQL
@@ -189,6 +191,8 @@ export default function useSAPTransportOrder() {
         langu: language,
       },
     });
+
+    setURLOData(url2Service);
   }, [systemSelected]);
 
   const adaptSAPOrders2TreeTable = useCallback((aSAPOrders) => {
@@ -241,5 +245,23 @@ export default function useSAPTransportOrder() {
     return newData;
   }, []);
 
-  return { loadInitialData };
+  /**
+   * Función que realiza la lectura de nuevo de las ordendes del usuario
+   * la diferencia. Esta función solo realiza la llamada al método de GraphQL y no tiene
+   * que hacer nada más ya que los loader o lo que sea ya se gestiona desde fuera de esta llamada.
+   */
+  const reloadUserOrders = useCallback(() => {
+    let paramsService = convertFilter2paramsGraphql(toolbarFilters);
+    srvGetUserOrdersList({
+      variables: {
+        system: URLOData,
+        sap_user: systemSelected.sap_user,
+        sap_password: systemSelected.sap_password,
+        user: systemSelected.sap_user,
+        ...paramsService,
+      },
+    });
+  }, [systemSelected, URLOData, toolbarFilters]);
+
+  return { loadInitialData, reloadUserOrders };
 }
