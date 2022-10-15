@@ -15,6 +15,7 @@ export const SAPTransportOrderSlice = createSlice({
       orderStatus: [],
       releaseDateFrom: null,
     },
+    systemChanged: true,
   },
   reducers: {
     orderTaskSelectedAction: (state, action) => {
@@ -41,6 +42,9 @@ export const SAPTransportOrderSlice = createSlice({
     toolbarFiltersAction: (state, action) => {
       state.toolbarFilters = action.payload;
     },
+    systemChangedAction: (state, action) => {
+      state.systemChanged = action.payload;
+    },
   },
 });
 
@@ -53,6 +57,7 @@ export const {
   userOrderListFromServiceAction,
   loadingOrdersAction,
   toolbarFiltersAction,
+  systemChangedAction,
 } = SAPTransportOrderSlice.actions;
 
 export default SAPTransportOrderSlice.reducer;

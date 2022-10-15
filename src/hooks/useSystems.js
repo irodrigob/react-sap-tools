@@ -1,5 +1,6 @@
 import { useCallback, useState, useMemo, useEffect } from "react";
-import { useLocation } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { useLocation, useNavigate } from "react-router-dom";
 import { useSession } from "auth/authProvider";
 import { useLazyQuery, gql } from "@apollo/client";
 import { firstBy } from "thenby";
@@ -8,6 +9,8 @@ import { showToast, MESSAGE } from "utils/general/message";
 import { useTranslations } from "translations/i18nContext";
 import { useGlobalData } from "context/globalDataContext";
 import { useSAPGlobalData } from "context/sapDataContext";
+import { systemChangedAction } from "reduxStore/sapTransportOrderSlice";
+import useSAPTransportOrder from "hooks/useSAPTransportOrder";
 import useSAPGeneral from "./useSAPGeneral";
 
 export const MAIN_SYSTEMS_FIELDS = gql`
@@ -71,7 +74,11 @@ export default function useSystems() {
   } = useGlobalData();
   const { setURLODataCore } = useSAPGlobalData();
   const { buildSAPUrl2Connect, getMetadataCore } = useSAPGeneral();
+  const { clearVariables: clearVariablesSAPTransportOrder } =
+    useSAPTransportOrder();
+  const dispatch = useDispatch();
   const location = useLocation();
+  const navigate = useNavigate();
 
   /*************************************
    * Funciones
@@ -210,9 +217,10 @@ export default function useSystems() {
    */
   const deleteSystemGeneralActions = useCallback(() => {
     // Limpiamos las variables del transporte de ordenes
-    //clearVariablesSAPTransportOrder();
+    clearVariablesSAPTransportOrder();
+
     // Vamos a la página de inicio
-    //router.push("/");
+    navigate("/");
   }, []);
 
   /**
@@ -259,7 +267,12 @@ export default function useSystems() {
    */
   const changeSystemGeneralActions = useCallback(() => {
     // Limpiamos las variables del transporte de ordenes
-    //clearVariablesSAPTransportOrder();
+    clearVariablesSAPTransportOrder();
+
+    // Si se esta en la pagina de transporte de orden indico que se ha cambiado el sistema para que se reelean los
+    // datos.
+    if (location.pathname === "/transportOrder")
+      dispatch(systemChangedAction(true));
   }, []);
 
   /*************************************

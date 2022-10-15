@@ -5,7 +5,7 @@ import {
   DynamicPageHeader,
   AnalyticalTable,
 } from "@ui5/webcomponents-react";
-import FiltersOrdersTable from "components/transportOrder/filtersOrdersTable";
+import ToolbarTable from "components/transportOrder/toolbarTable";
 import CustomAnalyticTable from "components/customAnalyticTable/CustomAnalyticTable";
 import { useTranslations } from "translations/i18nContext";
 import { useGlobalData } from "context/globalDataContext";
@@ -30,7 +30,7 @@ export default function OrdersTable(props) {
   const { getI18nText } = useTranslations();
   const { systemSelected, connectedToSystem } = useGlobalData();
   const { loadInitialData } = useSAPTransportOrder();
-  const { userOrderList, loadingOrders } = useSelector(
+  const { userOrderList, loadingOrders, systemChanged } = useSelector(
     (state) => state.SAPTransportOrder
   );
 
@@ -92,12 +92,14 @@ export default function OrdersTable(props) {
    ************************************/
 
   useEffect(() => {
-    if (systemSelected.name) loadInitialData();
+    // Si hay sistema seleccionado y el sistema ha cambiado se lee de nuevo
+    if (systemSelected.name && systemChanged) loadInitialData();
   }, [systemSelected]);
 
   return (
     <>
       <CustomAnalyticTable
+        header={<ToolbarTable />}
         columns={columns}
         data={valuesTable}
         isTreeTable={true}
@@ -110,6 +112,11 @@ export default function OrdersTable(props) {
           initialState: {
             expanded: expandedRows,
           },
+        }}
+        selectionMode="MultiSelect"
+        selectionBehavior="RowSelector"
+        onRowSelect={(event) => {
+          console.log(event);
         }}
       />
     </>

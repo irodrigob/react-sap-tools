@@ -15,6 +15,9 @@ import {
   userOrderListAction,
   loadingOrdersAction,
   toolbarFiltersAction,
+  systemChangedAction,
+  systemTransportCopyAction,
+  orderTaskSelectedAction,
 } from "reduxStore/sapTransportOrderSlice";
 
 const _ = require("lodash");
@@ -159,6 +162,7 @@ export default function useSAPTransportOrder() {
    */
   const loadInitialData = useCallback(() => {
     dispatch(loadingOrdersAction(true));
+    dispatch(systemChangedAction(false));
 
     let filterValues = getDefaultFilters();
     dispatch(toolbarFiltersAction(filterValues));
@@ -251,6 +255,8 @@ export default function useSAPTransportOrder() {
    * que hacer nada más ya que los loader o lo que sea ya se gestiona desde fuera de esta llamada.
    */
   const reloadUserOrders = useCallback(() => {
+    dispatch(loadingOrdersAction(true));
+
     let paramsService = convertFilter2paramsGraphql(toolbarFilters);
     srvGetUserOrdersList({
       variables: {
@@ -263,5 +269,19 @@ export default function useSAPTransportOrder() {
     });
   }, [systemSelected, URLOData, toolbarFilters]);
 
-  return { loadInitialData, reloadUserOrders };
+  /**
+   * Función que limpia el listado de ordenes del usuario.
+   * Se usará entre otros sitios cuando se borre un sistema para limpiar
+   * las ordenes
+   */
+  const clearVariables = useCallback(() => {
+    // Ordenes del usuario
+    dispatch(userOrderListAction([]));
+    dispatch(userOrderListFromServiceAction([]));
+    // Sistema seleccionado
+    dispatch(systemTransportCopyAction(""));
+    dispatch(orderTaskSelectedAction([]));
+  }, []);
+
+  return { loadInitialData, reloadUserOrders, clearVariables };
 }
