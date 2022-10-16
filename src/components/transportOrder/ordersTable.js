@@ -1,10 +1,6 @@
-import { useEffect, useState, useMemo, useRef } from "react";
-import { useSelector } from "react-redux";
-import {
-  DynamicPage,
-  DynamicPageHeader,
-  AnalyticalTable,
-} from "@ui5/webcomponents-react";
+import { useEffect, useMemo, useRef } from "react";
+import { useSelector, useDispatch } from "react-redux";
+import { orderTaskSelectedAction } from "reduxStore/sapTransportOrderSlice";
 import ToolbarTable from "components/transportOrder/toolbarTable";
 import CustomAnalyticTable from "components/customAnalyticTable/CustomAnalyticTable";
 import { useTranslations } from "translations/i18nContext";
@@ -30,9 +26,9 @@ export default function OrdersTable(props) {
   const { getI18nText } = useTranslations();
   const { systemSelected, connectedToSystem } = useGlobalData();
   const { loadInitialData } = useSAPTransportOrder();
-  const { userOrderList, loadingOrders, systemChanged } = useSelector(
-    (state) => state.SAPTransportOrder
-  );
+  const dispatch = useDispatch();
+  const { userOrderList, loadingOrders, systemChanged, orderTaskSelected } =
+    useSelector((state) => state.SAPTransportOrder);
 
   /*************************************
    * Memo
@@ -116,7 +112,15 @@ export default function OrdersTable(props) {
         selectionMode="MultiSelect"
         selectionBehavior="RowSelector"
         onRowSelect={(event) => {
-          console.log(event);
+          let newOrderTaskSelected = [...orderTaskSelected];
+          let tabix = newOrderTaskSelected.findIndex(
+            (row) => row.id == event.detail.row.original.id
+          );
+          if (tabix !== -1)
+            newOrderTaskSelected.splice(tabix, tabix >= 0 ? 1 : 0);
+          else newOrderTaskSelected.push(event.detail.row.original);
+
+          dispatch(orderTaskSelectedAction(newOrderTaskSelected));
         }}
       />
     </>

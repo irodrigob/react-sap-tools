@@ -13,6 +13,8 @@ import "@ui5/webcomponents-icons/dist/AllIcons.js";
 export default function ToolbarTable(props) {
   const { getI18nText } = useTranslations();
   const { reloadUserOrders } = useSAPTransportOrder();
+  const { orderTaskSelected } = useSelector((state) => state.SAPTransportOrder);
+
   return (
     <Toolbar>
       <Button
@@ -21,6 +23,9 @@ export default function ToolbarTable(props) {
           e.stopPropagation();
         }}
         tooltip={getI18nText("transportOrder.toolbarAction.transportCopy")}
+        style={{
+          ...(orderTaskSelected.length == 0 && { display: "none" }),
+        }}
       />
       <ToolbarSpacer />
       <ToolbarSeparator />
