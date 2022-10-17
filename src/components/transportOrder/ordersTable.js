@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef } from "react";
+import { useEffect, useMemo, useRef, useState, useCallback } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { orderTaskSelectedAction } from "reduxStore/sapTransportOrderSlice";
 import ToolbarTable from "components/transportOrder/toolbarTable";
@@ -91,6 +91,10 @@ export default function OrdersTable(props) {
     // Si hay sistema seleccionado y el sistema ha cambiado se lee de nuevo
     if (systemSelected.name && systemChanged) loadInitialData();
   }, [systemSelected]);
+
+  /*************************************
+   * Funciones
+   ************************************/
 
   return (
     <>
