@@ -8,10 +8,14 @@ import {
   Form,
   FormItem,
   Input,
+  Text,
+  Select,
+  Option,
 } from "@ui5/webcomponents-react";
 import TextField from "@mui/material/TextField";
 import { orderTaskSelectedAction } from "reduxStore/sapTransportOrderSlice";
 import useSAPTransportOrder from "hooks/useSAPTransportOrder";
+import { useEffect, useState } from "react";
 
 const FooterDialog = (props) => {
   const { onCloseButton, onConfirmButton } = props;
@@ -44,12 +48,24 @@ export default function PopupTransCopy(props) {
   const { getI18nText } = useTranslations();
   const dispatch = useDispatch();
   const { control, handleSubmit, reset } = useForm();
-  const { orderTaskSelected } = useSelector((state) => state.SAPTransportOrder);
+  const { orderTaskSelected, systemsTransportCopy } = useSelector(
+    (state) => state.SAPTransportOrder
+  );
+  const [defaultSystem, setDefaultSystem] = useState("");
 
   /*************************************
    * Funciones
    ************************************/
-  const onSubmitForm = (data) => {};
+  const onSubmitForm = (data) => {
+    console.log(data);
+  };
+  useEffect(() => {
+    let value =
+      systemsTransportCopy.length == 1
+        ? systemsTransportCopy[0]?.systemName
+        : "";
+    setDefaultSystem(value);
+  }, [systemsTransportCopy]);
   /*
  <TextField
                 required
@@ -86,21 +102,57 @@ export default function PopupTransCopy(props) {
           alignItems: "center",
         }}
       >
-        <FormItem>
+        <FormItem
+          label={getI18nText("transportOrder.transportCopy.popup.lblOrderDesc")}
+        >
           <Controller
-            name="name"
+            name="description"
             control={control}
             defaultValue=""
             render={({ field: { onChange, value }, fieldState: { error } }) => (
               <Input
-                required
+                required={true}
                 onChange={onChange}
                 value={value}
                 valueState={error?.message.length > 0 ? "Error" : "None"}
                 valueStateMessage={
-                  error?.message.length > 0 ? error.message : ""
+                  error?.message.length > 0 ? <Text>{error.message}</Text> : ""
                 }
               />
+            )}
+            rules={{ required: getI18nText("general.fieldMandatory") }}
+          />
+        </FormItem>
+        <FormItem
+          label={getI18nText("transportOrder.transportCopy.popup.lblSystem")}
+        >
+          <Controller
+            name="system"
+            control={control}
+            defaultValue={defaultSystem}
+            render={({ field: { onChange, value }, fieldState: { error } }) => (
+              <Select
+                onChange={(e) => {
+                  onChange(e.target.value);
+                }}
+                required={true}
+                valueState={error?.message.length > 0 ? "Error" : "None"}
+                valueStateMessage={
+                  error?.message.length > 0 ? <Text>{error.message}</Text> : ""
+                }
+              >
+                {systemsTransportCopy.map((row) => {
+                  return (
+                    <Option
+                      key={row.systemName}
+                      data-id={row.systemName}
+                      value={value}
+                    >
+                      {row.systemDesc}
+                    </Option>
+                  );
+                })}
+              </Select>
             )}
             rules={{ required: getI18nText("general.fieldMandatory") }}
           />
