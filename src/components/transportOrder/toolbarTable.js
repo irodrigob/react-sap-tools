@@ -7,12 +7,14 @@ import {
   Button,
 } from "@ui5/webcomponents-react";
 import PopupTransCopy from "components/transportOrder/popupTransCopy";
+import { descriptionTransportCopyAction } from "reduxStore/sapTransportOrderSlice";
 import { useTranslations } from "translations/i18nContext";
 import useSAPTransportOrder from "hooks/useSAPTransportOrder";
 import "@ui5/webcomponents-icons/dist/AllIcons.js";
 
 export default function ToolbarTable(props) {
   const { getI18nText } = useTranslations();
+  const dispatch = useDispatch();
   const { reloadUserOrders } = useSAPTransportOrder();
   const { orderTaskSelected } = useSelector((state) => state.SAPTransportOrder);
   const [openPopupTransCopy, setOpenPopupTransCopy] = useState(false);
@@ -31,6 +33,9 @@ export default function ToolbarTable(props) {
           icon="duplicate"
           onClick={(e) => {
             e.stopPropagation();
+            dispatch(
+              descriptionTransportCopyAction(orderTaskSelected[0].description)
+            );
             setOpenPopupTransCopy(true);
           }}
           tooltip={getI18nText("transportOrder.toolbarAction.transportCopy")}

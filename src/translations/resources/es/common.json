@@ -94,7 +94,8 @@
                 "lblOrderDesc": "Descripción *",
                 "lblSystem": "Sistema *",
                 "btnConfirm": "Transportar",
-                "msgTransportInProcess": "Transporte de copia en proceso..."
+                "msgTransportInProcess": "Transporte de copia en proceso...",
+                "systemDummyForSelect": "Seleccione un sistema"
             },
             "errorService": "El proceso de transporte de copia ha devuelto el siguiente error: &1"
         },

@@ -138,7 +138,15 @@ export default function useSAPTransportOrder() {
   const [srvGetSystemsTransport] = useLazyQuery(QUERY_SYSTEMS_TRANSPORT, {
     fetchPolicy: "network-only",
     onCompleted: (data) => {
+      // data.getSystemsTransport[0].systemName
       if (data.getSystemsTransport != null) {
+        // Si hay registros informo el primer sistema por defecto porque es el que saldrá "preseleccionado"
+        // en el componente Select.
+        if (data.getSystemsTransport.length > 0)
+          dispatch(
+            systemTransportCopyAction(data.getSystemsTransport[0].systemName)
+          );
+
         dispatch(systemsTransportCopyAction(data.getSystemsTransport));
       }
     },

@@ -45,13 +45,15 @@ const FooterDialog = (props) => {
 
 export default function PopupTransCopy(props) {
   const { open, onCloseButton, onConfirmButton } = props;
+  const {
+    orderTaskSelected,
+    systemsTransportCopy,
+    systemTransportCopy,
+    descriptionTransportCopy,
+  } = useSelector((state) => state.SAPTransportOrder);
   const { getI18nText } = useTranslations();
   const dispatch = useDispatch();
-  const { control, handleSubmit, reset } = useForm();
-  const { orderTaskSelected, systemsTransportCopy } = useSelector(
-    (state) => state.SAPTransportOrder
-  );
-  const [defaultSystem, setDefaultSystem] = useState("");
+  const { control, handleSubmit, reset, register, setValue } = useForm();
 
   /*************************************
    * Funciones
@@ -59,13 +61,17 @@ export default function PopupTransCopy(props) {
   const onSubmitForm = (data) => {
     console.log(data);
   };
+  /*************************************
+   * Efectos
+   ************************************/
+  /**
+   * Como se ha renderizado el componente el defaultValue del controller no funciona. Por ello
+   * cuando cambie la descripción lo pongo directamente en el formulario.
+   */
   useEffect(() => {
-    let value =
-      systemsTransportCopy.length == 1
-        ? systemsTransportCopy[0]?.systemName
-        : "";
-    setDefaultSystem(value);
-  }, [systemsTransportCopy]);
+    setValue("description", descriptionTransportCopy);
+    setValue("system", systemTransportCopy);
+  }, [descriptionTransportCopy, systemTransportCopy]);
   /*
  <TextField
                 required
@@ -108,7 +114,6 @@ export default function PopupTransCopy(props) {
           <Controller
             name="description"
             control={control}
-            defaultValue=""
             render={({ field: { onChange, value }, fieldState: { error } }) => (
               <Input
                 required={true}
@@ -129,11 +134,11 @@ export default function PopupTransCopy(props) {
           <Controller
             name="system"
             control={control}
-            defaultValue={defaultSystem}
+            defaultValue={systemTransportCopy}
             render={({ field: { onChange, value }, fieldState: { error } }) => (
               <Select
                 onChange={(e) => {
-                  onChange(e.target.value);
+                  onChange(e.detail.selectedOption.dataset.id);
                 }}
                 required={true}
                 valueState={error?.message.length > 0 ? "Error" : "None"}
@@ -147,6 +152,9 @@ export default function PopupTransCopy(props) {
                       key={row.systemName}
                       data-id={row.systemName}
                       value={value}
+                      selected={
+                        row.systemName == systemTransportCopy ? true : false
+                      }
                     >
                       {row.systemDesc}
                     </Option>
