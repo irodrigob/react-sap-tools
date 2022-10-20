@@ -97,7 +97,9 @@ export default function useSAPTransportOrder() {
   const { buildSAPUrl2Connect } = useSAPGeneral();
   const { getDefaultFilters, convertFilter2paramsGraphql } = useFilterValues();
   const dispatch = useDispatch();
-  const { toolbarFilters } = useSelector((state) => state.SAPTransportOrder);
+  const { toolbarFilters, orderTaskSelected } = useSelector(
+    (state) => state.SAPTransportOrder
+  );
 
   /*************************************
    * Servicios GraphQL
@@ -159,6 +161,46 @@ export default function useSAPTransportOrder() {
         }),
         MESSAGE.TYPE.ERROR
       );
+    },
+  });
+
+  /**
+   * Servicio que realiza el transporte de copias
+   */
+  const [srvDoTransportCopy] = useLazyQuery(QUERY_DO_TRANSPORT, {
+    fetchPolicy: "cache-and-network",
+    onCompleted: (data) => {
+      if (data.doTransportCopy != null) {
+        if (Array.isArray(data.doTransportCopy.return)) {
+          // Si el parámetro de salida RETURN solo tiene un solo registro lo saco directamente.
+          if (data.doTransportCopy.return.length == 1) {
+            showToast(
+              data.doTransportCopy.return[0].message,
+              MSG_SAP_2_MSG_APP[data.doTransportCopy.return[0].type]
+            );
+          }
+          // Guardo los mensajes en el gestor de mensajes.
+          //addMessagesManager(data.doTransportCopy.return);
+
+          // Guardo aquí el sistema seleccionado porque si lo hago en el momento de hacer el transporte
+          // fastidia los procesos de actualización de estados y no funciona el proceso.
+          dispatch(
+            systemTransportCopyAction(data.doTransportCopy.systemTransport)
+          );
+        }
+      }
+    },
+    onError: (error) => {
+      //clearMessagesManager();
+
+      let responseError = errorHandling(error);
+
+      // Llamo a la función que me gestiona los errores de graphQL y me devuelve una estructura común independientemente del tipo de error
+      let message = getI18nText("systemSelect.errorCallServiceRead", {
+        errorService: responseError.singleMessage,
+      });
+
+      //addMessagesManager([{ message: message, type: MESSAGE_TYPE.ERROR }]);
     },
   });
 
@@ -291,5 +333,33 @@ export default function useSAPTransportOrder() {
     dispatch(orderTaskSelectedAction([]));
   }, []);
 
-  return { loadInitialData, reloadUserOrders, clearVariables };
+  /**
+   * Función que realiza el transporte de copias de las ordenes seleccionadas
+   * @param pSystem | Sistema a transportar
+   * @param pSystem | Descripción del transporte de copia
+   */
+  const doTransportCopy = useCallback(
+    (pSystem, pOrderDescription) => {
+      // Se llama al servicio que realiza el transporte de copias
+      srvDoTransportCopy({
+        variables: {
+          input: {
+            system: URLOData,
+            sap_user: systemSelected.sap_user,
+            sap_password: systemSelected.sap_password,
+            user: systemSelected.sap_user,
+            langu: language,
+            orders: orderTaskSelected.map((row) => {
+              return { order: row.orderTask };
+            }),
+            systemTransport: pSystem,
+            description: pOrderDescription,
+          },
+        },
+      });
+    },
+    [orderTaskSelected, systemSelected, URLOData]
+  );
+
+  return { loadInitialData, reloadUserOrders, clearVariables, doTransportCopy };
 }

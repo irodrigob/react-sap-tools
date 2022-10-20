@@ -6,25 +6,23 @@ import {
   ToolbarSpacer,
   Button,
 } from "@ui5/webcomponents-react";
+import "@ui5/webcomponents-icons/dist/AllIcons.js";
 import PopupTransCopy from "components/transportOrder/popupTransCopy";
 import { descriptionTransportCopyAction } from "reduxStore/sapTransportOrderSlice";
 import { useTranslations } from "translations/i18nContext";
 import useSAPTransportOrder from "hooks/useSAPTransportOrder";
-import "@ui5/webcomponents-icons/dist/AllIcons.js";
+import { showToast, MESSAGE } from "utils/general/message";
 
 export default function ToolbarTable(props) {
   const { getI18nText } = useTranslations();
   const dispatch = useDispatch();
-  const { reloadUserOrders } = useSAPTransportOrder();
+  const { reloadUserOrders, doTransportCopy } = useSAPTransportOrder();
   const { orderTaskSelected } = useSelector((state) => state.SAPTransportOrder);
   const [openPopupTransCopy, setOpenPopupTransCopy] = useState(false);
 
   /*************************************
    * Funciones
    ************************************/
-  const handleClosePopupTransCopy = useCallback(() => {
-    setOpenPopupTransCopy(false);
-  }, []);
 
   return (
     <>
@@ -58,6 +56,19 @@ export default function ToolbarTable(props) {
         open={openPopupTransCopy}
         onCloseButton={(e) => {
           setOpenPopupTransCopy(false);
+        }}
+        onConfirmButton={(data) => {
+          setOpenPopupTransCopy(false);
+
+          showToast(
+            getI18nText(
+              "transportOrder.transportCopy.popup.msgTransportInProcess"
+            ),
+            MESSAGE.TYPE.INFO
+          );
+
+          // Se lanza el proceso de transporte de copia
+          doTransportCopy(data.system, data.description);
         }}
       />
     </>

@@ -59,7 +59,7 @@ export default function PopupTransCopy(props) {
    * Funciones
    ************************************/
   const onSubmitForm = (data) => {
-    console.log(data);
+    onConfirmButton(data);
   };
   /*************************************
    * Efectos
