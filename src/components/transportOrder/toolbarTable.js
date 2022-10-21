@@ -27,6 +27,7 @@ export default function ToolbarTable(props) {
   return (
     <>
       <Toolbar>
+        <ToolbarSpacer />
         <Button
           icon="duplicate"
           onClick={(e) => {
@@ -41,7 +42,6 @@ export default function ToolbarTable(props) {
             ...(orderTaskSelected.length == 0 && { display: "none" }),
           }}
         />
-        <ToolbarSpacer />
         <ToolbarSeparator />
         <Button
           icon="refresh"

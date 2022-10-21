@@ -39,7 +39,7 @@ export default function AppTopToolbar() {
                 <SystemSelect2 />
               </Grid>
               <Grid
-                xs={4}
+                xs={2}
                 display="flex"
                 justifyContent="flex-end"
                 flexGrow={1}

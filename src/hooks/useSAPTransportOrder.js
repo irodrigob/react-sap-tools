@@ -8,6 +8,9 @@ import { GATEWAY_CONF, MSG_SAP_2_MSG_APP } from "utils/sap/constans";
 import { useGlobalData } from "context/globalDataContext";
 import { useSAPTransportOrderData } from "context/sapTransportOrder";
 import useSAPGeneral from "hooks/useSAPGeneral";
+import useMessageManager, {
+  MESSAGE_TYPE,
+} from "components/messageManager/useMessageManager";
 import useFilterValues from "components/transportOrder/useFilterValues";
 import {
   systemsTransportCopyAction,
@@ -94,6 +97,7 @@ export default function useSAPTransportOrder() {
   const { getI18nText, language } = useTranslations();
   const { systemSelected } = useGlobalData();
   const { URLOData, setURLOData } = useSAPTransportOrderData();
+  const { addMessagesManager } = useMessageManager();
   const { buildSAPUrl2Connect } = useSAPGeneral();
   const { getDefaultFilters, convertFilter2paramsGraphql } = useFilterValues();
   const dispatch = useDispatch();
@@ -180,7 +184,7 @@ export default function useSAPTransportOrder() {
             );
           }
           // Guardo los mensajes en el gestor de mensajes.
-          //addMessagesManager(data.doTransportCopy.return);
+          addMessagesManager(data.doTransportCopy.return);
 
           // Guardo aquí el sistema seleccionado porque si lo hago en el momento de hacer el transporte
           // fastidia los procesos de actualización de estados y no funciona el proceso.
@@ -200,7 +204,7 @@ export default function useSAPTransportOrder() {
         errorService: responseError.singleMessage,
       });
 
-      //addMessagesManager([{ message: message, type: MESSAGE_TYPE.ERROR }]);
+      addMessagesManager([{ message: message, type: MESSAGE_TYPE.ERROR }]);
     },
   });
 
