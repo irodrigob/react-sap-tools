@@ -14,7 +14,7 @@ export const MessageManagerSlice = createSlice({
     },
     setMessagesAction: (state, action) => {
       state.messages = action.payload;
-      state.messagesNumber = state.messages.length;
+      state.messagesNumber = action.payload.length;
     },
     clearMessagesAction: (state, action) => {
       state.messages = [];

@@ -1,21 +1,22 @@
 import { useState, useCallback, useEffect } from "react";
+import { ValueState } from "@ui5/webcomponents-react";
 import { useDispatch, useSelector } from "react-redux";
 import * as actions from "components/messageManager/messageManagerSlice";
 
 // Constantes con los tipos de mensajes permitidos por el gestor
 export const MESSAGE_TYPE = {
-  ERROR: "Error",
-  WARNING: "Warning",
-  SUCCESS: "Success",
-  INFO: "Information",
-  NONE: "None",
+  ERROR: ValueState.Error,
+  WARNING: ValueState.Warning,
+  SUCCESS: ValueState.Success,
+  INFO: ValueState.Information,
+  NONE: ValueState.None,
 };
 export const MESSAGE_TYPE_SAP_2_INTERNAL = {
-  E: "ERROR",
-  W: "WARNING",
-  S: "SUCCESS",
-  I: "INFO",
-  "": "NONE",
+  E: ValueState.Error,
+  W: ValueState.Warning,
+  S: ValueState.Success,
+  I: ValueState.Information,
+  "": ValueState.None,
 };
 
 export default function useMessageManager() {
@@ -31,15 +32,19 @@ export default function useMessageManager() {
   /**
    * Añade un array de mensajes al gestor de mensaje
    * @param {object} aMessages | Array con con la siguiente estructura
-   * type: Tipo de mensaje. Valores posibles: 'E' - Error, 'W' - Warning y 'S' - Success.
+   * type: Tipo de mensaje. Valores posibles: 'Error' - Error, 'W' - Warning y 'S' - Success.
    * message: Texto del mensaje
+   * subMesssage: Subtexto del mensaje
    * @param {boolean} bKeepPreviosMessages | Indicador para que se mantengan los mensajes previos
    */
   const addMessagesManager = (aMessages = [], bKeepPreviosMessages = false) => {
     let newMessages = aMessages.map((row) => {
       return {
-        type: MESSAGE_TYPE[MESSAGE_TYPE_SAP_2_INTERNAL[row.type]],
+        type: MESSAGE_TYPE_SAP_2_INTERNAL[row.type]
+          ? MESSAGE_TYPE_SAP_2_INTERNAL[row.type]
+          : row.type,
         message: row.message,
+        subMessage: row.subMessage ? row.subMessage : "",
       };
     });
     // La acción depende de si se quiere mantener los valores previos o no

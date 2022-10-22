@@ -97,7 +97,7 @@ export default function useSAPTransportOrder() {
   const { getI18nText, language } = useTranslations();
   const { systemSelected } = useGlobalData();
   const { URLOData, setURLOData } = useSAPTransportOrderData();
-  const { addMessagesManager } = useMessageManager();
+  const { addMessagesManager, clearMessagesManager } = useMessageManager();
   const { buildSAPUrl2Connect } = useSAPGeneral();
   const { getDefaultFilters, convertFilter2paramsGraphql } = useFilterValues();
   const dispatch = useDispatch();
@@ -180,7 +180,9 @@ export default function useSAPTransportOrder() {
           if (data.doTransportCopy.return.length == 1) {
             showToast(
               data.doTransportCopy.return[0].message,
-              MSG_SAP_2_MSG_APP[data.doTransportCopy.return[0].type]
+              MSG_SAP_2_MSG_APP[
+                data.doTransportCopy.return[0].type.toUpperCase()
+              ]
             );
           }
           // Guardo los mensajes en el gestor de mensajes.
@@ -195,7 +197,7 @@ export default function useSAPTransportOrder() {
       }
     },
     onError: (error) => {
-      //clearMessagesManager();
+      clearMessagesManager();
 
       let responseError = errorHandling(error);
 
