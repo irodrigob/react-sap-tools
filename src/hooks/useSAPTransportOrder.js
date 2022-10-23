@@ -33,6 +33,7 @@ export const QUERY_USER_ORDERS = gql`
     $user: String!
     $orderStatus: [inputStatus]
     $orderTypes: [inputTypes]
+    $releaseDateFrom: String
   ) {
     getUserOrderList(
       system: $system
@@ -41,6 +42,7 @@ export const QUERY_USER_ORDERS = gql`
       user: $user
       orderStatus: $orderStatus
       orderTypes: $orderTypes
+      releaseDateFrom: $releaseDateFrom
     ) {
       taskStatusDesc
       taskStatus
@@ -48,6 +50,7 @@ export const QUERY_USER_ORDERS = gql`
       taskType
       taskUser
       task
+      taskDesc
       orderTypeDesc
       orderType
       orderStatusDesc
@@ -286,7 +289,7 @@ export default function useSAPTransportOrder() {
           let taskData = {
             id: id,
             orderTask: task.task,
-            description: task.orderDesc,
+            description: task.taskDesc,
             status: task.taskStatus,
             statusDesc: task.taskStatusDesc,
             type: task.taskType,

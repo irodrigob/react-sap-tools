@@ -2,7 +2,8 @@ import { useCallback } from "react";
 import { useDispatch } from "react-redux";
 import { useTranslations } from "translations/i18nContext";
 import { TYPE, STATUS } from "utils/sap/transportOrder";
-import { formatDate, getPreviousDay } from "utils/general/dates";
+import date from "date-and-time";
+//import { formatDate, getPreviousDay } from "utils/general/dates";
 
 export default function useFilterValues(props) {
   const dispatch = useDispatch();
@@ -48,7 +49,10 @@ export default function useFilterValues(props) {
     ];
 
     // Fecha de liberación
-    let previousDate = formatDate(getPreviousDay());
+    let previousDate = date.format(
+      date.addMonths(new Date(), -1),
+      "DD.MM.YYYY"
+    );
 
     return {
       orderTypes: types,
@@ -73,6 +77,15 @@ export default function useFilterValues(props) {
         .map((values) => {
           return { status: values.code };
         }),
+
+      releaseDateFrom: [
+        date.transform(
+          filtersValues.releaseDateFrom,
+          "DD.MM.YYYY",
+          "YYYY-MM-DD"
+        ),
+        "00:00:00",
+      ].join("T"),
     };
   }, []);
 
