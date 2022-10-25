@@ -1,12 +1,12 @@
 import { useSelector } from "react-redux";
 import { DynamicPage, DynamicPageHeader } from "@ui5/webcomponents-react";
 import FiltersOrdersTable from "components/transportOrder/filtersOrdersTable";
-import OrdersTable from "components/transportOrder/ordersTable";
+import OrdersTableTree from "components/transportOrder/ordersTableTree";
 import { useTranslations } from "translations/i18nContext";
 
 export default function MainTransportOrder(props) {
   const { getI18nText } = useTranslations();
-  const { userOrderList } = useSelector((state) => state.SAPTransportOrder);
+  const { userOrderListTree } = useSelector((state) => state.SAPTransportOrder);
 
   return (
     <DynamicPage
@@ -14,14 +14,14 @@ export default function MainTransportOrder(props) {
       headerContentPinnable={false}
       headerContent={
         <DynamicPageHeader>
-          {userOrderList && userOrderList.length > 0 ? (
+          {userOrderListTree && userOrderListTree.length > 0 ? (
             <FiltersOrdersTable />
           ) : null}
         </DynamicPageHeader>
       }
       style={{ paddingLeft: "0px", paddingRight: "0px" }}
     >
-      <OrdersTable />
+      <OrdersTableTree />
     </DynamicPage>
   );
 }

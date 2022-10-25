@@ -15,7 +15,7 @@ import useFilterValues from "components/transportOrder/useFilterValues";
 import {
   systemsTransportCopyAction,
   userOrderListFromServiceAction,
-  userOrderListAction,
+  userOrderListTreeAction,
   loadingOrdersAction,
   toolbarFiltersAction,
   systemChangedAction,
@@ -123,7 +123,7 @@ export default function useSAPTransportOrder() {
       dispatch(loadingOrdersAction(false));
       if (data.getUserOrderList != null) {
         dispatch(
-          userOrderListAction(adaptSAPOrders2TreeTable(data.getUserOrderList))
+          userOrderListTreeAction(adaptSAPOrders2TreeTable(data.getUserOrderList))
         );
         dispatch(userOrderListFromServiceAction(data.getUserOrderList));
       }
@@ -335,7 +335,7 @@ export default function useSAPTransportOrder() {
    */
   const clearVariables = useCallback(() => {
     // Ordenes del usuario
-    dispatch(userOrderListAction([]));
+    dispatch(userOrderListTreeAction([]));
     dispatch(userOrderListFromServiceAction([]));
     // Sistema seleccionado
     dispatch(systemTransportCopyAction(""));

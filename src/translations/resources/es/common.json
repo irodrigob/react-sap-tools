@@ -117,6 +117,10 @@
             },
             "releaseDate": {
                 "label": "Liberado desde"
+            },
+            "validations":{
+                "fieldMandatory":"Campo obligatorio",
+                "fixErrorFilters":"Corrija los filtros con errores"
             }
         }
     },

@@ -21,13 +21,13 @@ const useInstance = (instance) => {
   // toggleAllRowsExpanded(true);
 };*/
 
-export default function OrdersTable(props) {
+export default function OrdersTableTree(props) {
   const refTable = useRef();
   const { getI18nText } = useTranslations();
   const { systemSelected, connectedToSystem } = useGlobalData();
   const { loadInitialData } = useSAPTransportOrder();
   const dispatch = useDispatch();
-  const { userOrderList, loadingOrders, systemChanged, orderTaskSelected } =
+  const { userOrderListTree, loadingOrders, systemChanged, orderTaskSelected } =
     useSelector((state) => state.SAPTransportOrder);
 
   /*************************************
@@ -38,17 +38,17 @@ export default function OrdersTable(props) {
    me ha ido relativamente bien.
   */
   const valuesTable = useMemo(() => {
-    return userOrderList;
-  }, [userOrderList]);
+    return userOrderListTree;
+  }, [userOrderListTree]);
 
   // Memo para para poner los índices de los registros expandido por defecto
   const expandedRows = useMemo(() => {
     let rows = [];
-    rows = userOrderList.map((row, index) => {
+    rows = userOrderListTree.map((row, index) => {
       if (row.subRows.length > 0) return { [index]: true };
     });
     return rows;
-  }, [userOrderList]);
+  }, [userOrderListTree]);
 
   const columns = useMemo(
     () => [
