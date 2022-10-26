@@ -118,9 +118,9 @@
             "releaseDate": {
                 "label": "Liberado desde"
             },
-            "validations":{
-                "fieldMandatory":"Campo obligatorio",
-                "fixErrorFilters":"Corrija los filtros con errores"
+            "validations": {
+                "fieldMandatory": "Campo obligatorio",
+                "fixErrorFilters": "Aún hay filtros con errores"
             }
         }
     },

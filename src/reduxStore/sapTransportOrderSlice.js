@@ -16,6 +16,14 @@ export const SAPTransportOrderSlice = createSlice({
       orderStatus: [],
       releaseDateFrom: null,
     },
+    toolbarFiltersState: {
+      orderTypes: "None",
+      orderTypesDesc: "",
+      orderStatus: "None",
+      orderStatusDesc: "",
+      releaseDate: "None",
+      releaseDateDesc: "",
+    },
     systemChanged: true,
   },
   reducers: {
@@ -43,6 +51,9 @@ export const SAPTransportOrderSlice = createSlice({
     toolbarFiltersAction: (state, action) => {
       state.toolbarFilters = action.payload;
     },
+    toolbarFiltersStateAction: (state, action) => {
+      state.toolbarFiltersState = action.payload;
+    },
     systemChangedAction: (state, action) => {
       state.systemChanged = action.payload;
     },
@@ -63,6 +74,7 @@ export const {
   toolbarFiltersAction,
   systemChangedAction,
   descriptionTransportCopyAction,
+  toolbarFiltersStateAction,
 } = SAPTransportOrderSlice.actions;
 
 export default SAPTransportOrderSlice.reducer;

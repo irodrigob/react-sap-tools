@@ -1,12 +1,17 @@
 import { useCallback } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useTranslations } from "translations/i18nContext";
 import { TYPE, STATUS } from "utils/sap/transportOrder";
 import date from "date-and-time";
+import { toolbarFiltersStateAction } from "reduxStore/sapTransportOrderSlice";
 //import { formatDate, getPreviousDay } from "utils/general/dates";
 
 export default function useFilterValues(props) {
   const dispatch = useDispatch();
+
+  const { toolbarFiltersState } = useSelector(
+    (state) => state.SAPTransportOrder
+  );
   const { getI18nText } = useTranslations();
 
   /**
@@ -89,5 +94,49 @@ export default function useFilterValues(props) {
     };
   }, []);
 
-  return { getDefaultFilters, convertFilter2paramsGraphql };
+  /**
+   * Chequeo los valores de los multicombo
+   * @param {Array} comboValues
+   * @param {string} comboId
+   */
+  const checkFilterCombo = useCallback((comboValues, comboId) => {
+    let newFiltersValueState = { ...toolbarFiltersState };
+    let fieldDesc = comboId + "Desc";
+    if (comboValues.findIndex((row) => row.selected) != -1) {
+      newFiltersValueState[comboId] = ValueState.None;
+      newFiltersValueState[fieldDesc] = "";
+    } else {
+      newFiltersValueState[comboId] = ValueState.Error;
+      newFiltersValueState[fieldDesc] = getI18nText(
+        "transportOrder.filters.validations.fieldMandatory"
+      );
+    }
+    dispatch(toolbarFiltersStateAction(newFiltersValueState));
+  }, []);
+
+  /**
+   * Verifica la fecha de liberación
+   * @param {string} value
+   */
+  const checkReleaseDate = useCallback((value) => {
+    let newFiltersValueState = { ...toolbarFiltersState };
+
+    if (value.length == 0) {
+      newFiltersValueState.releaseDate = ValueState.Error;
+      newFiltersValueState.releaseDateDesc = getI18nText(
+        "transportOrder.filters.validations.fieldMandatory"
+      );
+    } else {
+      newFiltersValueState.releaseDate = ValueState.None;
+      newFiltersValueState.releaseDateDesc = "";
+    }
+    dispatch(toolbarFiltersStateAction(newFiltersValueState));
+  }, []);
+
+  return {
+    getDefaultFilters,
+    convertFilter2paramsGraphql,
+    checkFilterCombo,
+    checkReleaseDate,
+  };
 }

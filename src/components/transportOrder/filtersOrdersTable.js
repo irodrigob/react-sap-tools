@@ -7,7 +7,7 @@ import {
   MultiComboBoxItem,
   DatePicker,
   ValueState,
-  Text
+  Text,
 } from "@ui5/webcomponents-react";
 import "@ui5/webcomponents-icons/dist/filter";
 import { showToast, MESSAGE } from "utils/general/message";
@@ -15,21 +15,20 @@ import { useTranslations } from "translations/i18nContext";
 import useFilterValues from "components/transportOrder/useFilterValues";
 import useSAPTransportOrder from "hooks/useSAPTransportOrder";
 import { STATUS } from "utils/sap/transportOrder";
-import { toolbarFiltersAction } from "reduxStore/sapTransportOrderSlice";
-
+import {
+  toolbarFiltersAction,
+  toolbarFiltersStateAction,
+} from "reduxStore/sapTransportOrderSlice";
 
 export default function FiltersOrdersTable(props) {
   const dispatch = useDispatch();
   const { getI18nText } = useTranslations();
-  const { getDefaultFilters } = useFilterValues();
-  const { toolbarFilters } = useSelector((state) => state.SAPTransportOrder);
+  const { getDefaultFilters, checkFilterCombo, checkReleaseDate } =
+    useFilterValues();
+  const { toolbarFilters, toolbarFiltersState } = useSelector(
+    (state) => state.SAPTransportOrder
+  );
   const { reloadUserOrders } = useSAPTransportOrder();
-  const [filtersValueState,setFiltersValueState]=useState({orderTypes:ValueState.None,
-                                                           orderTypesDesc:"",
-                                                          orderStatus:ValueState.None,
-                                                          orderStatusDesc:"",
-                                                        releaseDate:ValueState.None,
-                                                      releaseDateDesc:""})
 
   /*************************************
    * Funciones
@@ -46,22 +45,9 @@ export default function FiltersOrdersTable(props) {
         return { ...row, selected: true };
       else return { ...row, selected: false };
     });
-    dispatch(toolbarFiltersAction(newFilterValues));
+    dispatch(toolbarFiltersStateAction(newFilterValues[e.target.id]));
 
-    // Se actualiza el valueState del campo
-    let newFiltersValueState={...filtersValueState}
-    let fieldDesc=e.target.id+"Desc"
-    if(newFilterValues[e.target.id].findIndex((row)=> row.selected)!=-1)
-        {          
-          newFiltersValueState[e.target.id]=ValueState.Error          
-          newFiltersValueState[fieldDesc]=getI18nText("transportOrder.filters.validations.fieldMandatory")
-          
-        }
-        else{
-          newFiltersValueState[e.target.id]=ValueState.None
-          newFiltersValueState[fieldDesc]=""
-        }
-        setFiltersValueState(newFiltersValueState)
+    checkFilterCombo(newFilterValues[e.target.id], e.target.id);
   };
 
   return (
@@ -72,17 +58,18 @@ export default function FiltersOrdersTable(props) {
       showRestoreOnFB
       hideFilterConfiguration={false}
       onGo={(e) => {
-        if(filtersValueState.orderStatus==ValueState.Error || filtersValueState.orderTypes==ValueState.Error 
-            || filtersValueState.releaseDate==ValueState.Error ){
-              showToast(
-                getI18nText("transportOrder.filters.validations.fixErrorFilters"),
-                MESSAGE.TYPE.ERROR
-              );
-            }
-            else{
-              reloadUserOrders();
-            }
-        
+        if (
+          filtersValueState.orderStatus == ValueState.Error ||
+          filtersValueState.orderTypes == ValueState.Error ||
+          filtersValueState.releaseDate == ValueState.Error
+        ) {
+          showToast(
+            getI18nText("transportOrder.filters.validations.fixErrorFilters"),
+            MESSAGE.TYPE.ERROR
+          );
+        } else {
+          reloadUserOrders();
+        }
       }}
       onRestore={() => {
         dispatch(toolbarFiltersAction(getDefaultFilters()));
@@ -93,16 +80,19 @@ export default function FiltersOrdersTable(props) {
         label={getI18nText("transportOrder.filters.type.labelOrder")}
         required
       >
-        <MultiComboBox onSelectionChange={onFilterChange} id="orderTypes" 
-                       valueState={filtersValueState.orderTypes}
-                       valueStateMessage={<Text>{filtersValueState.orderTypesDesc}</Text>}>
+        <MultiComboBox
+          onSelectionChange={onFilterChange}
+          id="orderTypes"
+          valueState={toolbarFiltersState.orderTypes}
+          valueStateMessage={<Text>{toolbarFiltersState.orderTypesDesc}</Text>}
+        >
           {toolbarFilters.orderTypes.map((row) => {
             return (
               <MultiComboBoxItem
                 text={row.text}
                 selected={row.selected}
                 key={row.code}
-                id={row.code}                
+                id={row.code}
               />
             );
           })}
@@ -113,9 +103,12 @@ export default function FiltersOrdersTable(props) {
         label={getI18nText("transportOrder.filters.status.labelOrder")}
         required
       >
-        <MultiComboBox onSelectionChange={onFilterChange} id="orderStatus"
-                       valueState={filtersValueState.orderTypes}
-                       valueStateMessage={<Text>{filtersValueState.orderTypesDesc}</Text>}>
+        <MultiComboBox
+          onSelectionChange={onFilterChange}
+          id="orderStatus"
+          valueState={toolbarFiltersState.orderStatus}
+          valueStateMessage={<Text>{toolbarFiltersState.orderStatusDesc}</Text>}
+        >
           {toolbarFilters.orderStatus.map((row) => {
             return (
               <MultiComboBoxItem
@@ -146,19 +139,7 @@ export default function FiltersOrdersTable(props) {
               };
               dispatch(toolbarFiltersAction(newFilterValues));
 
-              // Actualiza el estado de los campos
-              let newFiltersValueState={...filtersValueState}
-              let fieldDesc=e.target.id+"Desc"
-              if(e.detail.value.length==0)
-              {
-                newFiltersValueState[e.target.id]=ValueState.Error          
-                newFiltersValueState[fieldDesc]=getI18nText("transportOrder.filters.validations.fieldMandatory")
-              }
-              else{
-                newFiltersValueState[e.target.id]=ValueState.None
-                newFiltersValueState[fieldDesc]=""
-              }
-              setFiltersValueState(newFiltersValueState)
+              checkReleaseDate(e.detail.value);
             }}
             value={toolbarFilters.releaseDateFrom}
           />
