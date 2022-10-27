@@ -45,7 +45,7 @@ export default function FiltersOrdersTable(props) {
         return { ...row, selected: true };
       else return { ...row, selected: false };
     });
-    dispatch(toolbarFiltersStateAction(newFilterValues[e.target.id]));
+    dispatch(toolbarFiltersAction(newFilterValues));
 
     checkFilterCombo(newFilterValues[e.target.id], e.target.id);
   };
@@ -58,10 +58,11 @@ export default function FiltersOrdersTable(props) {
       showRestoreOnFB
       hideFilterConfiguration={false}
       onGo={(e) => {
+        e.stopPropagation();
         if (
-          filtersValueState.orderStatus == ValueState.Error ||
-          filtersValueState.orderTypes == ValueState.Error ||
-          filtersValueState.releaseDate == ValueState.Error
+          toolbarFiltersState.orderStatus == ValueState.Error ||
+          toolbarFiltersState.orderTypes == ValueState.Error ||
+          toolbarFiltersState.releaseDate == ValueState.Error
         ) {
           showToast(
             getI18nText("transportOrder.filters.validations.fixErrorFilters"),
@@ -132,6 +133,10 @@ export default function FiltersOrdersTable(props) {
           <DatePicker
             hideWeekNumbers={true}
             formatPattern="dd.MM.yyyy"
+            valueState={toolbarFiltersState.releaseDate}
+            valueStateMessage={
+              <Text>{toolbarFiltersState.releaseDateDesc}</Text>
+            }
             onChange={(e) => {
               let newFilterValues = {
                 ...toolbarFilters,

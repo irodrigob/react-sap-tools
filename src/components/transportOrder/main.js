@@ -6,7 +6,9 @@ import { useTranslations } from "translations/i18nContext";
 
 export default function MainTransportOrder(props) {
   const { getI18nText } = useTranslations();
-  const { userOrderListTree } = useSelector((state) => state.SAPTransportOrder);
+  const { userOrderListTree, loadingOrders } = useSelector(
+    (state) => state.SAPTransportOrder
+  );
 
   return (
     <DynamicPage
@@ -14,9 +16,7 @@ export default function MainTransportOrder(props) {
       headerContentPinnable={false}
       headerContent={
         <DynamicPageHeader>
-          {userOrderListTree && userOrderListTree.length > 0 ? (
-            <FiltersOrdersTable />
-          ) : null}
+          {!loadingOrders ? <FiltersOrdersTable /> : null}
         </DynamicPageHeader>
       }
       style={{ paddingLeft: "0px", paddingRight: "0px" }}

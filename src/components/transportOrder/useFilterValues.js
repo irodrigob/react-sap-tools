@@ -1,5 +1,6 @@
 import { useCallback } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { ValueState } from "@ui5/webcomponents-react";
 import { useTranslations } from "translations/i18nContext";
 import { TYPE, STATUS } from "utils/sap/transportOrder";
 import date from "date-and-time";
@@ -9,7 +10,7 @@ import { toolbarFiltersStateAction } from "reduxStore/sapTransportOrderSlice";
 export default function useFilterValues(props) {
   const dispatch = useDispatch();
 
-  const { toolbarFiltersState } = useSelector(
+  const { toolbarFiltersState, toolbarFilters } = useSelector(
     (state) => state.SAPTransportOrder
   );
   const { getI18nText } = useTranslations();
@@ -83,14 +84,17 @@ export default function useFilterValues(props) {
           return { status: values.code };
         }),
 
-      releaseDateFrom: [
-        date.transform(
-          filtersValues.releaseDateFrom,
-          "DD.MM.YYYY",
-          "YYYY-MM-DD"
-        ),
-        "00:00:00",
-      ].join("T"),
+      releaseDateFrom:
+        filtersValues.releaseDateFrom != ""
+          ? [
+              date.transform(
+                filtersValues.releaseDateFrom,
+                "DD.MM.YYYY",
+                "YYYY-MM-DD"
+              ),
+              "00:00:00",
+            ].join("T")
+          : null,
     };
   }, []);
 
@@ -118,20 +122,29 @@ export default function useFilterValues(props) {
    * Verifica la fecha de liberación
    * @param {string} value
    */
-  const checkReleaseDate = useCallback((value) => {
-    let newFiltersValueState = { ...toolbarFiltersState };
+  const checkReleaseDate = useCallback(
+    (value) => {
+      if (
+        toolbarFilters.orderStatus.find(
+          (row) => row.code == STATUS.RELEASED && row.selected == true
+        )
+      ) {
+        let newFiltersValueState = { ...toolbarFiltersState };
 
-    if (value.length == 0) {
-      newFiltersValueState.releaseDate = ValueState.Error;
-      newFiltersValueState.releaseDateDesc = getI18nText(
-        "transportOrder.filters.validations.fieldMandatory"
-      );
-    } else {
-      newFiltersValueState.releaseDate = ValueState.None;
-      newFiltersValueState.releaseDateDesc = "";
-    }
-    dispatch(toolbarFiltersStateAction(newFiltersValueState));
-  }, []);
+        if (value.length == 0) {
+          newFiltersValueState.releaseDate = ValueState.Error;
+          newFiltersValueState.releaseDateDesc = getI18nText(
+            "transportOrder.filters.validations.fieldMandatory"
+          );
+        } else {
+          newFiltersValueState.releaseDate = ValueState.None;
+          newFiltersValueState.releaseDateDesc = "";
+        }
+        dispatch(toolbarFiltersStateAction(newFiltersValueState));
+      }
+    },
+    [toolbarFilters]
+  );
 
   return {
     getDefaultFilters,

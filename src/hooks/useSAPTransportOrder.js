@@ -121,9 +121,12 @@ export default function useSAPTransportOrder() {
     notifyOnNetworkStatusChange: true,
     onCompleted: (data) => {
       dispatch(loadingOrdersAction(false));
+
       if (data.getUserOrderList != null) {
         dispatch(
-          userOrderListTreeAction(adaptSAPOrders2TreeTable(data.getUserOrderList))
+          userOrderListTreeAction(
+            adaptSAPOrders2TreeTable(data.getUserOrderList)
+          )
         );
         dispatch(userOrderListFromServiceAction(data.getUserOrderList));
       }
