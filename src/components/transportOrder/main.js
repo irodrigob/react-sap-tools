@@ -16,7 +16,7 @@ export default function MainTransportOrder(props) {
       headerContentPinnable={false}
       headerContent={
         <DynamicPageHeader>
-          {!loadingOrders ? <FiltersOrdersTable /> : null}
+          <FiltersOrdersTable />
         </DynamicPageHeader>
       }
       style={{ paddingLeft: "0px", paddingRight: "0px" }}
