@@ -193,7 +193,7 @@ export default function useSAPGeneral() {
 
           getMetadataApps({
             variables: {
-              system: URLODataCore,
+              system: URLSystem2Connect,
               sap_user: systemSelected.sap_user,
               sap_password: systemSelected.sap_password,
             },

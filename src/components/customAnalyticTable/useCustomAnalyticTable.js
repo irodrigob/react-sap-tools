@@ -250,7 +250,13 @@ export default function useCustomAnalyticTable() {
   const recalculatePropsFromMessages = useCallback(() => {
     let newValuesProperties = { ...valuesProperties };
 
-    if (tableValues.some((o) => o[INTERNAL_FIELDS_DATA.MESSAGES].length > 0))
+    if (
+      tableValues.some(
+        (o) =>
+          o[INTERNAL_FIELDS_DATA.MESSAGES] &&
+          o[INTERNAL_FIELDS_DATA.MESSAGES].length > 0
+      )
+    )
       newValuesProperties.actionMessages = true;
     else newValuesProperties.actionMessages = false;
 

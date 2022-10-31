@@ -5,7 +5,10 @@ let apolloClient;
 function createIsomorphLink() {
   const { HttpLink } = require("@apollo/client/link/http");
   return new HttpLink({
-    uri: "http://localhost:3001/api/graphql",
+    uri:
+      process.env.REACT_APP_ENVIRONMENT === "production"
+        ? "https://react-sap-tools-server.vercel.app/api/graphql"
+        : "http://localhost:3001/api/graphql",
     credentials: "same-origin",
   });
 }
