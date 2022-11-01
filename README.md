@@ -50,11 +50,11 @@ En la versión gratuita solo es posible generar un tunel y no se puede hacer tun
 
 La primera vez que entremos a la aplicación nos saldrá el botón para conectarnos con nuestra cuenta de google:
 
-![alt login](https://github.com/irodrigob/react-sap-tools/tree/master/public/instrucciones/pantalla_login.png)
+![alt login](https://github.com/irodrigob/react-sap-tools/blob/master/public/instrucciones/pantalla_login.png)
 
 Una vez conectados no saldrá la pantalla inicial:
 
-![alt pantalla inicial](https://github.com/irodrigob/react-sap-tools/tree/master/public/instrucciones/pantalla_inicial.png)
+![alt pantalla inicial](https://github.com/irodrigob/react-sap-tools/blob/master/public/instrucciones/pantalla_inicial.png)
 
 El siguiente paso es añadir un sistema.
 
@@ -62,7 +62,7 @@ El siguiente paso es añadir un sistema.
 
 Para añadir un nuevo sistema tenemos que abrir el desplegable de sistemas y pulsar el botón de `Añadir sistema` donde introduciremos los datos del sistema donde nos queramos conectar.
 
-![alt añadir sistema](https://github.com/irodrigob/react-sap-tools/tree/master/public/instrucciones/anyadir_sistema.png)
+![alt añadir sistema](https://github.com/irodrigob/react-sap-tools/blob/master/public/instrucciones/anyadir_sistema.png)
 
 En el `Host Servidor` tendremos que introducir la URL de conexión a nuestro servidor. Si no la conocemos podemos utilizar el [https://github.com/irodrigob/abap-sap-tools-core/wiki#saber-la-url-del-servidor-de-sap](programa) de utilidades en el core de las herramientas de SAP para saberlo. En la imagen he puesto la url del tunel que he generado previamente. 
 
@@ -74,11 +74,11 @@ La contraseña se cifra, usando AES, en base de datos y solo se descrifra en el 
 
 Para modificar un sistema tenemos que volver abrir el desplegable y pulsar el botón `Ver sistema`, el cual nos abrira la siguiente ventana:
 
-![alt añadir sistema](https://github.com/irodrigob/react-sap-tools/tree/master/public/instrucciones/listado_sistemas.png)
+![alt añadir sistema](https://github.com/irodrigob/react-sap-tools/blob/master/public/instrucciones/listado_sistemas.png)
 
 Para editarlo pulsaremos el lapiz que esta la fila del sistema que queremos modificar
 
-![alt modificar sistema](https://github.com/irodrigob/react-sap-tools/tree/master/public/instrucciones/modificar_sistema.png)
+![alt modificar sistema](https://github.com/irodrigob/react-sap-tools/blob/master/public/instrucciones/modificar_sistema.png)
 
 Una vez modificado pulsaremos sobre el botón de confirmar, o rechazar si no queremos hacer cambios.
 
@@ -90,6 +90,6 @@ Los pasos para borrar un sistema son los mismos que para modificarlo, lo único 
 
 Para seleccionar un sistema hay que abrir el desplegable de sistema y seleccionar el sistema al que se quiera conectar. Una vez seleccionado se nos abrirá el selector de aplicaciones:
 
-![alt seleccionar aplicación](https://github.com/irodrigob/react-sap-tools/tree/master/public/instrucciones/seleccionar_aplicacion.png)
+![alt seleccionar aplicación](https://github.com/irodrigob/react-sap-tools/blob/master/public/instrucciones/seleccionar_aplicacion.png)
 
 Y pulsaremos aquella que queramos utilizar.
