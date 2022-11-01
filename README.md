@@ -14,8 +14,8 @@ El acceso
 
 Para que la aplicación en React pueda utilizar las herramhay que instalar las siguientes aplicaciones en tu servidor de SAP:
 
-* [https://github.com/irodrigob/abap-sap-tools-core](Core) de las herramientas de SAP es el primer paso para poder utilizar las herramientas
-* [https://github.com/irodrigob/abap-sap-tools-trans-order](Herramienta de transporte de ordenes)
+* [Core](https://github.com/irodrigob/abap-sap-tools-core) de las herramientas de SAP es el primer paso para poder utilizar las herramientas
+* [Herramienta de transporte de ordenes](https://github.com/irodrigob/abap-sap-tools-trans-order)
 
 ### Cuenta en Gmail
 
