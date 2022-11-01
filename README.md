@@ -6,6 +6,8 @@ La herramienta actualmente disponible es la siguiente:
 
 * Transporte de ordenes
 
+El acceso 
+
 ## Prerequistos
 
 ### Instalación de las herramientas en SAP
@@ -42,7 +44,7 @@ Para hacer el tunel yo recomiendo usar el powershell de Windows, quien use Windo
  .\ngrok.exe http http://vhcalnplci.dummy.nodomain:8000    
 ```
 
-Esto generará un tunel y tan solo tenemos que copiar la URL para luego configurarlo en nuestro sistema.
+Esto generará un tunel y tan solo tenemos que copiar la URL para luego configurarlo en nuestro sistema. Si no conocemos la URL de nuestro sistema podemos utilizar el [https://github.com/irodrigob/abap-sap-tools-core/wiki#saber-la-url-del-servidor-de-sap](programa) de utilidades en el core de las herramientas de SAP para saberlo.
 
 En la versión gratuita solo es posible generar un tunel y no se puede hacer tuneles con un dirección fija. Por ello cada vez que nos quedamos conectar a un sistema habrá que hacer un tunel.
 
@@ -93,3 +95,24 @@ Para seleccionar un sistema hay que abrir el desplegable de sistema y selecciona
 ![alt seleccionar aplicación](https://github.com/irodrigob/react-sap-tools/blob/master/public/instrucciones/seleccionar_aplicacion.png)
 
 Y pulsaremos aquella que queramos utilizar.
+
+# Herramientas
+
+Las herramientas las explicaré en la Wiki para tenerlo mejor organizado.
+
+# Arquitectura
+
+La aplicación la he tenido que dividir en dos partes: Frontend y Backend. El motivo es que a nivel de librería gráfica quería utilizar [https://github.com/SAP/ui5-webcomponents-react](UI5 Web Components), y estos con el framework de NextJS no se llevan muy bien(a pesar de la ayuda prestada por uno de los desarrolladores).
+
+Por ello la parte Frontend esta desarrollado en React y como librerías destacadas uso:
+
+* `Material-ui`. No quería utilizarla pero para algunos temas como la barra de herramientas superior y construir un layout vía Grid me ha parecido mucho más sencillo y practico usarla.
+* `UI5 Web components`. Había hecho alguna cosa en UI5 anteriormente y quería probar la versión para React. En general muy contento de utilizarla.
+* `Cliente GraphQL`.  El backend es un servidor de GraphQL por ello toda la comunicación se hace a través de un cliente GraphQL.
+
+El backend esta creado en NextJS, que es un framework de React. El porque de NextJS es que me parece muy comodo a la hora de crear rutas y viene incluido con un middleware que me ha permitido construido un servidor GraphQL de manera fácil siguiendo los ejemplos existentes.
+
+Para más detalle de las liberías tan solo tenéis que mirar el `package.json` de los dos proyectos.
+
+En un futuro, cuando sea capaz de hacer funcionar UI5 Web componentes con NextJS las unificaré ambas aplicaciones.
+
