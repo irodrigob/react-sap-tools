@@ -1,70 +1,95 @@
-# Getting Started with Create React App
+# Introducción
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+React SAP tools es un conjunto de herramientas para SAP, que como su nombre indica, creadas en React. Actualmente tanto las herramientas, solo hay una, como en su funcionalidad son muy básicas pero la idea es ir dandoles más funcionalidad e ir añadiendo nuevas herramientas.
 
-## Available Scripts
+La herramienta actualmente disponible es la siguiente:
 
-In the project directory, you can run:
+* Transporte de ordenes
 
-### `npm start`
+## Prerequistos
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+### Instalación de las herramientas en SAP
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+Para que la aplicación en React pueda utilizar las herramhay que instalar las siguientes aplicaciones en tu servidor de SAP:
 
-### `npm test`
+* [https://github.com/irodrigob/abap-sap-tools-core](Core) de las herramientas de SAP es el primer paso para poder utilizar las herramientas
+* [https://github.com/irodrigob/abap-sap-tools-trans-order](Herramienta de transporte de ordenes)
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+### Cuenta en Gmail
 
-### `npm run build`
+Los sistemas que se van configurando se guardan en una base de datos asociado a tu cuenta de correo de Google, por ello lo primero que va hacer la aplicación es pedirte que hagas login con tu cuenta de Gmail.
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+### Tunneling
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+**IMPORTANTE: Si nuestro servidor de SAP no es local, es decir, que es accesible desde el exterior este paso no es necesario**
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+Generalmente los servidor de SAP a los que nos conectamos con Eclipse o SAP GUI son servidores locales los cuales no son accesibles desde el exterior. Por ello para que desde la aplicación se pueda conectar al servidor de SAP es necesario generar un tunnel que conecte el servidor de SAP local con la aplicación. Aquellos que se esten familiarizados con desarrollo en el cloud de SAP sabrán de la existencia del `Cloud Connector`. El `Cloud Connector` es una aplicación que enlaza los servidores de SAP con el propio cloud de SAP.
 
-### `npm run eject`
+Para hacer ese tunel yo uso [https://ngrok.com/](Ngrok). Ngrok es una herramienta gratuita que permite generar tuneles a tu servidor local. El registro es gratuito y puedes utilizar tu cuenta de Gmail o de Github. Lo que hace Ngrok es crear una URL dinámica que permite conectarnos a nuestro servidor local.
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+La instalación es muy sencilla y en la página web esta muy bien explicado pero hago un resumen rápido:
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+* Desde la [https://dashboard.ngrok.com/get-started/setup](página inicial) nos descargamos el programa para hacer un tunel. Es un fichero zip que solo tenemos que descomprimirlo en la ubicación que queramos.
+* Lo siguiente es añadir el token tal como se indica en las instrucciones: 
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+```bash
+ngrok config add-authtoken <token que se indica en la página>
+```
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+Para hacer el tunel yo recomiendo usar el powershell de Windows, quien use Windows, porque permite copiar la URL que genera al hacer el tunel. Si nuestro servidor es `http://vhcalnplci.dummy.nodomain:8000` el tunel se crearía así:
 
-## Learn More
+```bash
+ .\ngrok.exe http http://vhcalnplci.dummy.nodomain:8000    
+```
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+Esto generará un tunel y tan solo tenemos que copiar la URL para luego configurarlo en nuestro sistema.
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+En la versión gratuita solo es posible generar un tunel y no se puede hacer tuneles con un dirección fija. Por ello cada vez que nos quedamos conectar a un sistema habrá que hacer un tunel.
 
-### Code Splitting
+# Inicio de la aplicación
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+La primera vez que entremos a la aplicación nos saldrá el botón para conectarnos con nuestra cuenta de google:
 
-### Analyzing the Bundle Size
+![alt login](https://github.com/irodrigob/react-sap-tools/tree/master/public/instrucciones/pantalla_login.png)
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+Una vez conectados no saldrá la pantalla inicial:
 
-### Making a Progressive Web App
+![alt pantalla inicial](https://github.com/irodrigob/react-sap-tools/tree/master/public/instrucciones/pantalla_inicial.png)
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+El siguiente paso es añadir un sistema.
 
-### Advanced Configuration
+## Añadir un nuevo sistema.
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+Para añadir un nuevo sistema tenemos que abrir el desplegable de sistemas y pulsar el botón de `Añadir sistema` donde introduciremos los datos del sistema donde nos queramos conectar.
 
-### Deployment
+![alt añadir sistema](https://github.com/irodrigob/react-sap-tools/tree/master/public/instrucciones/anyadir_sistema.png)
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
+En el `Host Servidor` tendremos que introducir la URL de conexión a nuestro servidor. Si no la conocemos podemos utilizar el [https://github.com/irodrigob/abap-sap-tools-core/wiki#saber-la-url-del-servidor-de-sap](programa) de utilidades en el core de las herramientas de SAP para saberlo. En la imagen he puesto la url del tunel que he generado previamente. 
 
-### `npm run build` fails to minify
+Una vez introducido todos los datos hay que pulsar sobre el botón de `Grabar`.
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+La contraseña se cifra, usando AES, en base de datos y solo se descrifra en el momento de hacer la conexión a SAP. Con lo cual cualquier que inspeccione las llamadas no verá nunca la contraseña legible.
+
+## Modificando un sistema
+
+Para modificar un sistema tenemos que volver abrir el desplegable y pulsar el botón `Ver sistema`, el cual nos abrira la siguiente ventana:
+
+![alt añadir sistema](https://github.com/irodrigob/react-sap-tools/tree/master/public/instrucciones/listado_sistemas.png)
+
+Para editarlo pulsaremos el lapiz que esta la fila del sistema que queremos modificar
+
+![alt modificar sistema](https://github.com/irodrigob/react-sap-tools/tree/master/public/instrucciones/modificar_sistema.png)
+
+Una vez modificado pulsaremos sobre el botón de confirmar, o rechazar si no queremos hacer cambios.
+
+## Borrar un sistema
+
+Los pasos para borrar un sistema son los mismos que para modificarlo, lo único que varia es que tendremos que pulsar sobre el icono de la papelera y confirmar el borrado.
+
+## Conectado con un sistema
+
+Para seleccionar un sistema hay que abrir el desplegable de sistema y seleccionar el sistema al que se quiera conectar. Una vez seleccionado se nos abrirá el selector de aplicaciones:
+
+![alt seleccionar aplicación](https://github.com/irodrigob/react-sap-tools/tree/master/public/instrucciones/seleccionar_aplicacion.png)
+
+Y pulsaremos aquella que queramos utilizar.

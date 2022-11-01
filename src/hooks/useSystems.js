@@ -289,9 +289,11 @@ export default function useSystems() {
         saveSystems(data.getSystemsByUser);
 
         // Si solo hay un sistema lo selecciono por defecto
-        if (data.getSystemsByUser.length == 1) {
+        // Nota: Lo comento porque no funciona ya que el contexto del saveSystem aun no esta actualizado
+        // y hace que el proceso falle.
+        /*if (data.getSystemsByUser.length == 1) {
           processSelectedSystem(data.getSystemsByUser[0]._id);
-        }
+        }*/
       },
 
       onError: (error) => {
