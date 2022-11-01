@@ -17,6 +17,11 @@ Para que la aplicación en React pueda utilizar las herramhay que instalar las s
 * [Core](https://github.com/irodrigob/abap-sap-tools-core) de las herramientas de SAP es el primer paso para poder utilizar las herramientas
 * [Herramienta de transporte de ordenes](https://github.com/irodrigob/abap-sap-tools-trans-order)
 
+Las herramientas en SAP podía haber hecho todo en un mismo proyecto pero he preferido separarlo por dos motivos: 
+
+1. Cada uno se instala la aplicación que más le interese, evitando instalar más objetos de los necesarios.
+2. Los cambios que se hagan en una herramienta sea independientes al resto de herramientas. Si meto la pata en una de ellas solo afectará a una hora y no al resto.
+
 ### Cuenta en Gmail
 
 Los sistemas que se van configurando se guardan en una base de datos asociado a tu cuenta de correo de Google, por ello lo primero que va hacer la aplicación es pedirte que hagas login con tu cuenta de Gmail.
