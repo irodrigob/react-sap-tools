@@ -27,11 +27,11 @@ Los sistemas que se van configurando se guardan en una base de datos asociado a 
 
 Generalmente los servidor de SAP a los que nos conectamos con Eclipse o SAP GUI son servidores locales los cuales no son accesibles desde el exterior. Por ello para que desde la aplicación se pueda conectar al servidor de SAP es necesario generar un tunnel que conecte el servidor de SAP local con la aplicación. Aquellos que se esten familiarizados con desarrollo en el cloud de SAP sabrán de la existencia del `Cloud Connector`. El `Cloud Connector` es una aplicación que enlaza los servidores de SAP con el propio cloud de SAP.
 
-Para hacer ese tunel yo uso [https://ngrok.com/](Ngrok). Ngrok es una herramienta gratuita que permite generar tuneles a tu servidor local. El registro es gratuito y puedes utilizar tu cuenta de Gmail o de Github. Lo que hace Ngrok es crear una URL dinámica que permite conectarnos a nuestro servidor local.
+Para hacer ese tunel yo uso (Ngrok)(https://ngrok.com/). Ngrok es una herramienta gratuita que permite generar tuneles a tu servidor local. El registro es gratuito y puedes utilizar tu cuenta de Gmail o de Github. Lo que hace Ngrok es crear una URL dinámica que permite conectarnos a nuestro servidor local.
 
 La instalación es muy sencilla y en la página web esta muy bien explicado pero hago un resumen rápido:
 
-* Desde la [https://dashboard.ngrok.com/get-started/setup](página inicial) nos descargamos el programa para hacer un tunel. Es un fichero zip que solo tenemos que descomprimirlo en la ubicación que queramos.
+* Desde la [página inicial](https://dashboard.ngrok.com/get-started/setup) nos descargamos el programa para hacer un tunel. Es un fichero zip que solo tenemos que descomprimirlo en la ubicación que queramos.
 * Lo siguiente es añadir el token tal como se indica en las instrucciones: 
 
 ```bash
@@ -44,7 +44,7 @@ Para hacer el tunel yo recomiendo usar el powershell de Windows, quien use Windo
  .\ngrok.exe http http://vhcalnplci.dummy.nodomain:8000    
 ```
 
-Esto generará un tunel y tan solo tenemos que copiar la URL para luego configurarlo en nuestro sistema. Si no conocemos la URL de nuestro sistema podemos utilizar el [https://github.com/irodrigob/abap-sap-tools-core/wiki#saber-la-url-del-servidor-de-sap](programa) de utilidades en el core de las herramientas de SAP para saberlo.
+Esto generará un tunel y tan solo tenemos que copiar la URL para luego configurarlo en nuestro sistema. Si no conocemos la URL de nuestro sistema podemos utilizar el [programa](https://github.com/irodrigob/abap-sap-tools-core/wiki#saber-la-url-del-servidor-de-sap) de utilidades en el core de las herramientas de SAP para saberlo.
 
 En la versión gratuita solo es posible generar un tunel y no se puede hacer tuneles con un dirección fija. Por ello cada vez que nos quedamos conectar a un sistema habrá que hacer un tunel.
 
@@ -66,7 +66,7 @@ Para añadir un nuevo sistema tenemos que abrir el desplegable de sistemas y pul
 
 ![alt añadir sistema](https://github.com/irodrigob/react-sap-tools/blob/master/public/instrucciones/anyadir_sistema.png)
 
-En el `Host Servidor` tendremos que introducir la URL de conexión a nuestro servidor. Si no la conocemos podemos utilizar el [https://github.com/irodrigob/abap-sap-tools-core/wiki#saber-la-url-del-servidor-de-sap](programa) de utilidades en el core de las herramientas de SAP para saberlo. En la imagen he puesto la url del tunel que he generado previamente. 
+En el `Host Servidor` tendremos que introducir la URL de conexión a nuestro servidor. Si no la conocemos podemos utilizar el [programa](https://github.com/irodrigob/abap-sap-tools-core/wiki#saber-la-url-del-servidor-de-sap) de utilidades en el core de las herramientas de SAP para saberlo. En la imagen he puesto la url del tunel que he generado previamente. 
 
 Una vez introducido todos los datos hay que pulsar sobre el botón de `Grabar`.
 
@@ -102,7 +102,7 @@ Las herramientas las explicaré en la Wiki para tenerlo mejor organizado.
 
 # Arquitectura
 
-La aplicación la he tenido que dividir en dos partes: Frontend y Backend. El motivo es que a nivel de librería gráfica quería utilizar [https://github.com/SAP/ui5-webcomponents-react](UI5 Web Components), y estos con el framework de NextJS no se llevan muy bien(a pesar de la ayuda prestada por uno de los desarrolladores).
+La aplicación la he tenido que dividir en dos partes: Frontend y Backend. El motivo es que a nivel de librería gráfica quería utilizar [UI5 Web Components]([https://github.com/SAP/ui5-webcomponents-react]), y estos con el framework de NextJS no se llevan muy bien(a pesar de la ayuda prestada por uno de los desarrolladores).
 
 Por ello la parte Frontend esta desarrollado en React y como librerías destacadas uso:
 
