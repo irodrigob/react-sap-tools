@@ -1,10 +1,5 @@
 import { useState, useEffect } from "react";
-import {
-  AnalyticalTable,
-  FlexBox,
-  Input,
-  Label,
-} from "@ui5/webcomponents-react";
+import { AnalyticalTable } from "@ui5/webcomponents-react";
 import DialogMessages from "./dialogMessages";
 import { AnalyticalTableHooks } from "@ui5/webcomponents-react";
 import DialogConfirmDeleteRow from "./dialogConfirmDeleteRow";

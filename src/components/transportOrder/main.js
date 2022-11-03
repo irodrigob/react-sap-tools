@@ -11,17 +11,18 @@ export default function MainTransportOrder(props) {
   );
 
   return (
-    <DynamicPage
-      showHideHeaderButton={true}
-      headerContentPinnable={false}
-      headerContent={
-        <DynamicPageHeader>
-          <FiltersOrdersTable />
-        </DynamicPageHeader>
-      }
-      style={{ paddingLeft: "0px", paddingRight: "0px" }}
-    >
+    <>
+      <DynamicPage
+        showHideHeaderButton={true}
+        headerContentPinnable={false}
+        headerContent={
+          <DynamicPageHeader>
+            <FiltersOrdersTable />
+          </DynamicPageHeader>
+        }
+        style={{ paddingLeft: "0px", paddingRight: "0px" }}
+      ></DynamicPage>
       <OrdersTableTree />
-    </DynamicPage>
+    </>
   );
 }

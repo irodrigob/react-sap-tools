@@ -108,6 +108,7 @@ export default function OrdersTableTree(props) {
         tableInstance={refTable}
         loading={loadingOrders || !connectedToSystem}
         noDataText={getI18nText("transportOrder.noData")}
+        visibleRows="19"
         reactTableOptions={{
           initialState: {
             expanded: expandedRows,
