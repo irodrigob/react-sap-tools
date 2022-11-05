@@ -104,9 +104,8 @@ export default function useSAPTransportOrder() {
   const { buildSAPUrl2Connect } = useSAPGeneral();
   const { getDefaultFilters, convertFilter2paramsGraphql } = useFilterValues();
   const dispatch = useDispatch();
-  const { toolbarFilters, orderTaskSelected } = useSelector(
-    (state) => state.SAPTransportOrder
-  );
+  const { toolbarFilters, orderTaskSelected, systemsTransportCopy } =
+    useSelector((state) => state.SAPTransportOrder);
 
   /*************************************
    * Servicios GraphQL
@@ -152,14 +151,16 @@ export default function useSAPTransportOrder() {
     onCompleted: (data) => {
       // data.getSystemsTransport[0].systemName
       if (data.getSystemsTransport != null) {
-        // Si hay registros informo el primer sistema por defecto porque es el que saldrá "preseleccionado"
-        // en el componente Select.
-        if (data.getSystemsTransport.length > 0)
-          dispatch(
-            systemTransportCopyAction(data.getSystemsTransport[0].systemName)
-          );
+        if (data.getSystemsTransport.length > 0) {
+          // Añado un registro al principio en blanco y por defecto lo selecciono para que se tenga que selecionar un sistema.
+          // Lo tengo que hacer porque el componente Select de UI5 no lo hace y parece que tengas un sistema preseleccionado cuando no es así.
+          let values = [...data.getSystemsTransport];
+          values.unshift({ systemName: "", systemDesc: "" });
 
-        dispatch(systemsTransportCopyAction(data.getSystemsTransport));
+          dispatch(systemTransportCopyAction(""));
+
+          dispatch(systemsTransportCopyAction(values));
+        }
       }
     },
     onError: (error) => {
@@ -199,6 +200,18 @@ export default function useSAPTransportOrder() {
           dispatch(
             systemTransportCopyAction(data.doTransportCopy.systemTransport)
           );
+
+          // Si en el primer registro de los sistema a transporte esta el systema "blanco" que se se añade al principio
+          // del proceso lo borro porque como ya se ha seleccionado un sistema no tiene sentido que siga estando en la tabla.
+          if (
+            systemsTransportCopy[0].systemName == "" &&
+            systemsTransportCopy[0].systemDesc == ""
+          ) {
+            let values = [...systemsTransportCopy];
+            values.shift();
+
+            dispatch(systemsTransportCopyAction(values));
+          }
         }
       }
     },
