@@ -25,6 +25,7 @@ export const SAPTransportOrderSlice = createSlice({
       releaseDateDesc: "",
     },
     systemChanged: true,
+    textSearch: "",
   },
   reducers: {
     orderTaskSelectedAction: (state, action) => {
@@ -60,6 +61,9 @@ export const SAPTransportOrderSlice = createSlice({
     descriptionTransportCopyAction: (state, action) => {
       state.descriptionTransportCopy = action.payload;
     },
+    textSearchAction: (state, action) => {
+      state.textSearch = action.payload;
+    },
   },
 });
 
@@ -75,6 +79,7 @@ export const {
   systemChangedAction,
   descriptionTransportCopyAction,
   toolbarFiltersStateAction,
+  textSearchAction,
 } = SAPTransportOrderSlice.actions;
 
 export default SAPTransportOrderSlice.reducer;

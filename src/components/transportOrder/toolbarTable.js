@@ -5,10 +5,14 @@ import {
   ToolbarSeparator,
   ToolbarSpacer,
   Button,
+  Input,
 } from "@ui5/webcomponents-react";
 import "@ui5/webcomponents-icons/dist/AllIcons.js";
 import PopupTransCopy from "components/transportOrder/popupTransCopy";
-import { descriptionTransportCopyAction } from "reduxStore/sapTransportOrderSlice";
+import {
+  descriptionTransportCopyAction,
+  textSearchAction,
+} from "reduxStore/sapTransportOrderSlice";
 import { useTranslations } from "translations/i18nContext";
 import useSAPTransportOrder from "hooks/useSAPTransportOrder";
 import { showToast, MESSAGE } from "utils/general/message";
@@ -43,6 +47,14 @@ export default function ToolbarTable(props) {
           }}
         />
         <ToolbarSeparator />
+        <Input
+          placeholder={getI18nText(
+            "transportOrder.toolbarAction.textSearchPlaceholder"
+          )}
+          onInput={(e) => {
+            dispatch(textSearchAction(e.target.value));
+          }}
+        />
         <Button
           icon="refresh"
           onClick={(e) => {

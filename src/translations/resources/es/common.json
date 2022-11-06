@@ -86,7 +86,8 @@
         },
         "toolbarAction": {
             "transportCopy": "Transporte de copias",
-            "refreshOrders": "Refrescar ordenes/tareas"
+            "refreshOrders": "Refrescar ordenes/tareas",
+            "textSearchPlaceholder": "Búsqueda..."
         },
         "transportCopy": {
             "popup": {
