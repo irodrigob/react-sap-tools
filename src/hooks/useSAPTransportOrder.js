@@ -7,6 +7,7 @@ import { showToast, MESSAGE } from "utils/general/message";
 import { GATEWAY_CONF, MSG_SAP_2_MSG_APP } from "utils/sap/constans";
 import { useGlobalData } from "context/globalDataContext";
 import { useSAPTransportOrderData } from "context/sapTransportOrder";
+import { FIELDS_TREE_TABLE } from "utils/sap/transportOrder";
 import useSAPGeneral from "hooks/useSAPGeneral";
 import useMessageManager, {
   MESSAGE_TYPE,
@@ -104,8 +105,12 @@ export default function useSAPTransportOrder() {
   const { buildSAPUrl2Connect } = useSAPGeneral();
   const { getDefaultFilters, convertFilter2paramsGraphql } = useFilterValues();
   const dispatch = useDispatch();
-  const { toolbarFilters, orderTaskSelected, systemsTransportCopy } =
-    useSelector((state) => state.SAPTransportOrder);
+  const {
+    toolbarFilters,
+    orderTaskSelected,
+    systemsTransportCopy,
+    userOrderListTree,
+  } = useSelector((state) => state.SAPTransportOrder);
 
   /*************************************
    * Servicios GraphQL
@@ -292,6 +297,7 @@ export default function useSAPTransportOrder() {
         type: orderGroups[order][0].orderType,
         typeDesc: orderGroups[order][0].orderTypeDesc,
         user: orderGroups[order][0].orderUser,
+        [FIELDS_TREE_TABLE.EXPANDED]: false,
         subRows: [],
       };
 
@@ -386,5 +392,70 @@ export default function useSAPTransportOrder() {
     [orderTaskSelected, systemSelected, URLOData]
   );
 
-  return { loadInitialData, reloadUserOrders, clearVariables, doTransportCopy };
+  /**
+   *
+   * @param {string} searchText | Texto a buscar
+   * @returns | Tabla con las ordenes filtradas
+   */
+  const searchOrdersTableTree = useCallback((ordersListTree, searchText) => {
+    if (searchText == "") {
+      return ordersListTree.map((row) => {
+        return { ...row, FIELDS_TREE_TABLE: false };
+      });
+    } else {
+      let newSearchText = searchText.toUpperCase().trim();
+
+      let aa = [];
+      aa = ordersListTree.filter((row) => {
+        // Filtramos por las tareas
+        let filterSubRows = row.subRows.filter((subRow) => {
+          return searchTextRowOrderTree(subRow, newSearchText);
+        });
+        let filterRow = searchTextRowOrderTree(row, newSearchText);
+
+        // Si hay tareas devuelvo la orden y con las tareas subfiltradas. Si no hay tareas
+        // pero si que conicide la orden entonces devuelvo la fila entera
+        if (filterSubRows.length > 0) {
+          let newRow = {
+            ...row,
+            subRows: filterSubRows,
+            [FIELDS_TREE_TABLE.EXPANDED]: true,
+          };
+          return newRow;
+        } else if (filterRow) {
+          return { ...row, [FIELDS_TREE_TABLE.EXPANDED]: true };
+        }
+      });
+
+      console.log(aa);
+
+      return aa;
+    }
+  }, []);
+
+  /**
+   * Búsqueda de un texto en la fila de ordenes/tareas
+   * @param {object} row
+   * @param {string} searchText
+   * @returns | Fila si se cumplen los datos
+   */
+  const searchTextRowOrderTree = useCallback((row, searchText) => {
+    if (
+      row.orderTask.includes(searchText) ||
+      row.description.toUpperCase().includes(searchText) ||
+      row.statusDesc.toUpperCase().includes(searchText) ||
+      row.typeDesc.toUpperCase().includes(searchText) ||
+      row.user.toUpperCase().includes(searchText)
+    )
+      return row;
+    else return null;
+  }, []);
+
+  return {
+    loadInitialData,
+    reloadUserOrders,
+    clearVariables,
+    doTransportCopy,
+    searchOrdersTableTree,
+  };
 }

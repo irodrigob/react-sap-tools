@@ -87,7 +87,7 @@
         "toolbarAction": {
             "transportCopy": "Transporte de copias",
             "refreshOrders": "Refrescar ordenes/tareas",
-            "textSearchPlaceholder": "Búsqueda..."
+            "textSearchPlaceholder": "Búsqueda (mayor 2 carácteres)..."
         },
         "transportCopy": {
             "popup": {

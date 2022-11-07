@@ -52,7 +52,8 @@ export default function ToolbarTable(props) {
             "transportOrder.toolbarAction.textSearchPlaceholder"
           )}
           onInput={(e) => {
-            dispatch(textSearchAction(e.target.value));
+            if (e.target.value.length > 2 || e.target.value.length == 0)
+              dispatch(textSearchAction(e.target.value));
           }}
         />
         <Button

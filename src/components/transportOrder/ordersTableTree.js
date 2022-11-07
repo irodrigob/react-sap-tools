@@ -6,6 +6,7 @@ import CustomAnalyticTable from "components/customAnalyticTable/CustomAnalyticTa
 import { useTranslations } from "translations/i18nContext";
 import { useGlobalData } from "context/globalDataContext";
 import useSAPTransportOrder from "hooks/useSAPTransportOrder";
+import { FIELDS_TREE_TABLE } from "utils/sap/transportOrder";
 
 /*
 export const useStartExpanded = (hooks) => {
@@ -25,10 +26,15 @@ export default function OrdersTableTree(props) {
   const refTable = useRef();
   const { getI18nText } = useTranslations();
   const { systemSelected, connectedToSystem } = useGlobalData();
-  const { loadInitialData } = useSAPTransportOrder();
+  const { loadInitialData, searchOrdersTableTree } = useSAPTransportOrder();
   const dispatch = useDispatch();
-  const { userOrderListTree, loadingOrders, systemChanged, orderTaskSelected } =
-    useSelector((state) => state.SAPTransportOrder);
+  const {
+    userOrderListTree,
+    loadingOrders,
+    systemChanged,
+    orderTaskSelected,
+    textSearch,
+  } = useSelector((state) => state.SAPTransportOrder);
 
   /*************************************
    * Memo
@@ -38,17 +44,19 @@ export default function OrdersTableTree(props) {
    me ha ido relativamente bien.
   */
   const valuesTable = useMemo(() => {
-    return userOrderListTree;
-  }, [userOrderListTree]);
+    let aa = searchOrdersTableTree(userOrderListTree, textSearch);
+
+    return aa;
+  }, [userOrderListTree, textSearch]);
 
   // Memo para para poner los índices de los registros expandido por defecto
   const expandedRows = useMemo(() => {
     let rows = [];
-    rows = userOrderListTree.map((row, index) => {
-      if (row.subRows.length > 0) return { [index]: true };
+    rows = valuesTable.map((row, index) => {
+      if (row[FIELDS_TREE_TABLE.EXPANDED]) return { [index]: true };
     });
     return rows;
-  }, [userOrderListTree]);
+  }, [valuesTable]);
 
   const columns = useMemo(
     () => [
