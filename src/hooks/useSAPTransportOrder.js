@@ -393,7 +393,7 @@ export default function useSAPTransportOrder() {
   );
 
   /**
-   *
+   * Búsqueda del texto pasado por parámetro en la tabla de ordenes en formato arbol
    * @param {string} searchText | Texto a buscar
    * @returns | Tabla con las ordenes filtradas
    */
@@ -405,8 +405,8 @@ export default function useSAPTransportOrder() {
     } else {
       let newSearchText = searchText.toUpperCase().trim();
 
-      let aa = [];
-      aa = ordersListTree.filter((row) => {
+      let resultSearch = [];
+      ordersListTree.forEach((row) => {
         // Filtramos por las tareas
         let filterSubRows = row.subRows.filter((subRow) => {
           return searchTextRowOrderTree(subRow, newSearchText);
@@ -421,15 +421,13 @@ export default function useSAPTransportOrder() {
             subRows: filterSubRows,
             [FIELDS_TREE_TABLE.EXPANDED]: true,
           };
-          return newRow;
+          resultSearch.push(newRow);
         } else if (filterRow) {
-          return { ...row, [FIELDS_TREE_TABLE.EXPANDED]: true };
+          resultSearch.push({ ...row, [FIELDS_TREE_TABLE.EXPANDED]: true });
         }
       });
 
-      console.log(aa);
-
-      return aa;
+      return resultSearch;
     }
   }, []);
 

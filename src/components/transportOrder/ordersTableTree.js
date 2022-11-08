@@ -44,12 +44,10 @@ export default function OrdersTableTree(props) {
    me ha ido relativamente bien.
   */
   const valuesTable = useMemo(() => {
-    let aa = searchOrdersTableTree(userOrderListTree, textSearch);
-
-    return aa;
+    return searchOrdersTableTree(userOrderListTree, textSearch);
   }, [userOrderListTree, textSearch]);
 
-  // Memo para para poner los índices de los registros expandido por defecto
+  // Memo para para poner los índices de los registros expandido
   const expandedRows = useMemo(() => {
     let rows = [];
     rows = valuesTable.map((row, index) => {

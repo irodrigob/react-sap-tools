@@ -12,6 +12,7 @@ import PopupTransCopy from "components/transportOrder/popupTransCopy";
 import {
   descriptionTransportCopyAction,
   textSearchAction,
+  orderTaskSelectedAction,
 } from "reduxStore/sapTransportOrderSlice";
 import { useTranslations } from "translations/i18nContext";
 import useSAPTransportOrder from "hooks/useSAPTransportOrder";
@@ -52,8 +53,12 @@ export default function ToolbarTable(props) {
             "transportOrder.toolbarAction.textSearchPlaceholder"
           )}
           onInput={(e) => {
-            if (e.target.value.length > 2 || e.target.value.length == 0)
+            if (e.target.value.length > 2 || e.target.value.length == 0) {
+              // Quito las tareas seleccionadas porque sino hay una discrepancia entre la tabla
+              // y los registros seleccionados y provoca que no funcione bien el transporte de copias.
+              dispatch(orderTaskSelectedAction([]));
               dispatch(textSearchAction(e.target.value));
+            }
           }}
         />
         <Button
