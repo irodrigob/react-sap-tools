@@ -371,7 +371,8 @@ export default function useSAPTransportOrder() {
    */
   const doTransportCopy = useCallback(
     (pSystem, pOrderDescription) => {
-      // Se llama al servicio que realiza el transporte de copias
+      clearMessagesManager();
+
       srvDoTransportCopy({
         variables: {
           input: {

@@ -2,6 +2,8 @@ import { useCallback, useEffect, useRef } from "react";
 import AppBar from "@mui/material/AppBar";
 import Toolbar from "@mui/material/Toolbar";
 import { useTheme } from "@mui/material/styles";
+import { Button } from "@ui5/webcomponents-react";
+import "@ui5/webcomponents-icons/dist/sys-help";
 import "@ui5/webcomponents-icons/dist/menu2";
 import "@ui5/webcomponents-icons/dist/account";
 import Grid from "@mui/material/Unstable_Grid2";
@@ -13,6 +15,7 @@ import UserAvatar from "./userAvatar";
 import SystemSelect2 from "components/systemSelect/systemSelect2";
 import { useSession } from "auth/authProvider";
 import { useTranslations } from "translations/i18nContext";
+import IconInteractive from "components/general/iconInteractive/iconInteractive";
 
 export default function AppTopToolbar() {
   const { session } = useSession();
@@ -50,6 +53,29 @@ export default function AppTopToolbar() {
                   <MessageManagerButton />
                 </Grid>
               )}
+              <Grid
+                xs={1}
+                display="flex"
+                justifyContent="flex-end"
+                flexGrow={1}
+              >
+                <IconInteractive
+                  name="sys-help"
+                  style={{
+                    width: "2rem",
+                    height: "2rem",
+                    color: "var(--sapContent_Illustrative_Color2)",
+                    paddingRight: "1rem",
+                  }}
+                  onClick={() => {
+                    window.open(
+                      "https://github.com/irodrigob/react-sap-tools",
+                      "_blank",
+                      "noopener,noreferrer"
+                    );
+                  }}
+                />
+              </Grid>
               <Grid
                 xs={1}
                 display="flex"
