@@ -44,7 +44,7 @@ export default function ListApps() {
                 <SideNavigationItem
                   key={row.app}
                   text={row.appDesc == "" ? row.app : row.appDesc}
-                  icon={getIcon(row.app)}
+                  icon={row.icon}
                   id={row.frontendPage}
                 />
               );

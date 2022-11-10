@@ -50,7 +50,8 @@
         "labelHOST": "Host servidor",
         "labelSAPUser": "Usuario SAP",
         "labelSAPPassword": "Password SAP",
-        "labelActions": "Acciones"
+        "labelActions": "Acciones",
+        "btnClose": "Cerrar"
     },
     "systemList": {
         "title": "Listado de sistemas",

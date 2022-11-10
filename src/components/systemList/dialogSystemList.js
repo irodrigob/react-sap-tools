@@ -22,7 +22,7 @@ const FooterDialog = (props) => {
       design="Footer"
       endContent={
         <Button style={{ marginTop: "1rem" }} onClick={onCloseButton}>
-          {getI18nText("general.btnTxtCancel")}
+          {getI18nText("systems.btnClose")}
         </Button>
       }
       style={{

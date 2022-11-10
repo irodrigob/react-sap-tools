@@ -49,6 +49,8 @@ export const QUERY_GET_APPS_LIST = gql`
       appDesc
       service
       frontendPage
+      icon
+      urlHelp
     }
   }
 `;
