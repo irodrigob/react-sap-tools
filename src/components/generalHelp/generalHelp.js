@@ -37,8 +37,8 @@ export default function GeneralHelp() {
         style={{
           width: "2rem",
           height: "2rem",
+          paddingLeft: "3rem",
           color: "var(--sapContent_Illustrative_Color2)",
-          //paddingRight: "3rem",
         }}
         onClick={() => {
           setOpen(true);

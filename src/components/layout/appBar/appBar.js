@@ -5,7 +5,7 @@ import { useTheme } from "@mui/material/styles";
 import "@ui5/webcomponents-icons/dist/sys-help";
 import "@ui5/webcomponents-icons/dist/menu2";
 import "@ui5/webcomponents-icons/dist/account";
-import Grid from "@mui/material/Unstable_Grid2";
+import { Grid } from "@mui/material";
 import GeneralHelp from "components/generalHelp/generalHelp";
 import { MessageManagerButton } from "components/messageManager/messageManagerComponent";
 import useMessageManager from "components/messageManager/useMessageManager";
@@ -35,38 +35,43 @@ export default function AppTopToolbar() {
           sx={{ backgroundColor: "var(--sapShellColor)" }}
         >
           <Toolbar variant="dense">
-            <Grid container flexGrow={1} spacing={2}>
-              <Grid xs="auto">
-                <SelectApp />
-              </Grid>
-              <Grid xs={8} display="flex" justifyContent="flex-start">
-                <SystemSelect2 />
-              </Grid>
-              {messagesNumber > 0 && (
-                <Grid
-                  xs={1}
-                  display="flex"
-                  justifyContent="flex-end"
-                  flexGrow={1}
-                >
-                  <MessageManagerButton />
+            <Grid
+              container
+              direction="row"
+              alignItems="center"
+              justifyContent="flex-start"
+            >
+              <Grid item xs={6} sm={6} md={6} lg={6} xl={6}>
+                <Grid container spacing={2}>
+                  <Grid item>
+                    <SelectApp />
+                  </Grid>
+                  <Grid item>
+                    <SystemSelect2 />
+                  </Grid>
                 </Grid>
-              )}
-              <Grid
-                xs={1}
-                display="flex"
-                justifyContent="flex-end"
-                flexGrow={1}
-              >
-                <GeneralHelp />
               </Grid>
-              <Grid
-                xs={1}
-                display="flex"
-                justifyContent="flex-end"
-                flexGrow={1}
-              >
-                <UserAvatar />
+
+              <Grid item xs={6} sm={6} md={6} lg={6} xl={6}>
+                <Grid
+                  container
+                  direction="row"
+                  alignItems="center"
+                  justifyContent="flex-end"
+                  spacing={4}
+                >
+                  {messagesNumber > 0 && (
+                    <Grid item>
+                      <MessageManagerButton />
+                    </Grid>
+                  )}
+                  <Grid item>
+                    <GeneralHelp />
+                  </Grid>
+                  <Grid item>
+                    <UserAvatar />
+                  </Grid>
+                </Grid>
               </Grid>
             </Grid>
           </Toolbar>

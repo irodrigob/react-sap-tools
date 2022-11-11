@@ -14,7 +14,7 @@ import useMessageManager, {
 
 function MessageViewComponent(props) {
   return (
-    <MessageView>
+    <MessageView showDetailsPageHeader={false}>
       {props.messages.map((row, index) => {
         return (
           <MessageItem

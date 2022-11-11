@@ -144,6 +144,10 @@ export default function PopupTransCopy(props) {
                 }
               >
                 {systemsTransportCopy.map((row) => {
+                  let option =
+                    row.systemName == ""
+                      ? ""
+                      : `${row.systemName} - ${row.systemDesc}`;
                   return (
                     <Option
                       key={row.systemName}
@@ -153,7 +157,7 @@ export default function PopupTransCopy(props) {
                         row.systemName == systemTransportCopy ? true : false
                       }
                     >
-                      {row.systemDesc}
+                      {option}
                     </Option>
                   );
                 })}
