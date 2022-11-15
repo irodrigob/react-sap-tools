@@ -1,5 +1,12 @@
-import { useState } from "react";
-import { Dialog, Button, Bar, Form, FormItem } from "@ui5/webcomponents-react";
+import { useState, useEffect } from "react";
+import {
+  Dialog,
+  Button,
+  Bar,
+  Form,
+  FormItem,
+  CheckBox,
+} from "@ui5/webcomponents-react";
 import "@ui5/webcomponents/dist/features/InputElementsFormSupport.js";
 import { useMutation } from "@apollo/client";
 import TextField from "@mui/material/TextField";
@@ -41,10 +48,17 @@ const FooterDialog = (props) => {
 };
 export default function DialogAddSystem(props) {
   const { open, onCloseButton } = props;
-  const { control, handleSubmit, reset } = useForm();
+  const {
+    control,
+    handleSubmit,
+    reset,
+    watch,
+    formState: { errors },
+  } = useForm();
   const { getI18nText } = useTranslations();
   const { formatterHost, validateHost, addSystem, session } = useSystems();
   const [btnSaveDisabled, setBtnSaveDisabled] = useState(false);
+  const watchNgrokActive = watch("ngrok_active");
 
   /*************************************
    * Funciones
@@ -54,6 +68,8 @@ export default function DialogAddSystem(props) {
     // Formateo del host
     data.host = formatterHost(data.host);
     data.sap_password = encryptText(data.sap_password);
+    data.ngrok_api_token =
+      data.ngrok_api_token != "" ? encryptText(data.ngrok_api_token) : "";
     showToast(
       getI18nText("editSystem.saveInProcess", {
         newSystem: data.name,
@@ -68,6 +84,9 @@ export default function DialogAddSystem(props) {
           host: data.host,
           sap_password: data.sap_password,
           sap_user: data.sap_user,
+          ngrok_active: data.ngrok_active,
+          ngrok_api_token: data.ngrok_api_token,
+          ngrok_tunnel: data.ngrok_tunnel,
         },
       },
     });
@@ -247,6 +266,84 @@ export default function DialogAddSystem(props) {
             rules={{ required: getI18nText("general.fieldMandatory") }}
           />
         </FormItem>
+        <FormItem>
+          <Controller
+            name="ngrok_active"
+            control={control}
+            defaultValue={false}
+            render={({ field: { onChange, value }, fieldState: { error } }) => (
+              <CheckBox
+                text={getI18nText("systems.labelNgrokActive")}
+                checked={value}
+                onChange={(e) => {
+                  onChange(e.target.checked);
+                }}
+              />
+            )}
+          />
+        </FormItem>
+        {watchNgrokActive && (
+          <FormItem>
+            <Controller
+              name="ngrok_api_token"
+              control={control}
+              defaultValue=""
+              render={({
+                field: { onChange, value },
+                fieldState: { error },
+              }) => (
+                <TextField
+                  required
+                  label={getI18nText("systems.labelNgrokApiToken")}
+                  variant="filled"
+                  value={value}
+                  onChange={onChange}
+                  error={!!error}
+                  helperText={
+                    !!error
+                      ? error.type === "validate"
+                        ? getI18nText("general.fieldMandatory")
+                        : error.message
+                      : null
+                  }
+                  sx={{ width: "15em" }}
+                  type="text"
+                />
+              )}
+              rules={{ validate: (value) => value !== "" && watchNgrokActive }}
+            />
+          </FormItem>
+        )}
+        {watchNgrokActive && (
+          <FormItem>
+            <Controller
+              name="ngrok_tunnel"
+              control={control}
+              defaultValue=""
+              render={({
+                field: { onChange, value },
+                fieldState: { error },
+              }) => (
+                <TextField
+                  label={getI18nText("systems.labelNgrokTunnel")}
+                  variant="filled"
+                  value={value}
+                  onChange={onChange}
+                  error={!!error}
+                  helperText={
+                    !!error
+                      ? error.type === "validate"
+                        ? getI18nText("general.fieldMandatory")
+                        : error.message
+                      : null
+                  }
+                  sx={{ width: "15em" }}
+                  type="text"
+                />
+              )}
+            />
+          </FormItem>
+        )}
       </Form>
     </Dialog>
   );

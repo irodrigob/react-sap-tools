@@ -21,6 +21,9 @@ export const MAIN_SYSTEMS_FIELDS = gql`
     host
     sap_user
     sap_password
+    ngrok_active
+    ngrok_api_token
+    ngrok_tunnel
   }
 `;
 

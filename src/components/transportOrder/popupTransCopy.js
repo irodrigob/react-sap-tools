@@ -41,6 +41,7 @@ const FooterDialog = (props) => {
 };
 
 export default function PopupTransCopy(props) {
+  const { control, handleSubmit, reset, register, setValue } = useForm();
   const { open, onCloseButton, onConfirmButton } = props;
   const {
     orderTaskSelected,
@@ -50,7 +51,6 @@ export default function PopupTransCopy(props) {
   } = useSelector((state) => state.SAPTransportOrder);
   const { getI18nText } = useTranslations();
   const dispatch = useDispatch();
-  const { control, handleSubmit, reset, register, setValue } = useForm();
 
   /*************************************
    * Funciones

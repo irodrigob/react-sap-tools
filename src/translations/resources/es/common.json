@@ -50,6 +50,9 @@
         "labelHOST": "Host servidor",
         "labelSAPUser": "Usuario SAP",
         "labelSAPPassword": "Password SAP",
+        "labelNgrokActive": "Tunel por Ngrok",
+        "labelNgrokApiToken": "API Token",
+        "labelNgrokTunnel": "URL Tunel",
         "labelActions": "Acciones",
         "btnClose": "Cerrar"
     },
