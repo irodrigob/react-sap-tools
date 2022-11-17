@@ -1,28 +1,16 @@
-import { useEffect, useMemo, useState, useId } from "react";
+import { useMemo } from "react";
 import {
   FlexBox,
   Label,
   Button,
   Icon,
   Input,
-  ValueState,
+  CheckBox,
 } from "@ui5/webcomponents-react";
-import { styled } from "@mui/material/styles";
-import { TextField } from "@mui/material";
 import { INTERNAL_FIELDS_DATA } from "./constants";
 
-const InputCustom = styled(TextField)({
-  "& .MuiInputBase-input": {
-    borderRadius: 0,
-    padding: "4.5px 14px",
-  },
-  "& .MuiOutlinedInput-root": {
-    borderRadius: "var(--_ui5_input_border_radius);",
-  },
-});
-
 export default function CellEdit(props) {
-  const { instance, onChange, required } = props;
+  const { instance, onChange, required,columnType } = props;
   const { cell, row } = instance;
 
   const fieldCellValueState = useMemo(() => {
@@ -37,25 +25,6 @@ export default function CellEdit(props) {
     return cell.column.originalWidth - 40;
   }, [cell.column.originalWidth]);
 
-  /*
-    {!row.original[INTERNAL_FIELDS_DATA.EDITING] && (
-        <Label>{cell.value}</Label>
-      )}
-      {row.original[INTERNAL_FIELDS_DATA.EDITING] && (
-        <Input
-          value={cell.value}
-          required={required}
-          valueState={instance.row.original[fieldCellValueState]}
-          valueStateMessage={<Label>{fieldCellValueStateMessage}</Label>}
-          onChange={(e) => {
-            onChange(instance, e.target.value);
-          }}
-          style={{ minWidth: `${inputWidth}px` }}
-          type={props.type}
-        />
-      )}        
-
-  */
   return (
     <>
       {!row.original[INTERNAL_FIELDS_DATA.EDITING] && (

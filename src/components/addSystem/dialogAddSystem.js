@@ -70,6 +70,8 @@ export default function DialogAddSystem(props) {
     data.sap_password = encryptText(data.sap_password);
     data.ngrok_api_token =
       data.ngrok_api_token != "" ? encryptText(data.ngrok_api_token) : "";
+    data.ngrok_tunnel = formatterHost(data.ngrok_tunnel);
+
     showToast(
       getI18nText("editSystem.saveInProcess", {
         newSystem: data.name,
@@ -310,7 +312,9 @@ export default function DialogAddSystem(props) {
                   type="text"
                 />
               )}
-              rules={{ validate: (value) => value !== "" && watchNgrokActive }}
+              rules={{
+                validate: (value) => value !== "" && watchNgrokActive,
+              }}
             />
           </FormItem>
         )}
@@ -333,7 +337,7 @@ export default function DialogAddSystem(props) {
                   helperText={
                     !!error
                       ? error.type === "validate"
-                        ? getI18nText("general.fieldMandatory")
+                        ? getI18nText("editSystem.msgErrorHostInvalid")
                         : error.message
                       : null
                   }
@@ -341,6 +345,11 @@ export default function DialogAddSystem(props) {
                   type="text"
                 />
               )}
+              rules={{
+                validate: (value) => {
+                  return validateHost(value);
+                },
+              }}
             />
           </FormItem>
         )}

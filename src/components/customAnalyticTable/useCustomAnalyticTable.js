@@ -2,6 +2,7 @@ import { useState, useCallback, useEffect } from "react";
 import { ValueState } from "@ui5/webcomponents-react";
 import CellActions from "./cellActions";
 import CellEdit from "./cellEdit";
+import CellView from "./cellView";
 import {
   COLUMN_PROPERTIES,
   DEFAULT_TABLE_PROPS,
@@ -152,62 +153,28 @@ export default function useCustomAnalyticTable() {
   );
 
   /**
-   * Añado para las columnas editables
+   * Columnas a medida en el catalogo de campos
    * @param {Array} columns | Configuración de columnas de la tabla.
    * @returns {Array} | Columnas con la propiedad Cell añadida con el control deseado
    */
-  const addCustomCellColumns = useCallback(
+  const customCellColumns = useCallback(
     (columns) => {
       let newColumns = [];
       columns.forEach((column) => {
         let newColumn = { ...column };
 
-        // Solo se añade campo "Cell" cuando no viene previamente, existe el campo editable y este esta a true.
-        if (
-          ANALYTIC_TABLE.COLUMNS.CELL_COMPONENT in column === false &&
-          COLUMN_PROPERTIES.EDIT in column === true &&
-          column[COLUMN_PROPERTIES.EDIT] === true
+        // El tipo de campo varia si la columna es editable o no.
+        if (column[COLUMN_PROPERTIES.EDIT] === true) {
+          newColumn = customEditCellColumn(newColumn);
+        }
+        // Si no es editable se mira que tenga el campo de "ComponentType" informado y con datos
+        // y además que no tenga el atributo "Cell" predefinido.
+        else if (
+          column[COLUMN_PROPERTIES.COMPONENT_TYPE] != undefined &&
+          column[COLUMN_PROPERTIES.COMPONENT_TYPE] != "" &&
+          column[ANALYTIC_TABLE.COLUMNS.CELL_COMPONENT] == undefined
         ) {
-          // Se determina si el campo es obligatorio, si no viene la propiedad en el catalogo de campos se marcará como
-          // no obligatorio.
-          newColumn[COLUMN_PROPERTIES.REQUIRED] =
-            column.required != undefined ? column.required : false;
-
-          newColumn[ANALYTIC_TABLE.COLUMNS.CELL_COMPONENT] = (instance) => {
-            return (
-              <CellEdit
-                instance={instance}
-                required={newColumn[COLUMN_PROPERTIES.REQUIRED]}
-                onChange={(instance, cellValue) => {
-                  const { onCellValidation } = propsEditable;
-                  let returnValidations = cellValidations(
-                    instance,
-                    cellValue,
-                    onCellValidation
-                  );
-
-                  setTableValues(
-                    propagateValidation(
-                      instance.data,
-                      getTabix(instance),
-                      returnValidations
-                    )
-                  );
-
-                  if (returnValidations.state != ValueState.Error)
-                    setTableValues(
-                      updateCellValue(
-                        instance.data,
-                        getTabix(instance),
-                        instance.cell.column.id,
-                        cellValue
-                      )
-                    );
-                }}
-                type={column.type}
-              />
-            );
-          };
+          newColumn = customViewCellColumn(newColumn);
         }
         newColumns.push(newColumn);
       });
@@ -215,7 +182,77 @@ export default function useCustomAnalyticTable() {
     },
     [tableValues, fieldCatalog, propsEditable]
   );
+  /**
+   * Columna editable a medida
+   * @param {object} column | Columna de datos
+   * @returns
+   */
+  const customEditCellColumn = useCallback((column) => {
+    let newColumn = { ...column };
 
+    // Se determina si el campo es obligatorio, si no viene la propiedad en el catalogo de campos se marcará como
+    // no obligatorio.
+    newColumn[COLUMN_PROPERTIES.REQUIRED] =
+      column.required != undefined ? column.required : false;
+
+    newColumn[ANALYTIC_TABLE.COLUMNS.CELL_COMPONENT] = (instance) => {
+      return (
+        <CellEdit
+          instance={instance}
+          required={newColumn[COLUMN_PROPERTIES.REQUIRED]}
+          onChange={(instance, cellValue) => {
+            const { onCellValidation } = propsEditable;
+            let returnValidations = cellValidations(
+              instance,
+              cellValue,
+              onCellValidation
+            );
+
+            setTableValues(
+              propagateValidation(
+                instance.data,
+                getTabix(instance),
+                returnValidations
+              )
+            );
+
+            if (returnValidations.state != ValueState.Error)
+              setTableValues(
+                updateCellValue(
+                  instance.data,
+                  getTabix(instance),
+                  instance.cell.column.id,
+                  cellValue
+                )
+              );
+          }}
+          type={column.type}
+        />
+      );
+    };
+
+    return newColumn;
+  }, []);
+
+  /**
+   * Column de visualización a medida
+   * @param {object} column | Datos de la columna
+   * @returns Columna adaptada
+   */
+  const customViewCellColumn = (column) => {
+    let newColumn = column;
+
+    newColumn[ANALYTIC_TABLE.COLUMNS.CELL_COMPONENT] = (instance) => {
+      return (
+        <CellView
+          instance={instance}
+          componentType={column[COLUMN_PROPERTIES.COMPONENT_TYPE]}
+        />
+      );
+    };
+
+    return newColumn;
+  };
   /**
    * Construye el catalogo de campos para la tabla en base a las columnas pasadas. Cosas que realiza:
    * 1.- Añade una columna de acciones cuando alguno campo tiene el atributo "EDIT" y la tabla a nivel general se puede editar. O
@@ -227,6 +264,8 @@ export default function useCustomAnalyticTable() {
   const buildFieldCatalog = useCallback(
     (columns, valuesProperties, propsEditable) => {
       let newFieldCatalog = [];
+
+      // Columnas de acciones si hay edición o se puede borrar filas.
       if (
         (columns.some((o) => COLUMN_PROPERTIES.EDIT in o) &&
           tableProps.allowEdit) ||
@@ -234,10 +273,8 @@ export default function useCustomAnalyticTable() {
       ) {
         let actionColumn = addColumnActions(valuesProperties, propsEditable);
         if (actionColumn) newFieldCatalog.push(actionColumn);
-        newFieldCatalog = newFieldCatalog.concat(addCustomCellColumns(columns));
-      } else {
-        newFieldCatalog = [...columns];
       }
+      newFieldCatalog = newFieldCatalog.concat(customCellColumns(columns));
 
       setFieldCatalog(newFieldCatalog);
     },

@@ -5,6 +5,7 @@ export const COLUMN_PROPERTIES = {
   EDIT: "edit",
   REQUIRED: "required",
   ACTIONS: "actions",
+  COMPONENT_TYPE: "componentType",
 };
 
 export const COLUMN_ACTION = {
@@ -56,4 +57,11 @@ export const DEFAULT_ROW_MESSAGE = {
   message: "",
 };
 
+// Estructura base para las validaciones a nivel de celda
 export const DEFAULT_SINGLE_VALIDATION = { state: "", message: "" };
+
+// Tipos de componentes
+export const COMPONENT_TYPE = {
+  CHECKBOX: "checkbox",
+  DEFAULT: "",
+};

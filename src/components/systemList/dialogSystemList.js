@@ -52,7 +52,7 @@ export default function DialogSystemList(props) {
         headerTooltip: getI18nText("systems.labelName"),
         edit: true,
         required: true,
-        width: 270,
+        width: 200,
       },
       {
         Header: getI18nText("systems.labelHOST"),
@@ -60,7 +60,7 @@ export default function DialogSystemList(props) {
         headerTooltip: getI18nText("systems.labelHOST"),
         edit: true,
         required: true,
-        width: 500,
+        width: 400,
       },
       {
         Header: getI18nText("systems.labelSAPUser"),
@@ -76,8 +76,33 @@ export default function DialogSystemList(props) {
         headerTooltip: getI18nText("systems.labelSAPPassword"),
         edit: true,
         required: true,
-        width: 300,
+        width: 150,
         type: "Password",
+      },
+      {
+        Header: getI18nText("systems.labelNgrokActive"),
+        accessor: "ngrok_active",
+        headerTooltip: getI18nText("systems.labelNgrokActive"),
+        edit: false,
+        required: false,
+        width: 100,
+        componentType: "checkbox",
+      },
+      {
+        Header: getI18nText("systems.labelNgrokApiToken"),
+        accessor: "ngrok_api_token",
+        headerTooltip: getI18nText("systems.labelNgrokApiToken"),
+        edit: true,
+        required: false,
+        width: 200,
+      },
+      {
+        Header: getI18nText("systems.labelNgrokTunnel"),
+        accessor: "ngrok_tunnel",
+        headerTooltip: getI18nText("systems.labelNgrokTunnel"),
+        edit: true,
+        required: false,
+        width: 300,
       },
     ]);
   }, []);
