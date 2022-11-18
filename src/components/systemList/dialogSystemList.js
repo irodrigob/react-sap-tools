@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useMutation } from "@apollo/client";
-import { Dialog, Button, Bar } from "@ui5/webcomponents-react";
+import { Dialog, Button, Bar, ValueState } from "@ui5/webcomponents-react";
 import CustomAnalyticTable from "components/customAnalyticTable/CustomAnalyticTable";
 import { useTranslations } from "translations/i18nContext";
 import { useGlobalData } from "context/globalDataContext";
@@ -39,7 +39,8 @@ export default function DialogSystemList(props) {
   const { systemsList } = useGlobalData();
   const [columns, setColumns] = useState([]);
   const [toastID, setToastID] = useState("");
-  const { formatterHost, updateSystem, deleteSystem } = useSystems();
+  const { formatterHost, updateSystem, deleteSystem, validateHost } =
+    useSystems();
 
   /*************************************
    * Efectos
@@ -83,7 +84,7 @@ export default function DialogSystemList(props) {
         Header: getI18nText("systems.labelNgrokActive"),
         accessor: "ngrok_active",
         headerTooltip: getI18nText("systems.labelNgrokActive"),
-        edit: false,
+        edit: true,
         required: false,
         width: 100,
         componentType: "checkbox",
@@ -95,6 +96,7 @@ export default function DialogSystemList(props) {
         edit: true,
         required: false,
         width: 200,
+        type: "Password",
       },
       {
         Header: getI18nText("systems.labelNgrokTunnel"),
@@ -227,10 +229,20 @@ export default function DialogSystemList(props) {
             setToastID(toastID);
 
             newData.host = formatterHost(newData.host);
+
             // Si el password nuevo y el original son distintos es que lo ha cambio y hay que cifrarlo.
             // En caso contrario se deja el mismo porque ya esta cifrado.
             if (newData.sap_password != oldData.sap_password)
               newData.sap_password = encryptText(newData.sap_password);
+
+            if (newData.ngrok_active) {
+              newData.ngrok_tunnel = formatterHost(newData.ngrok_tunnel);
+              if (newData.ngrok_api_token != oldData.ngrok_api_token)
+                newData.ngrok_api_token = encryptText(newData.ngrok_api_token);
+            } else {
+              newData.ngrok_api_token = "";
+              newData.ngrok_tunnel = "";
+            }
 
             return updateSystemFunction({
               variables: {
@@ -241,6 +253,9 @@ export default function DialogSystemList(props) {
                   host: newData.host,
                   sap_password: newData.sap_password,
                   sap_user: newData.sap_user,
+                  ngrok_active: newData.ngrok_active,
+                  ngrok_api_token: newData.ngrok_api_token,
+                  ngrok_tunnel: newData.ngrok_tunnel,
                 },
               },
             });
@@ -259,6 +274,33 @@ export default function DialogSystemList(props) {
                 id: oldData._id,
               },
             });
+          },
+          onRowValidation: (newData, column, value) => {
+            switch (column) {
+              case "host":
+                if (!validateHost(value))
+                  return [
+                    {
+                      state: ValueState.Error,
+                      message: getI18nText("editSystem.msgErrorHostInvalid"),
+                    },
+                  ];
+              case "ngrok_tunnel":
+                if (newData.ngrok_active) {
+                  if (!validateHost(value))
+                    return [
+                      {
+                        state: ValueState.Error,
+                        message: getI18nText("editSystem.msgErrorHostInvalid"),
+                      },
+                    ];
+                } else {
+                  return [{ column: "ngrok_tunnel", value: "" }];
+                }
+              case "ngrok_api_token":
+                value = newData.ngrok_active ? value : "";
+            }
+            return [{ state: ValueState.None, message: "" }];
           },
         }}
       />

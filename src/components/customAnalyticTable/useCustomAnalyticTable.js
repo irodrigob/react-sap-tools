@@ -40,7 +40,7 @@ export default function useCustomAnalyticTable() {
     getRowOriginalData,
     convertFieldsInternalRow2External,
   } = useDataManager();
-  const { cellValidations } = useDataValidations();
+  const { rowValidations } = useDataValidations();
   const [openPopupMessages, setOpenPopupMessages] = useState(false);
   const [openPopupConfirmDelete, setOpenPopupConfirmDelete] = useState(false);
   const [instanceToDelete, setInstanceToDelete] = useState({});
@@ -163,6 +163,11 @@ export default function useCustomAnalyticTable() {
       columns.forEach((column) => {
         let newColumn = { ...column };
 
+        newColumn[COLUMN_PROPERTIES.COMPONENT_TYPE] =
+          column[COLUMN_PROPERTIES.COMPONENT_TYPE] != undefined
+            ? column[COLUMN_PROPERTIES.COMPONENT_TYPE]
+            : "";
+
         // El tipo de campo varia si la columna es editable o no.
         if (column[COLUMN_PROPERTIES.EDIT] === true) {
           newColumn = customEditCellColumn(newColumn);
@@ -187,52 +192,55 @@ export default function useCustomAnalyticTable() {
    * @param {object} column | Columna de datos
    * @returns
    */
-  const customEditCellColumn = useCallback((column) => {
-    let newColumn = { ...column };
+  const customEditCellColumn = useCallback(
+    (column) => {
+      let newColumn = { ...column };
 
-    // Se determina si el campo es obligatorio, si no viene la propiedad en el catalogo de campos se marcará como
-    // no obligatorio.
-    newColumn[COLUMN_PROPERTIES.REQUIRED] =
-      column.required != undefined ? column.required : false;
+      // Se determina si el campo es obligatorio, si no viene la propiedad en el catalogo de campos se marcará como
+      // no obligatorio.
+      newColumn[COLUMN_PROPERTIES.REQUIRED] =
+        column.required != undefined ? column.required : false;
 
-    newColumn[ANALYTIC_TABLE.COLUMNS.CELL_COMPONENT] = (instance) => {
-      return (
-        <CellEdit
-          instance={instance}
-          required={newColumn[COLUMN_PROPERTIES.REQUIRED]}
-          onChange={(instance, cellValue) => {
-            const { onCellValidation } = propsEditable;
-            let returnValidations = cellValidations(
-              instance,
-              cellValue,
-              onCellValidation
-            );
+      newColumn[ANALYTIC_TABLE.COLUMNS.CELL_COMPONENT] = (instance) => {
+        return (
+          <CellEdit
+            instance={instance}
+            required={newColumn[COLUMN_PROPERTIES.REQUIRED]}
+            onChange={(instance, cellValue) => {
+              const { onRowValidation } = propsEditable;
+              let returnValidations = rowValidations(
+                instance,
+                cellValue,
+                onRowValidation
+              );
 
-            setTableValues(
-              propagateValidation(
-                instance.data,
-                getTabix(instance),
-                returnValidations
-              )
-            );
-
-            if (returnValidations.state != ValueState.Error)
               setTableValues(
-                updateCellValue(
+                propagateValidation(
                   instance.data,
                   getTabix(instance),
-                  instance.cell.column.id,
-                  cellValue
+                  returnValidations
                 )
               );
-          }}
-          type={column.type}
-        />
-      );
-    };
 
-    return newColumn;
-  }, []);
+              if (returnValidations.state != ValueState.Error)
+                setTableValues(
+                  updateCellValue(
+                    instance.data,
+                    getTabix(instance),
+                    instance.cell.column.id,
+                    cellValue
+                  )
+                );
+            }}
+            type={column.type}
+          />
+        );
+      };
+
+      return newColumn;
+    },
+    [propsEditable]
+  );
 
   /**
    * Column de visualización a medida
@@ -243,12 +251,7 @@ export default function useCustomAnalyticTable() {
     let newColumn = column;
 
     newColumn[ANALYTIC_TABLE.COLUMNS.CELL_COMPONENT] = (instance) => {
-      return (
-        <CellView
-          instance={instance}
-          componentType={column[COLUMN_PROPERTIES.COMPONENT_TYPE]}
-        />
-      );
+      return <CellView instance={instance} />;
     };
 
     return newColumn;

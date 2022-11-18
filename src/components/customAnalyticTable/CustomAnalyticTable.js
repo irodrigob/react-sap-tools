@@ -21,13 +21,16 @@ import { useTranslations } from "translations/i18nContext";
  * oldData --> JSON con los datos originales de la fila
  * ----> onRowDelete: Se le pasara una función que se ejecutara cuando una fila se borre. La función deberá devolver un promise. El reject de la promise
  * se enviará un texto con el error producido. Los parámetros de la función son: oldData --> JSON con los datos originales de la fila
- * ----> onCellValidation: Se le pasará la función donde permitirá validar los de la celda modifica. Los parámetros de entrada son:
+ * ----> onRowValidation: Se le pasará la función donde permitirá validar los de la celda modifica. Los parámetros de entrada son:
  * newData -> Datos de la fila modificada
  * column -> Nombre de la columna
  * value -> Valor de la celda
- * La función deberá devolver la siguiente estructura JSON:
+ * La función deberá devolver un array con la siguiente estructura JSON:
+ * column -> Columna donde aplicará el estado y mensaje. Si esta en blanco aplica a la fila entera. Si no se informa se tomará como
+ * base la columna donde se ha modificado el valor
  * state -> Estado de la validación. Los valores posibles son: "None","Warning","Error","Success","Information"
  * message -> Texto libre
+ * value --> Nuevo valor de la columna, si esta se indica. Si no se informa el campo no se hará ningún cambio
  */
 export default function CustomAnalyticTable(props) {
   const {

@@ -336,6 +336,7 @@ export default function useSAPTransportOrder() {
    * que hacer nada más ya que los loader o lo que sea ya se gestiona desde fuera de esta llamada.
    */
   const reloadUserOrders = useCallback(() => {
+    dispatch(orderTaskSelectedAction([]));
     dispatch(loadingOrdersAction(true));
 
     let paramsService = convertFilter2paramsGraphql(toolbarFilters);

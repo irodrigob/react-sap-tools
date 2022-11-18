@@ -309,7 +309,7 @@ export default function DialogAddSystem(props) {
                       : null
                   }
                   sx={{ width: "15em" }}
-                  type="text"
+                  type="password"
                 />
               )}
               rules={{

@@ -7,7 +7,11 @@ import {
   Input,
   CheckBox,
 } from "@ui5/webcomponents-react";
-import { INTERNAL_FIELDS_DATA, COMPONENT_TYPE } from "./constants";
+import {
+  INTERNAL_FIELDS_DATA,
+  COMPONENT_TYPE,
+  COLUMN_PROPERTIES,
+} from "./constants";
 
 export default function CellView(props) {
   const { instance } = props;
@@ -20,10 +24,13 @@ export default function CellView(props) {
     return cell.column.originalWidth - 40;
   }, [cell.column.originalWidth]);
 
+  /*************************************
+   * Funciones
+   ************************************/
   const ComponentTypeObject = () => {
-    const { instance, componentType } = props;
+    const { instance } = props;
     const { cell, row } = instance;
-    switch (componentType) {
+    switch (cell.column[COLUMN_PROPERTIES.COMPONENT_TYPE]) {
       case COMPONENT_TYPE.CHECKBOX:
         return <CheckBox checked={cell.value} disabled={true} />;
       default:

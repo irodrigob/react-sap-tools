@@ -7,10 +7,15 @@ import {
   Input,
   CheckBox,
 } from "@ui5/webcomponents-react";
-import { INTERNAL_FIELDS_DATA } from "./constants";
+import CellView from "./cellView";
+import {
+  INTERNAL_FIELDS_DATA,
+  COMPONENT_TYPE,
+  COLUMN_PROPERTIES,
+} from "./constants";
 
 export default function CellEdit(props) {
-  const { instance, onChange, required,columnType } = props;
+  const { instance, onChange, required } = props;
   const { cell, row } = instance;
 
   const fieldCellValueState = useMemo(() => {
@@ -25,24 +30,45 @@ export default function CellEdit(props) {
     return cell.column.originalWidth - 40;
   }, [cell.column.originalWidth]);
 
+  /*************************************
+   * Funciones
+   ************************************/
+  const ComponentTypeObject = () => {
+    const { instance } = props;
+    const { cell, row } = instance;
+    switch (cell.column[COLUMN_PROPERTIES.COMPONENT_TYPE]) {
+      case COMPONENT_TYPE.CHECKBOX:
+        return (
+          <CheckBox
+            checked={cell.value}
+            onChange={(e) => {
+              onChange(instance, e.target.checked);
+            }}
+          />
+        );
+      default:
+        return (
+          <Input
+            value={cell.value}
+            required={required}
+            valueState={instance.row.original[fieldCellValueState]}
+            valueStateMessage={<Label>{fieldCellValueStateMessage}</Label>}
+            onChange={(e) => {
+              onChange(instance, e.target.value);
+            }}
+            style={{ minWidth: `${inputWidth}px` }}
+            type={props.type}
+          />
+        );
+    }
+  };
+
   return (
     <>
       {!row.original[INTERNAL_FIELDS_DATA.EDITING] && (
-        <Label>{cell.value}</Label>
+        <CellView instance={instance} />
       )}
-      {row.original[INTERNAL_FIELDS_DATA.EDITING] && (
-        <Input
-          value={cell.value}
-          required={required}
-          valueState={instance.row.original[fieldCellValueState]}
-          valueStateMessage={<Label>{fieldCellValueStateMessage}</Label>}
-          onChange={(e) => {
-            onChange(instance, e.target.value);
-          }}
-          style={{ minWidth: `${inputWidth}px` }}
-          type={props.type}
-        />
-      )}
+      {row.original[INTERNAL_FIELDS_DATA.EDITING] && <ComponentTypeObject />}
     </>
   );
 }

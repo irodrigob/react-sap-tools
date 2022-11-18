@@ -58,7 +58,10 @@ export const DEFAULT_ROW_MESSAGE = {
 };
 
 // Estructura base para las validaciones a nivel de celda
-export const DEFAULT_SINGLE_VALIDATION = { state: "", message: "" };
+export const DEFAULT_SINGLE_VALIDATION = {
+  state: ValueState.None,
+  message: "",
+};
 
 // Tipos de componentes
 export const COMPONENT_TYPE = {

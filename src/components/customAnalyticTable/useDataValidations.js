@@ -13,56 +13,72 @@ export default function useDataValidations() {
   const { getI18nText } = useTranslations();
 
   /**
-   * Proceso que realiza las validaciones a nivel de celda tanto internas del componente como propias
+   * Proceso que realiza las validaciones y cambios de valor a nivel de fila tanto internas del componente como propias
    * indicadas a nivel de columna.
    * @param {object} instance
    * @param {string} cellValue
-   * @returns Objeto con el resultado de la validación
+   * @returns Array con los objetos con el resultado de la validación. El array tendrá la siguiente estructura:
+   * {
+      column:"" --> Columna con el mensaje. Por defecto siempre vendrá la columna donde se modifica el campo
+      state:"" --> Un valor de las constante del componente ValueState
+      message:"" --> String para el mensaje
+      value:"" --> Valor introducido del campo que puede ser modificado.
+    }
+
    */
-  const cellValidations = useCallback(
+  const rowValidations = useCallback(
     (instance, cellValue, customCellValidation) => {
+      let rowValidations = [];
+      let cellBaseValidation = {
+        column: instance.cell.column.id,
+        value: cellValue,
+      };
+
       let cellValidation = {
         ...DEFAULT_ROW_MESSAGE,
         column: instance.cell.column.id,
+        value: cellValue,
       };
 
-      /*
-    La estructura de error que tiene que devolver las funciones que se llaman son muy simple:
-    {
-      state:"" --> Un valor de las constante del componente ValueState
-      message:"" --> Campos string
-    }
-    */
-      let validationReturn = DEFAULT_SINGLE_VALIDATION;
-      let validationCustomReturn = DEFAULT_SINGLE_VALIDATION;
-
+      // La validación de campo obligatoria devolverá una estructura plana simple
       if (instance.cell.column.required === true) {
-        validationReturn = fieldMandatory(instance, cellValue);
+        rowValidations.push({
+          ...fieldMandatory(instance, cellValue),
+          ...cellBaseValidation,
+        });
       }
 
       if (
-        validationReturn.state === "" ||
-        validationReturn.state === ValueState.None
+        rowValidations.findIndex((row) => row.state == ValueState.None) != -1
       ) {
         // Siguientes validaciones
         if (typeof customCellValidation === "function") {
-          validationCustomReturn = customCellValidation(
+          let validationsCustomReturn = customCellValidation(
             convertFieldsInternalRow2External(instance.row.original),
             instance.cell.column.id,
             cellValue
           );
-          cellValidation.state = validationCustomReturn?.state
+          let arrayCustomReturn = validationsCustomReturn.map((row) => {
+            return {
+              state: row?.state ? row?.state : ValueState.None,
+              message: row?.message ? row.message : "",
+              column: row?.column ? row.colum : instance.cell.column.id,
+              value: row?.value
+                ? row.value
+                : instance.row.original[instance.cell.column.id],
+            };
+          });
+          rowValidations = rowValidations.concat(arrayCustomReturn);
+          /*cellValidation.state = validationCustomReturn?.state
             ? validationCustomReturn?.state
             : ValueState.None;
           cellValidation.message = validationCustomReturn?.message
             ? validationCustomReturn.message
-            : "";
+            : "";*/
         }
-      } else {
-        cellValidation.state = validationReturn.state;
-        cellValidation.message = validationReturn.message;
       }
 
+      console.log(rowValidations);
       return cellValidation;
     },
     []
@@ -79,5 +95,5 @@ export default function useDataValidations() {
     else return DEFAULT_SINGLE_VALIDATION;
   }, []);
 
-  return { cellValidations };
+  return { rowValidations };
 }
