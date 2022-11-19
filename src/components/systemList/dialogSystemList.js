@@ -281,26 +281,49 @@ export default function DialogSystemList(props) {
                 if (!validateHost(value))
                   return [
                     {
-                      state: ValueState.Error,
-                      message: getI18nText("editSystem.msgErrorHostInvalid"),
+                      column: column,
+                      validations: [
+                        {
+                          state: ValueState.Error,
+                          message: getI18nText(
+                            "editSystem.msgErrorHostInvalid"
+                          ),
+                        },
+                      ],
                     },
                   ];
+                break;
               case "ngrok_tunnel":
                 if (newData.ngrok_active) {
                   if (!validateHost(value))
                     return [
                       {
-                        state: ValueState.Error,
-                        message: getI18nText("editSystem.msgErrorHostInvalid"),
+                        column: column,
+                        validations: [
+                          {
+                            state: ValueState.Error,
+                            message: getI18nText(
+                              "editSystem.msgErrorHostInvalid"
+                            ),
+                          },
+                        ],
                       },
                     ];
                 } else {
-                  return [{ column: "ngrok_tunnel", value: "" }];
+                  return [{ value: "" }];
                 }
+                break;
+              case "ngrok_active":
+                if (!value)
+                  return [
+                    { column: "ngrok_api_token", value: "" },
+                    { column: "ngrok_tunnel", value: "" },
+                  ];
+                break;
               case "ngrok_api_token":
-                value = newData.ngrok_active ? value : "";
+                if (!newData.ngrok_active) return [{ value: "" }];
+                break;
             }
-            return [{ state: ValueState.None, message: "" }];
           },
         }}
       />

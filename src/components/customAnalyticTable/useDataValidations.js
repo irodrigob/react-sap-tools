@@ -19,37 +19,35 @@ export default function useDataValidations() {
    * @param {string} cellValue
    * @returns Array con los objetos con el resultado de la validación. El array tendrá la siguiente estructura:
    * {
-      column:"" --> Columna con el mensaje. Por defecto siempre vendrá la columna donde se modifica el campo
-      state:"" --> Un valor de las constante del componente ValueState
-      message:"" --> String para el mensaje
+      column:"" --> Columna con el mensaje. Por defecto siempre vendrá la columna donde se modifica el campo      
       value:"" --> Valor introducido del campo que puede ser modificado.
+      validations:[]--> Array que tendrá la siguiente estructura:
+            {
+              state:"" --> Un valor de las constante del componente ValueState
+              message:"" --> String para el mensaje
+            }
     }
 
    */
   const rowValidations = useCallback(
     (instance, cellValue, customCellValidation) => {
-      let rowValidations = [];
-      let cellBaseValidation = {
-        column: instance.cell.column.id,
-        value: cellValue,
-      };
-
-      let cellValidation = {
-        ...DEFAULT_ROW_MESSAGE,
-        column: instance.cell.column.id,
-        value: cellValue,
-      };
+      let rowValidations = [
+        {
+          ...DEFAULT_ROW_MESSAGE,
+          column: instance.cell.column.id,
+          value: cellValue,
+        },
+      ];
 
       // La validación de campo obligatoria devolverá una estructura plana simple
-      if (instance.cell.column.required === true) {
-        rowValidations.push({
-          ...fieldMandatory(instance, cellValue),
-          ...cellBaseValidation,
-        });
-      }
+      if (instance.cell.column.required === true)
+        rowValidations[0].validations = [fieldMandatory(instance, cellValue)];
 
       if (
-        rowValidations.findIndex((row) => row.state == ValueState.None) != -1
+        rowValidations[0].validations.findIndex(
+          (row) => row.state == ValueState.None
+        ) != -1 ||
+        rowValidations[0].validations.length == 0
       ) {
         // Siguientes validaciones
         if (typeof customCellValidation === "function") {
@@ -58,28 +56,53 @@ export default function useDataValidations() {
             instance.cell.column.id,
             cellValue
           );
-          let arrayCustomReturn = validationsCustomReturn.map((row) => {
-            return {
-              state: row?.state ? row?.state : ValueState.None,
-              message: row?.message ? row.message : "",
-              column: row?.column ? row.colum : instance.cell.column.id,
-              value: row?.value
-                ? row.value
-                : instance.row.original[instance.cell.column.id],
-            };
-          });
-          rowValidations = rowValidations.concat(arrayCustomReturn);
-          /*cellValidation.state = validationCustomReturn?.state
-            ? validationCustomReturn?.state
-            : ValueState.None;
-          cellValidation.message = validationCustomReturn?.message
-            ? validationCustomReturn.message
-            : "";*/
+          if (
+            Array.isArray(validationsCustomReturn) &&
+            validationsCustomReturn.length > 0
+          ) {
+            validationsCustomReturn.forEach((row) => {
+              let index = rowValidations.findIndex(
+                (rowValidation) => rowValidation.column == row.column
+              );
+
+              let newValidations =
+                row.validations != undefined
+                  ? row.validations.map((validation) => {
+                      return {
+                        state: validation?.state
+                          ? validation?.state
+                          : ValueState.None,
+                        message: validation?.message ? validation.message : "",
+                      };
+                    })
+                  : [];
+
+              let newColumn = row?.column
+                ? row.column
+                : instance.cell.column.id;
+
+              if (index == -1) {
+                rowValidations.push({
+                  column: newColumn,
+                  value:
+                    row.value != undefined
+                      ? row.value
+                      : instance.row.original[newColumn],
+                  validations: newValidations,
+                });
+              } else {
+                if (row.value != undefined)
+                  rowValidations[index].value = row.value;
+
+                rowValidations[index].validations =
+                  rowValidations[index].validations.concat(newValidations);
+              }
+            });
+          }
         }
       }
 
-      console.log(rowValidations);
-      return cellValidation;
+      return rowValidations;
     },
     []
   );

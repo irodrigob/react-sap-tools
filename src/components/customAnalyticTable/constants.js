@@ -49,18 +49,16 @@ export const ANALYTIC_TABLE = {
     ROW_HIGHLIGHT: "status",
   },
 };
-
-// Estructura de campos para los errores a nivel de fila o columna con sus valores por defecto.
-export const DEFAULT_ROW_MESSAGE = {
-  column: "",
-  state: ValueState.None,
-  message: "",
-};
-
 // Estructura base para las validaciones a nivel de celda
 export const DEFAULT_SINGLE_VALIDATION = {
   state: ValueState.None,
   message: "",
+};
+
+// Estructura de campos para los errores a nivel de fila o columna con sus valores por defecto.
+export const DEFAULT_ROW_MESSAGE = {
+  column: "",
+  validations: [],
 };
 
 // Tipos de componentes

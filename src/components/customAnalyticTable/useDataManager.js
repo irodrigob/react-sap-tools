@@ -1,4 +1,5 @@
 import { useCallback, useState } from "react";
+import { firstBy } from "thenby";
 import { ValueState } from "@ui5/webcomponents-react";
 import {
   COLUMN_PROPERTIES,
@@ -237,47 +238,89 @@ export default function useDataManager() {
   };
 
   /**
-   * Propaga la validación en el registro de la tabla de datos
+   * Propaga la validación y datos cambiados en el registro de la tabla de datos
    * @param {Array} data | Valores
    * @param {number} index | Indice
-   * @param {object} | returnValidation
+   * @param {Array} | returnValidation | Array con las validaciones
    * @returns Array con los valores actualizados
    */
-  const propagateValidation = useCallback((data, index, returnValidation) => {
-    let newTable = [...data];
+  const propagateValidationValue = useCallback(
+    (data, index, returnValidation) => {
+      let newTable = [...data];
 
-    // Primero vamos a borrar los registros existentes para la columna (si esta en blanco es a nivel general)
-    let findIndex = 0;
-    while (findIndex != -1) {
-      findIndex = newTable[index][INTERNAL_FIELDS_DATA.MESSAGES].findIndex(
-        (row) => row.column == returnValidation.column
-      );
-      if (findIndex != -1)
-        newTable[index][INTERNAL_FIELDS_DATA.MESSAGES].splice(
-          findIndex,
-          findIndex >= 0 ? 1 : 0
+      returnValidation.forEach((rowValidation) => {
+        // Borrado de mensajes previos.
+        let findIndex = 0;
+        while (findIndex !== -1) {
+          findIndex = newTable[index][INTERNAL_FIELDS_DATA.MESSAGES].findIndex(
+            (row) => row.column == rowValidation.column
+          );
+          if (findIndex !== -1)
+            newTable[index][INTERNAL_FIELDS_DATA.MESSAGES].splice(
+              findIndex,
+              findIndex >= 0 ? 1 : 0
+            );
+        }
+
+        // Valor
+        if (rowValidation.column != "")
+          newTable[index][rowValidation.column] = rowValidation.value;
+
+        // Campo de estado y mensajes de la columna, que además se resetean
+        const fieldCellValueState = `${INTERNAL_FIELDS_DATA.PREFIX_VALUE_STATE}${rowValidation.column}`;
+        newTable[index][fieldCellValueState] = ValueState.None;
+        const fieldCellValueStateMessage = `${INTERNAL_FIELDS_DATA.PREFIX_VALUE_STATE_MESSAGE}${rowValidation.column}`;
+        newTable[index][fieldCellValueStateMessage] = "";
+
+        rowValidation.validations.forEach((validation) => {
+          // Se determina el mensaje más prioritario. El prioritario es el error, seguido del warning, success e information-.
+          if (newTable[index][fieldCellValueState] != ValueState.Error) {
+            if (validation.state === ValueState.Error) {
+              newTable[index][fieldCellValueState] = validation.state;
+              newTable[index][fieldCellValueStateMessage] = validation.message;
+            } else if (
+              validation.state === ValueState.Warning &&
+              (newTable[index][fieldCellValueState] !== ValueState.Warning ||
+                newTable[index][fieldCellValueStateMessage] == "")
+            ) {
+              newTable[index][fieldCellValueState] = validation.state;
+              newTable[index][fieldCellValueStateMessage] = validation.message;
+            } else if (
+              validation.state === ValueState.Success &&
+              (newTable[index][fieldCellValueState] !== ValueState.Success ||
+                newTable[index][fieldCellValueStateMessage] == "")
+            ) {
+              newTable[index][fieldCellValueState] = validation.state;
+              newTable[index][fieldCellValueStateMessage] = validation.message;
+            } else if (
+              validation.state === ValueState.Information &&
+              (newTable[index][fieldCellValueState] !==
+                ValueState.Information ||
+                newTable[index][fieldCellValueStateMessage] == "")
+            ) {
+              newTable[index][fieldCellValueState] = validation.state;
+              newTable[index][fieldCellValueStateMessage] = validation.message;
+            }
+          }
+
+          if (validation.state != ValueState.None)
+            newTable[index][INTERNAL_FIELDS_DATA.MESSAGES].push({
+              column: rowValidation.column,
+              state: validation.state,
+              message: validation.message,
+            });
+        });
+      });
+
+      newTable[index][ANALYTIC_TABLE.COLUMNS.ROW_HIGHLIGHT] =
+        determineHighLightfromMessages(
+          newTable[index][INTERNAL_FIELDS_DATA.MESSAGES]
         );
-    }
 
-    // Por último añadimos si el estado es distinto de note
-    const fieldCellValueState = `${INTERNAL_FIELDS_DATA.PREFIX_VALUE_STATE}${returnValidation.column}`;
-    const fieldCellValueStateMessage = `${INTERNAL_FIELDS_DATA.PREFIX_VALUE_STATE_MESSAGE}${returnValidation.column}`;
-    newTable[index][fieldCellValueState] = returnValidation.state;
-    newTable[index][fieldCellValueStateMessage] = returnValidation.message;
-
-    if (returnValidation.state != ValueState.None) {
-      newTable[index][INTERNAL_FIELDS_DATA.MESSAGES].push(returnValidation);
-      newTable[index][fieldCellValueState] = returnValidation.state;
-      newTable[index][fieldCellValueStateMessage] = returnValidation.message;
-    }
-
-    newTable[index][ANALYTIC_TABLE.COLUMNS.ROW_HIGHLIGHT] =
-      determineHighLightfromMessages(
-        newTable[index][INTERNAL_FIELDS_DATA.MESSAGES]
-      );
-
-    return newTable;
-  }, []);
+      return newTable;
+    },
+    []
+  );
 
   /**
    * Propaga la validación en el registro de la tabla de datos
@@ -362,7 +405,7 @@ export default function useDataManager() {
     updateRowOriginalData,
     setStatusRow,
     getTabix,
-    propagateValidation,
+    propagateValidationValue,
     existErrorInRow,
     existMessagesInRow,
     addMessage,

@@ -34,7 +34,7 @@ export default function useCustomAnalyticTable() {
     updateRowOriginalData,
     setStatusRow,
     getTabix,
-    propagateValidation,
+    propagateValidationValue,
     existErrorInRow,
     addMessage,
     getRowOriginalData,
@@ -215,14 +215,14 @@ export default function useCustomAnalyticTable() {
               );
 
               setTableValues(
-                propagateValidation(
+                propagateValidationValue(
                   instance.data,
                   getTabix(instance),
                   returnValidations
                 )
               );
 
-              if (returnValidations.state != ValueState.Error)
+              /* if (returnValidations.state != ValueState.Error)
                 setTableValues(
                   updateCellValue(
                     instance.data,
@@ -230,7 +230,7 @@ export default function useCustomAnalyticTable() {
                     instance.cell.column.id,
                     cellValue
                   )
-                );
+                );*/
             }}
             type={column.type}
           />

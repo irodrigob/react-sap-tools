@@ -26,11 +26,12 @@ import { useTranslations } from "translations/i18nContext";
  * column -> Nombre de la columna
  * value -> Valor de la celda
  * La función deberá devolver un array con la siguiente estructura JSON:
- * column -> Columna donde aplicará el estado y mensaje. Si esta en blanco aplica a la fila entera. Si no se informa se tomará como
+ * column -> Columna donde aplicará el estado y mensaje. Si esta en blanco aplica a la fila entera. Si no se informa el campo se tomará como
  * base la columna donde se ha modificado el valor
- * state -> Estado de la validación. Los valores posibles son: "None","Warning","Error","Success","Information"
- * message -> Texto libre
  * value --> Nuevo valor de la columna, si esta se indica. Si no se informa el campo no se hará ningún cambio
+ * validations --> Array con los mensajes y su tipo generado. La estructura es la siguiente:
+ ** state: -> Estado de la validación. Los valores posibles son: "None","Warning","Error","Success","Information"
+ ** message -> Texto libre
  */
 export default function CustomAnalyticTable(props) {
   const {

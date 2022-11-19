@@ -312,9 +312,9 @@ export default function DialogAddSystem(props) {
                   type="password"
                 />
               )}
-              rules={{
+              /*rules={{
                 validate: (value) => value !== "" && watchNgrokActive,
-              }}
+              }}*/
             />
           </FormItem>
         )}
