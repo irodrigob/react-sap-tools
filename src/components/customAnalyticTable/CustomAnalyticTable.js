@@ -71,7 +71,7 @@ export default function CustomAnalyticTable(props) {
     setPropsEditable(propsEditable); // Props para la edición
     const tableProps = setTableProperties(props); // Propiedades globales
     const valuesProps = setData(columns, data, tableProps); // Adaptacion de los valores
-    buildFieldCatalog(columns, valuesProps, propsEditable); // Catalogo de campos
+    buildFieldCatalog(columns, valuesProps, propsEditable, tableProps); // Catalogo de campos
 
     setShowRowHighLight(valuesProps.showRowHighLight);
   }, [data, columns]);

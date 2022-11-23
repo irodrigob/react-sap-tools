@@ -88,31 +88,52 @@ export default function useCustomAnalyticTable() {
    * @param {Object} propsEditable | Props pasadas para las edición de datos
    */
   const addColumnActions = useCallback(
-    (valuesProps, propsEditable) => {
+    (valuesProps, propsEditable, columns) => {
       let buttonNumbers = calculateNumberActionButton(valuesProps);
+
+      buttonNumbers =
+        columns.findIndex((o) => o.accessor == COLUMN_PROPERTIES.ACTIONS) != -1
+          ? (buttonNumbers += 1)
+          : buttonNumbers;
 
       if (buttonNumbers > 0)
         return {
           Cell: (instance) => {
+            const { cell, row, webComponentsReactProperties } = instance;
+            const cellOriginalActions =
+              instance.cell.column[COLUMN_PROPERTIES.CELL_ORIGINAL_ACTIONS] !=
+              undefined
+                ? instance.cell.column[
+                    COLUMN_PROPERTIES.CELL_ORIGINAL_ACTIONS
+                  ].Cell(instance)
+                : null;
+
             return (
-              <CellActions
-                instance={instance}
-                onClickEdit={() => {
-                  actionActiveEditRow(instance);
-                }}
-                onClickDecline={() => {
-                  actionDeclineEditRow(instance);
-                }}
-                onClickAccept={() => {
-                  actionConfirmEditRow(instance, propsEditable);
-                }}
-                onClickShowMessages={() => {
-                  actionOpenShowMessagesRow(instance);
-                }}
-                onClickDelete={() => {
-                  actionDeleteRow(instance);
-                }}
-              />
+              <>
+                <span style={{ marginRight: "1rem" }}>
+                  {instance.cell.column[
+                    COLUMN_PROPERTIES.CELL_ORIGINAL_ACTIONS
+                  ].Cell(instance)}
+                </span>
+                <CellActions
+                  instance={instance}
+                  onClickEdit={() => {
+                    actionActiveEditRow(instance);
+                  }}
+                  onClickDecline={() => {
+                    actionDeclineEditRow(instance);
+                  }}
+                  onClickAccept={() => {
+                    actionConfirmEditRow(instance, propsEditable);
+                  }}
+                  onClickShowMessages={() => {
+                    actionOpenShowMessagesRow(instance);
+                  }}
+                  onClickDelete={() => {
+                    actionDeleteRow(instance);
+                  }}
+                />
+              </>
             );
           },
           Header: getI18nText(
@@ -126,7 +147,11 @@ export default function useCustomAnalyticTable() {
           disableResizing: false,
           disableSortBy: true,
           id: COLUMN_PROPERTIES.ACTIONS,
+          accessor: COLUMN_PROPERTIES.ACTIONS,
           width: buttonNumbers * COLUMN_ACTION.WIDTH_ICON,
+          [COLUMN_PROPERTIES.CELL_ORIGINAL_ACTIONS]: columns.find(
+            (o) => o.accessor == COLUMN_PROPERTIES.ACTIONS
+          ),
         };
       else return null;
     },
@@ -221,16 +246,6 @@ export default function useCustomAnalyticTable() {
                   returnValidations
                 )
               );
-
-              /* if (returnValidations.state != ValueState.Error)
-                setTableValues(
-                  updateCellValue(
-                    instance.data,
-                    getTabix(instance),
-                    instance.cell.column.id,
-                    cellValue
-                  )
-                );*/
             }}
             type={column.type}
           />
@@ -263,25 +278,49 @@ export default function useCustomAnalyticTable() {
    * @param {Array} columns | Array con los campos a mostrar en la tabla
    * @param {Object} valuesProperties | Propiedas general según los valores.
    * @param {Object} propsEditable | Props pasadas para las edición de datos
+   * @param {Object} tableProps | Props determinas de la tabla
    */
   const buildFieldCatalog = useCallback(
-    (columns, valuesProperties, propsEditable) => {
+    (columns, valuesProperties, propsEditable, tableProps) => {
       let newFieldCatalog = [];
 
-      // Columnas de acciones si hay edición o se puede borrar filas.
-      if (
-        (columns.some((o) => COLUMN_PROPERTIES.EDIT in o) &&
-          tableProps.allowEdit) ||
-        tableProps.allowDelete
-      ) {
-        let actionColumn = addColumnActions(valuesProperties, propsEditable);
-        if (actionColumn) newFieldCatalog.push(actionColumn);
-      }
-      newFieldCatalog = newFieldCatalog.concat(customCellColumns(columns));
+      // Columnas a añadir. Si la tabla tendrá acciones propias, por temas de edición,
+      // las acciones que se pasen en el catalogo se añadirán a las propias y se excluirán
+      // cuando se añadan al catalogo final.
+      let columnsToAdd = [];
 
-      setFieldCatalog(newFieldCatalog);
+      if (Array.isArray(columns) && columns.length > 0) {
+        // Columnas de acciones si hay edición o se puede borrar filas.
+        if (
+          (columns.some((o) => COLUMN_PROPERTIES.EDIT in o) &&
+            tableProps.allowEdit) ||
+          tableProps.allowDelete ||
+          columns.findIndex((o) => o.accessor == COLUMN_PROPERTIES.ACTIONS) !=
+            -1
+        ) {
+          let actionColumn = addColumnActions(
+            valuesProperties,
+            propsEditable,
+            columns
+          );
+
+          if (actionColumn) newFieldCatalog.push(actionColumn);
+
+          columnsToAdd = columns.filter(
+            (o) => o.accessor != COLUMN_PROPERTIES.ACTIONS
+          );
+        } else {
+          columnsToAdd = columns;
+        }
+
+        newFieldCatalog = newFieldCatalog.concat(
+          customCellColumns(columnsToAdd)
+        );
+
+        setFieldCatalog(newFieldCatalog);
+      }
     },
-    [tableProps]
+    []
   );
   /**
    * Recalcula las propiedades en base a los valores de la tabla y lanza

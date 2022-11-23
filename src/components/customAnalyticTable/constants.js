@@ -6,6 +6,7 @@ export const COLUMN_PROPERTIES = {
   REQUIRED: "required",
   ACTIONS: "actions",
   COMPONENT_TYPE: "componentType",
+  CELL_ORIGINAL_ACTIONS: "cellOriginalActions",
 };
 
 export const COLUMN_ACTION = {

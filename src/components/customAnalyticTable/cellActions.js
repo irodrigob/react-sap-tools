@@ -21,69 +21,6 @@ export default function CellActions(props) {
   const { row } = instance;
   const { getI18nText } = useTranslations();
 
-  /*
-
-  {row.original[INTERNAL_FIELDS_DATA.EDITABLE] &&
-        !row.original[INTERNAL_FIELDS_DATA.EDITING] && (
-          <IconInteractive
-            name="edit"
-            onClick={onClickEdit}
-            showTooltip={true}
-            accessibleName={getI18nText(
-              "customAnalyticTable.localization.editRow.editTooltip"
-            )}
-          />
-        )}
-      {row.original[INTERNAL_FIELDS_DATA.DELETABLE] &&
-        !row.original[INTERNAL_FIELDS_DATA.EDITING] && (
-          <IconInteractive
-            name="delete"
-            onClick={onClickDelete}
-            style={{ marginLeft: "1rem" }}
-            showTooltip={true}
-            accessibleName={getI18nText(
-              "customAnalyticTable.localization.editRow.deleteTooltip"
-            )}
-          />
-        )}
-        
-{INTERNAL_FIELDS_DATA.EDITING in row.original &&
-        row.original[INTERNAL_FIELDS_DATA.EDITING] && (
-          <IconInteractive
-            name="accept"
-            onClick={onClickAccept}
-            showTooltip={true}
-            accessibleName={getI18nText(
-              "customAnalyticTable.localization.editRow.confirmTooltip"
-            )}
-          />
-        )}
-      {INTERNAL_FIELDS_DATA.EDITING in row.original &&
-        row.original[INTERNAL_FIELDS_DATA.EDITING] && (
-          <IconInteractive
-            name="decline"
-            onClick={onClickDecline}
-            style={{ marginLeft: "1rem" }}
-            showTooltip={true}
-            accessibleName={getI18nText(
-              "customAnalyticTable.localization.editRow.cancelTooltip"
-            )}
-          />
-        )}
-
-         {row.original[INTERNAL_FIELDS_DATA.MESSAGES].length > 0 && (
-        <IconInteractive
-          name="alert"
-          onClick={onClickShowMessages}
-          style={{ marginLeft: "1rem" }}
-          showTooltip={true}
-          accessibleName={getI18nText(
-            "customAnalyticTable.localization.editRow.messagesTooltip"
-          )}
-        />
-      )}
-      
-  */
   return (
     <FlexBox>
       {row.original[INTERNAL_FIELDS_DATA.EDITABLE] &&

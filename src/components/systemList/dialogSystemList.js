@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useMutation } from "@apollo/client";
 import { Dialog, Button, Bar, ValueState } from "@ui5/webcomponents-react";
+import "@ui5/webcomponents-icons/dist/away";
 import CustomAnalyticTable from "components/customAnalyticTable/CustomAnalyticTable";
 import { useTranslations } from "translations/i18nContext";
 import { useGlobalData } from "context/globalDataContext";
@@ -47,6 +48,20 @@ export default function DialogSystemList(props) {
    ************************************/
   useEffect(() => {
     setColumns([
+      {
+        Cell: (instance) => {
+          const { cell, row, webComponentsReactProperties } = instance;
+          return <Button icon="away" />;
+        },
+        Header: "Actions",
+        accessor: "actions",
+        disableFilters: true,
+        disableGroupBy: true,
+        disableResizing: true,
+        disableSortBy: true,
+        id: "actions",
+        width: 100,
+      },
       {
         Header: getI18nText("systems.labelName"),
         accessor: "name",
