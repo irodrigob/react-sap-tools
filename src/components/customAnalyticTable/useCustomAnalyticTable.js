@@ -91,26 +91,23 @@ export default function useCustomAnalyticTable() {
     (valuesProps, propsEditable, columns) => {
       let buttonNumbers = calculateNumberActionButton(valuesProps);
 
-      buttonNumbers =
-        columns.findIndex((o) => o.accessor == COLUMN_PROPERTIES.ACTIONS) != -1
-          ? (buttonNumbers += 1)
-          : buttonNumbers;
+      if (buttonNumbers > 0) {
+        let customCellsActionsIndex = columns.findIndex(
+          (o) => o.accessor == COLUMN_PROPERTIES.ACTIONS
+        );
 
-      if (buttonNumbers > 0)
+        let widthCell = buttonNumbers * COLUMN_ACTION.WIDTH_ICON;
+        if (customCellsActionsIndex != -1)
+          widthCell += columns[customCellsActionsIndex].width;
+
         return {
-          Cell: (instance) => {
-            const { cell, row, webComponentsReactProperties } = instance;
-            const cellOriginalActions =
-              instance.cell.column[COLUMN_PROPERTIES.CELL_ORIGINAL_ACTIONS] !=
-              undefined
-                ? instance.cell.column[
-                    COLUMN_PROPERTIES.CELL_ORIGINAL_ACTIONS
-                  ].Cell(instance)
-                : null;
+          /*
 
+          */
+          Cell: (instance) => {
             return (
               <>
-                <span style={{ marginRight: "1rem" }}>
+                <span style={{ marginRight: "0.5rem" }}>
                   {instance.cell.column[
                     COLUMN_PROPERTIES.CELL_ORIGINAL_ACTIONS
                   ].Cell(instance)}
@@ -148,12 +145,15 @@ export default function useCustomAnalyticTable() {
           disableSortBy: true,
           id: COLUMN_PROPERTIES.ACTIONS,
           accessor: COLUMN_PROPERTIES.ACTIONS,
-          width: buttonNumbers * COLUMN_ACTION.WIDTH_ICON,
-          [COLUMN_PROPERTIES.CELL_ORIGINAL_ACTIONS]: columns.find(
-            (o) => o.accessor == COLUMN_PROPERTIES.ACTIONS
-          ),
+          width: "200",
+          [COLUMN_PROPERTIES.CELL_ORIGINAL_ACTIONS]:
+            customCellsActionsIndex != -1
+              ? columns[customCellsActionsIndex]
+              : null,
         };
-      else return null;
+      } else {
+        return null;
+      }
     },
     [tableValues, fieldCatalog, originalValues]
   );

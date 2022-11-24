@@ -6,7 +6,7 @@ import "@ui5/webcomponents-icons/dist/accept";
 import "@ui5/webcomponents-icons/dist/decline";
 import "@ui5/webcomponents-icons/dist/alert";
 import IconInteractive from "components/general/iconInteractive/iconInteractive";
-import { INTERNAL_FIELDS_DATA } from "./constants";
+import { INTERNAL_FIELDS_DATA, COLUMN_PROPERTIES } from "./constants";
 import { useTranslations } from "translations/i18nContext";
 
 export default function CellActions(props) {
@@ -39,7 +39,7 @@ export default function CellActions(props) {
           <IconInteractive
             name="delete"
             onClick={onClickDelete}
-            style={{ marginLeft: "1rem" }}
+            style={{ marginLeft: "0.5rem" }}
             showTooltip={true}
             accessibleName={getI18nText(
               "customAnalyticTable.localization.editRow.deleteTooltip"
@@ -62,7 +62,7 @@ export default function CellActions(props) {
           <IconInteractive
             name="decline"
             onClick={onClickDecline}
-            style={{ marginLeft: "1rem" }}
+            style={{ marginLeft: "0.5rem" }}
             showTooltip={true}
             accessibleName={getI18nText(
               "customAnalyticTable.localization.editRow.cancelTooltip"
@@ -74,7 +74,7 @@ export default function CellActions(props) {
           <IconInteractive
             name="alert"
             onClick={onClickShowMessages}
-            style={{ marginLeft: "1rem" }}
+            style={{ marginLeft: "0.5rem" }}
             showTooltip={true}
             accessibleName={getI18nText(
               "customAnalyticTable.localization.editRow.messagesTooltip"

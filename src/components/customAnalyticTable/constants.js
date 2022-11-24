@@ -4,7 +4,7 @@ import { ValueState } from "@ui5/webcomponents-react";
 export const COLUMN_PROPERTIES = {
   EDIT: "edit",
   REQUIRED: "required",
-  ACTIONS: "actions",
+  ACTIONS: "customActions",
   COMPONENT_TYPE: "componentType",
   CELL_ORIGINAL_ACTIONS: "cellOriginalActions",
 };

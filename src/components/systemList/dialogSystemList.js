@@ -1,7 +1,13 @@
 import { useEffect, useState } from "react";
 import { useMutation } from "@apollo/client";
-import { Dialog, Button, Bar, ValueState } from "@ui5/webcomponents-react";
-import "@ui5/webcomponents-icons/dist/away";
+import {
+  Dialog,
+  Button,
+  Bar,
+  ValueState,
+  FlexBox,
+} from "@ui5/webcomponents-react";
+import "@ui5/webcomponents-icons/dist/upload-to-cloud";
 import CustomAnalyticTable from "components/customAnalyticTable/CustomAnalyticTable";
 import { useTranslations } from "translations/i18nContext";
 import { useGlobalData } from "context/globalDataContext";
@@ -9,6 +15,7 @@ import useSystems, {
   MUTATION_UPDATE_SYSTEM,
   MUTATION_DELETE_SYSTEM,
 } from "hooks/useSystems";
+import IconInteractive from "components/messageManager/messageManagerIcon";
 import { showToast, MESSAGE, closeToast } from "utils/general/message";
 import { encryptText } from "utils/general/security";
 import { errorHandling } from "utils/graphQL/errorHandling";
@@ -51,16 +58,22 @@ export default function DialogSystemList(props) {
       {
         Cell: (instance) => {
           const { cell, row, webComponentsReactProperties } = instance;
-          return <Button icon="away" />;
+          return (
+            <FlexBox>
+              <IconInteractive name="upload-to-cloud" />
+              <IconInteractive name="upload-to-cloud" />
+            </FlexBox>
+          );
         },
         Header: "Actions",
-        accessor: "actions",
+        accessor: "customActions",
         disableFilters: true,
         disableGroupBy: true,
         disableResizing: true,
         disableSortBy: true,
-        id: "actions",
-        width: 100,
+        id: "customActions",
+        width: 102,
+        minWidth: 102,
       },
       {
         Header: getI18nText("systems.labelName"),
