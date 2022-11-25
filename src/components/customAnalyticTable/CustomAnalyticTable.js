@@ -39,7 +39,8 @@ export default function CustomAnalyticTable(props) {
     data,
     editable: propsEditable,
     withRowHighlight,
-    allowDelete, // Para evitar el warning en la consola, aunque no lo use directamente aquí
+    allowDelete, // Para evitar el warning en la consola, aunque no lo use directamente
+    allowEdit, // Para evitar el warning en la consola, aunque no lo use directamente
     ...others
   } = props;
   const {

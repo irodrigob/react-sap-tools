@@ -19,6 +19,7 @@ import IconInteractive from "components/messageManager/messageManagerIcon";
 import { showToast, MESSAGE, closeToast } from "utils/general/message";
 import { encryptText } from "utils/general/security";
 import { errorHandling } from "utils/graphQL/errorHandling";
+import { alertClasses } from "@mui/material";
 
 const FooterDialog = (props) => {
   const { onCloseButton } = props;
@@ -53,6 +54,9 @@ export default function DialogSystemList(props) {
   /*************************************
    * Efectos
    ************************************/
+  /*
+
+ */
   useEffect(() => {
     setColumns([
       {
@@ -60,20 +64,22 @@ export default function DialogSystemList(props) {
           const { cell, row, webComponentsReactProperties } = instance;
           return (
             <FlexBox>
-              <IconInteractive name="upload-to-cloud" />
-              <IconInteractive name="upload-to-cloud" />
+              <IconInteractive
+                name="upload-to-cloud"
+                showTooltip={true}
+                onClick={() => {}}
+              />
             </FlexBox>
           );
         },
         Header: "Actions",
-        accessor: "customActions",
+        accessor: "actions",
         disableFilters: true,
         disableGroupBy: true,
         disableResizing: true,
         disableSortBy: true,
-        id: "customActions",
-        width: 102,
-        minWidth: 102,
+        numberIcons: 1,
+        id: "actions",
       },
       {
         Header: getI18nText("systems.labelName"),

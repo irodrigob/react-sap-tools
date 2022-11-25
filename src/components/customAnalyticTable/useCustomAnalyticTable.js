@@ -1,5 +1,5 @@
 import { useState, useCallback, useEffect } from "react";
-import { ValueState } from "@ui5/webcomponents-react";
+import { FlexBox, ValueState } from "@ui5/webcomponents-react";
 import CellActions from "./cellActions";
 import CellEdit from "./cellEdit";
 import CellView from "./cellView";
@@ -91,22 +91,17 @@ export default function useCustomAnalyticTable() {
     (valuesProps, propsEditable, columns) => {
       let buttonNumbers = calculateNumberActionButton(valuesProps);
 
+      // Se renderiza la celda propia de acciones cuando hay botones me da igual si hay acciones propias
+      // de la tabla o no. Si entra en esta rutina es que hay acciones propias del control
       if (buttonNumbers > 0) {
         let customCellsActionsIndex = columns.findIndex(
           (o) => o.accessor == COLUMN_PROPERTIES.ACTIONS
         );
 
-        let widthCell = buttonNumbers * COLUMN_ACTION.WIDTH_ICON;
-        if (customCellsActionsIndex != -1)
-          widthCell += columns[customCellsActionsIndex].width;
-
         return {
-          /*
-
-          */
           Cell: (instance) => {
             return (
-              <>
+              <FlexBox>
                 <span style={{ marginRight: "0.5rem" }}>
                   {instance.cell.column[
                     COLUMN_PROPERTIES.CELL_ORIGINAL_ACTIONS
@@ -130,7 +125,7 @@ export default function useCustomAnalyticTable() {
                     actionDeleteRow(instance);
                   }}
                 />
-              </>
+              </FlexBox>
             );
           },
           Header: getI18nText(
@@ -145,7 +140,7 @@ export default function useCustomAnalyticTable() {
           disableSortBy: true,
           id: COLUMN_PROPERTIES.ACTIONS,
           accessor: COLUMN_PROPERTIES.ACTIONS,
-          width: "200",
+          width: buttonNumbers * COLUMN_ACTION.WIDTH_ICON,
           [COLUMN_PROPERTIES.CELL_ORIGINAL_ACTIONS]:
             customCellsActionsIndex != -1
               ? columns[customCellsActionsIndex]
@@ -171,6 +166,11 @@ export default function useCustomAnalyticTable() {
       if (valuesProps.actionEdit) buttonNumbers += 1;
       if (valuesProps.actionMessages) buttonNumbers += 1;
       if (tableProps.isTreeTable) buttonNumbers += 1;
+
+      // Solo se suma si hay columna de acciones propias
+      buttonNumbers += valuesProps.columnOwnerActions
+        ? valuesProps.numberIconsOwnerActions
+        : 0;
 
       return buttonNumbers;
     },
@@ -294,9 +294,7 @@ export default function useCustomAnalyticTable() {
         if (
           (columns.some((o) => COLUMN_PROPERTIES.EDIT in o) &&
             tableProps.allowEdit) ||
-          tableProps.allowDelete ||
-          columns.findIndex((o) => o.accessor == COLUMN_PROPERTIES.ACTIONS) !=
-            -1
+          tableProps.allowDelete
         ) {
           let actionColumn = addColumnActions(
             valuesProperties,
@@ -370,7 +368,7 @@ export default function useCustomAnalyticTable() {
    * Guarda los valores pasados por parámetros. Aunque esos valores se ajustan para el funcionamiento de la tabla
    * @param {Array} columns | Array con los campos a mostrar en la tabla
    * @param {Array} values | Array con los valores de la tabla
-   * @returns {object} Propiedadess segun los valores.
+   * @returns {object} Propiedades segun los valores.
    */
   const setData = useCallback(
     (columns, values, tableProps) => {

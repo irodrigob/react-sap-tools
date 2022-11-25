@@ -4,13 +4,14 @@ import { ValueState } from "@ui5/webcomponents-react";
 export const COLUMN_PROPERTIES = {
   EDIT: "edit",
   REQUIRED: "required",
-  ACTIONS: "customActions",
+  ACTIONS: "actions",
   COMPONENT_TYPE: "componentType",
   CELL_ORIGINAL_ACTIONS: "cellOriginalActions",
+  NUMBER_ICONS_CELL_ORIGINAL_ACTIONS: "numberIcons",
 };
 
 export const COLUMN_ACTION = {
-  WIDTH_ICON: 40,
+  WIDTH_ICON: 30,
 };
 
 export const INTERNAL_FIELD_PATTERN = "calt";
@@ -41,6 +42,8 @@ export const DEFAULT_VALUES_PROPERTIES = {
   actionEdit: false,
   actionMessages: false,
   showRowHighLight: false,
+  columnOwnerActions: false,
+  numberIconsOwnerActions: 0,
 };
 
 // Constantes sobre la tabla análitica estándar del componente de UI5

@@ -5,6 +5,7 @@ import "@ui5/webcomponents-icons/dist/delete";
 import "@ui5/webcomponents-icons/dist/accept";
 import "@ui5/webcomponents-icons/dist/decline";
 import "@ui5/webcomponents-icons/dist/alert";
+import "@ui5/webcomponents-icons/dist/upload-to-cloud";
 import IconInteractive from "components/general/iconInteractive/iconInteractive";
 import { INTERNAL_FIELDS_DATA, COLUMN_PROPERTIES } from "./constants";
 import { useTranslations } from "translations/i18nContext";
@@ -69,6 +70,7 @@ export default function CellActions(props) {
             )}
           />
         )}
+
       {INTERNAL_FIELDS_DATA.MESSAGES in row.original &&
         row.original[INTERNAL_FIELDS_DATA.MESSAGES].length > 0 && (
           <IconInteractive

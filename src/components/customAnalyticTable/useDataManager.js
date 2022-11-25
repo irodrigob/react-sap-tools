@@ -112,6 +112,26 @@ export default function useDataManager() {
 
       newValues.push(newRow);
     });
+
+    // Se determina si hay una columna con acciones propias que vienen
+    let indexColumnAction = columns.findIndex(
+      (o) => o.accessor == COLUMN_PROPERTIES.ACTIONS
+    );
+
+    newValuesProperties.columnOwnerActions =
+      indexColumnAction != -1 ? true : false;
+
+    // Si hay columna de acciones propias miro si hay la propiedad de numero de botones existe
+    // para informar.
+    if (newValuesProperties.columnOwnerActions)
+      newValuesProperties.numberIconsOwnerActions = columns[indexColumnAction][
+        COLUMN_PROPERTIES.NUMBER_ICONS_CELL_ORIGINAL_ACTIONS
+      ]
+        ? columns[indexColumnAction][
+            COLUMN_PROPERTIES.NUMBER_ICONS_CELL_ORIGINAL_ACTIONS
+          ]
+        : 0;
+
     return { data: newValues, valuesProperties: newValuesProperties };
   }, []);
 
