@@ -11,6 +11,8 @@ import { useTranslations } from "translations/i18nContext";
  * columns:
  * --> edit: Booleano indica si es editable o no.
  * --> required: Booleano para indicar si el campo es obligatorio
+ * --> numberIcons: solo aplica cuando se le pasa una columna de acciones a la tabla y se quiere poder editar o eliminar registros. El indicar
+ * el numero de iconos de las acciones facilitará el calculo del ancho de la columna de acciones que viene a la tabla + acciones propias del control
  * Props exclusivas del componente a medidas:
  * --> allowEdit: Booleano permite a nivel global si la tabla es editable.Si no se informa por defecto es true.
  * --> allowDelete: Booleano permite a nivel global si se pueden borrar registros.Si no se informa por defecto es true.

@@ -58,7 +58,10 @@
     },
     "systemList": {
         "title": "Listado de sistemas",
-        "btnTxtSave": "Cerrar"
+        "btnTxtSave": "Cerrar",
+        "tunneling": {
+            "updateTunel": "Acción valida solo para sistemas con la opción tunel ngrok activada"
+        }
     },
     "drawersApps": {
         "tooltipButtonClose": "Ocultar listado aplicaciones"

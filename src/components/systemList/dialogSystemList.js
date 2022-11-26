@@ -11,6 +11,7 @@ import "@ui5/webcomponents-icons/dist/upload-to-cloud";
 import CustomAnalyticTable from "components/customAnalyticTable/CustomAnalyticTable";
 import { useTranslations } from "translations/i18nContext";
 import { useGlobalData } from "context/globalDataContext";
+import useNgrok from "hooks/useNgrok";
 import useSystems, {
   MUTATION_UPDATE_SYSTEM,
   MUTATION_DELETE_SYSTEM,
@@ -19,7 +20,6 @@ import IconInteractive from "components/messageManager/messageManagerIcon";
 import { showToast, MESSAGE, closeToast } from "utils/general/message";
 import { encryptText } from "utils/general/security";
 import { errorHandling } from "utils/graphQL/errorHandling";
-import { alertClasses } from "@mui/material";
 
 const FooterDialog = (props) => {
   const { onCloseButton } = props;
@@ -50,6 +50,7 @@ export default function DialogSystemList(props) {
   const [toastID, setToastID] = useState("");
   const { formatterHost, updateSystem, deleteSystem, validateHost } =
     useSystems();
+  const { determineTunnelForSystem } = useNgrok();
 
   /*************************************
    * Efectos
@@ -67,7 +68,20 @@ export default function DialogSystemList(props) {
               <IconInteractive
                 name="upload-to-cloud"
                 showTooltip={true}
-                onClick={() => {}}
+                instance={instance}
+                onClick={(event) => {
+                  if (instance.row.original.ngrok_active) {
+                    determineTunnelForSystem(
+                      instance.row.original.ngrok_api_token,
+                      instance.row.original.host
+                    );
+                  } else {
+                    showToast(
+                      getI18nText("systemList.tunneling.updateTunel"),
+                      MESSAGE.TYPE.INFO
+                    );
+                  }
+                }}
               />
             </FlexBox>
           );
@@ -270,7 +284,9 @@ export default function DialogSystemList(props) {
               newData.sap_password = encryptText(newData.sap_password);
 
             if (newData.ngrok_active) {
-              newData.ngrok_tunnel = formatterHost(newData.ngrok_tunnel);
+              if (newData.ngrok_tunnel != "" && newData.ngrok_tunnel != null)
+                newData.ngrok_tunnel = formatterHost(newData.ngrok_tunnel);
+
               if (newData.ngrok_api_token != oldData.ngrok_api_token)
                 newData.ngrok_api_token = encryptText(newData.ngrok_api_token);
             } else {

@@ -12,6 +12,11 @@ import { useSAPGlobalData } from "context/sapDataContext";
 import { systemChangedAction } from "reduxStore/sapTransportOrderSlice";
 import useSAPTransportOrder from "hooks/useSAPTransportOrder";
 import useSAPGeneral from "./useSAPGeneral";
+import {
+  formatterHost,
+  validateHost,
+  formatterPath,
+} from "utils/general/validations";
 
 export const MAIN_SYSTEMS_FIELDS = gql`
   fragment MainSystemsFields on Systems {
@@ -119,43 +124,6 @@ export default function useSystems() {
     },
     [systemSelected]
   );
-
-  /**
-   * Valida si la URL es valida
-   * @param pURL | URL
-   * @returns Booleano
-   */
-  const validateHost = useCallback((pURL) => {
-    if (pURL.match(/(^http[s]?:\/{2})|(^\/{1,2})/g) == null) return false;
-    else return true;
-  }, []);
-
-  /**
-   * Formatea la URL
-   * @param pURL | URL
-   * @returns URL formateada
-   */
-  const formatterHost = useCallback((pURL) => {
-    // Si en el host tenemos el / como carácter final lo elimino.
-    if (pURL.match(/(\/$)/g)) pURL = pURL.slice(0, -1);
-
-    return pURL;
-  }, []);
-
-  /**
-   * Formatea el path
-   * @param pURL | URL
-   * @returns URL formateada
-   */
-  const formatterPath = useCallback((pPath) => {
-    // Si el path no tiene / al final se lo añado.
-    if (!pPath.match(/(\/$)/g)) pPath = pPath.concat("/");
-
-    // Si el path no tiene el / al principio se lo pongo
-    if (!pPath.match(/(^\/)/g)) pPath = `/${pPath}`;
-
-    return pPath;
-  }, []);
 
   /**
    * Función que añade un sistema al modelo de datos

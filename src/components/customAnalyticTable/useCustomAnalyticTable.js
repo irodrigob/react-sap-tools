@@ -102,11 +102,6 @@ export default function useCustomAnalyticTable() {
           Cell: (instance) => {
             return (
               <FlexBox>
-                <span style={{ marginRight: "0.5rem" }}>
-                  {instance.cell.column[
-                    COLUMN_PROPERTIES.CELL_ORIGINAL_ACTIONS
-                  ].Cell(instance)}
-                </span>
                 <CellActions
                   instance={instance}
                   onClickEdit={() => {
