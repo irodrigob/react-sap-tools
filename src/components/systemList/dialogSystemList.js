@@ -72,8 +72,8 @@ export default function DialogSystemList(props) {
                 onClick={(event) => {
                   if (instance.row.original.ngrok_active) {
                     determineTunnelForSystem(
-                      instance.row.original.ngrok_api_token,
-                      instance.row.original.host
+                      instance.row.original,
+                      updateSystemFromNgrok()
                     );
                   } else {
                     showToast(
@@ -160,6 +160,9 @@ export default function DialogSystemList(props) {
   /*************************************
    * Funciones
    ************************************/
+  const updateSystemFromNgrok = () => {
+    alert("hola");
+  };
 
   /*************************************
    * GraphQL
