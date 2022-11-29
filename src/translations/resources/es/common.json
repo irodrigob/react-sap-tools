@@ -165,6 +165,6 @@
     },
     "ngrok": {
         "tunnelNotChange": "El tunel no ha sufrido cambios. No es necesario actualizar.",
-        "withOutTunnels": "No hay tuneles en marcha. Arranque Ngrok y establezca conexión con el sistema."
+        "withOutTunnels": "No hay tunel establecido para el sistema seleccionado."
     }
 }

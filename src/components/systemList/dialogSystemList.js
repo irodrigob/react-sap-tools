@@ -11,7 +11,7 @@ import "@ui5/webcomponents-icons/dist/upload-to-cloud";
 import CustomAnalyticTable from "components/customAnalyticTable/CustomAnalyticTable";
 import { useTranslations } from "translations/i18nContext";
 import { useGlobalData } from "context/globalDataContext";
-import useNgrok from "hooks/useNgrok";
+import useNgrok from "ngrokTunnel/application/useNgrok";
 import useSystems, {
   MUTATION_UPDATE_SYSTEM,
   MUTATION_DELETE_SYSTEM,
@@ -73,7 +73,15 @@ export default function DialogSystemList(props) {
                   if (instance.row.original.ngrok_active) {
                     determineTunnelForSystem(
                       instance.row.original,
-                      updateSystemFromNgrok()
+                      updateSystemFromNgrok,
+                      (responseError) => {
+                        showToast(
+                          getI18nText("editSystem.errorCallServiceNew", {
+                            errorService: responseError.singleMessage,
+                          }),
+                          MESSAGE.TYPE.ERROR
+                        );
+                      }
                     );
                   } else {
                     showToast(
@@ -160,8 +168,8 @@ export default function DialogSystemList(props) {
   /*************************************
    * Funciones
    ************************************/
-  const updateSystemFromNgrok = () => {
-    alert("hola");
+  const updateSystemFromNgrok = (httpTunnel) => {
+    alert(httpTunnel);
   };
 
   /*************************************
