@@ -1,3 +1,4 @@
+import { useCallback } from "react";
 import { useLazyQuery, gql, useQuery } from "@apollo/client";
 import { useGlobalData } from "context/globalDataContext";
 import { useState } from "react";
@@ -21,9 +22,7 @@ export const QUERY_TUNNELS = gql`
 export default function useNgrok() {
   const { getI18nText } = useTranslations();
   const { systemsList } = useGlobalData();
-  const [systemDetermineTunnel, setSystemDetermineTunnel] = useState({});
   const { getTunnelsService } = useNgrokServices();
-  const [fnCallBackDetermineTunnel, setFnCallBackDetermineTunnel] = useState();
 
   /*************************************
    * Funciones
@@ -35,28 +34,24 @@ export default function useNgrok() {
    * @param fnCallBackSuccess | Función que se ejecuta cuando ha terminado la lectura de datos
    * @param fnCallBackError | Función que se ejecuta cuando se ha producido un error.
    */
-  const determineTunnelForSystem = (
-    oSystem,
-    fnCallBackSuccess,
-    fnCallBackError
-  ) => {
-    setSystemDetermineTunnel(oSystem);
 
-    getTunnelsService(
-      oSystem.ngrok_api_token,
-      (data) => {
-        // Hay veces que falla la llamada y entra por el onError y por el onCompleted, porque son errore que al no ser
-        // de red entra por este evento. La única manera de solventarlo es mirar si el dato que devuelve es un nulo. Si lo es, no ejecute los pasos siguientes
-        if (data.getTunnelsList != null) {
-          let systemIndex = data.getTunnelsList.findIndex(
-            (row) => row.forwards_to.indexOf(systemDetermineTunnel.host) != -1
-          );
-          if (systemIndex == -1) {
-            fnCallBackSuccess("");
-            //showToast(getI18nText("ngrok.withOutTunnels"), MESSAGE.TYPE.INFO);
-          } else {
-            fnCallBackSuccess(data.getTunnelsList[systemIndex].public_url);
-            /* if (
+  const determineTunnelForSystem = useCallback(
+    (oSystem, fnCallBackSuccess, fnCallBackError) => {
+      getTunnelsService(
+        oSystem.ngrok_api_token,
+        (data) => {
+          // Hay veces que falla la llamada y entra por el onError y por el onCompleted, porque son errore que al no ser
+          // de red entra por este evento. La única manera de solventarlo es mirar si el dato que devuelve es un nulo. Si lo es, no ejecute los pasos siguientes
+          if (data.getTunnelsList != null) {
+            let systemIndex = data.getTunnelsList.findIndex(
+              (row) => row.forwards_to.indexOf(oSystem.host) != -1
+            );
+            if (systemIndex == -1) {
+              fnCallBackSuccess("");
+              //showToast(getI18nText("ngrok.withOutTunnels"), MESSAGE.TYPE.INFO);
+            } else {
+              fnCallBackSuccess(data.getTunnelsList[systemIndex].public_url);
+              /* if (
               data.getTunnelsList[systemIndex].public_url ==
               systemDetermineTunnel.ngrok_tunnel
             ) {
@@ -67,14 +62,14 @@ export default function useNgrok() {
             } else {
               console.log("tunnel no igual");
             }*/
+            }
+          } else {
+            fnCallBackSuccess("");
           }
-        } else {
-          fnCallBackSuccess("");
-        }
-      },
-      fnCallBackError
-    );
-    /*
+        },
+        fnCallBackError
+      );
+      /*
     getNgrokTunnels({
       variables: {
         apiToken: oSystem.ngrok_api_token,
@@ -114,7 +109,9 @@ export default function useNgrok() {
         );
       },
     });*/
-  };
+    },
+    []
+  );
 
   /*************************************
    * Servicios graphQL

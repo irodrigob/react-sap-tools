@@ -1,5 +1,5 @@
-import { useLazyQuery, gql, useQuery } from "@apollo/client";
 import { useCallback } from "react";
+import { useLazyQuery, gql, useQuery } from "@apollo/client";
 import { errorHandling } from "utils/graphQL/errorHandling";
 
 export const QUERY_TUNNELS = gql`

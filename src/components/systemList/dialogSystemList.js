@@ -12,6 +12,7 @@ import CustomAnalyticTable from "components/customAnalyticTable/CustomAnalyticTa
 import { useTranslations } from "translations/i18nContext";
 import { useGlobalData } from "context/globalDataContext";
 import useNgrok from "ngrokTunnel/application/useNgrok";
+import useSystemsController from "systems/application/useSystems.controller";
 import useSystems, {
   MUTATION_UPDATE_SYSTEM,
   MUTATION_DELETE_SYSTEM,
@@ -51,6 +52,7 @@ export default function DialogSystemList(props) {
   const { formatterHost, updateSystem, deleteSystem, validateHost } =
     useSystems();
   const { determineTunnelForSystem } = useNgrok();
+  const { updateTunnelService } = useSystemsController();
 
   /*************************************
    * Efectos
@@ -71,9 +73,9 @@ export default function DialogSystemList(props) {
                 instance={instance}
                 onClick={(event) => {
                   if (instance.row.original.ngrok_active) {
-                    determineTunnelForSystem(
+                    updateTunnelService(
                       instance.row.original,
-                      updateSystemFromNgrok,
+                      callbackUpdateTunnelNgrok,
                       (responseError) => {
                         showToast(
                           getI18nText("editSystem.errorCallServiceNew", {
@@ -168,9 +170,11 @@ export default function DialogSystemList(props) {
   /*************************************
    * Funciones
    ************************************/
-  const updateSystemFromNgrok = (httpTunnel) => {
-    alert(httpTunnel);
-  };
+  /**
+   *
+   * @param {object} oResult | Resultado del proceso
+   */
+  const callbackUpdateTunnelNgrok = (oResult) => {};
 
   /*************************************
    * GraphQL
