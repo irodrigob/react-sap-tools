@@ -1,4 +1,4 @@
 import System from "../entities/system";
-export default interface SystemRepositoy{
-    getList():Promise<System[]>
+export default interface SystemRepositoryInterface {
+  getUserSystems(user: String): Promise<System[]>;
 }
