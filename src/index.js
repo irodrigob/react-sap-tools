@@ -3,7 +3,7 @@ import ReactDOM from "react-dom/client";
 import { Provider } from "react-redux";
 import { BrowserRouter } from "react-router-dom";
 import { ApolloProvider } from "@apollo/client";
-import { createApolloClient } from "graphql/client";
+import { apolloClient } from "graphql/client";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { ThemeProvider } from "@ui5/webcomponents-react";
@@ -25,7 +25,7 @@ import "@ui5/webcomponents-fiori/dist/generated/json-imports/Themes";
 // Se carga al inicio salen en ingles.
 import "@ui5/webcomponents-react/dist/Assets";
 
-const apolloClient = createApolloClient();
+const apolloClient = apolloClient();
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(

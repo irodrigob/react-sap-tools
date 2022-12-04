@@ -1,6 +1,11 @@
 import system from "systems/domain/entities/system";
 import SystemRepositoryInterface from "systems/domain/interfaces/systemRepository";
-import { useLazyQuery, gql } from "@apollo/client";
+import {
+  useLazyQuery,
+  gql,
+  ApolloConsumer,
+  useApolloClient,
+} from "@apollo/client";
 
 export const MAIN_SYSTEMS_FIELDS = gql`
   fragment MainSystemsFields on Systems {
@@ -53,5 +58,9 @@ export const MUTATION_DELETE_SYSTEM = gql`
 `;
 
 export default class systemRepository implements SystemRepositoryInterface {
-  async getUserSystems(user: String): Promise<system[]> {}
+  async getUserSystems(user: String): Promise<system[]> {
+    const { query } = useApolloClient();
+    query;
+    return null;
+  }
 }
