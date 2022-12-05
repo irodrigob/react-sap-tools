@@ -1,4 +1,4 @@
-import system from "systems/domain/entities/system";
+import System from "systems/domain/entities/system";
 import SystemRepositoryInterface from "systems/domain/interfaces/systemRepository";
 import {
   useLazyQuery,
@@ -57,10 +57,28 @@ export const MUTATION_DELETE_SYSTEM = gql`
   ${MAIN_SYSTEMS_FIELDS}
 `;
 
-export default class systemRepository implements SystemRepositoryInterface {
-  async getUserSystems(user: String): Promise<system[]> {
+export default class SystemRepository implements SystemRepositoryInterface {
+  async getUserSystems(user: String): Promise<System[]> {
     const { query } = useApolloClient();
-    query;
-    return null;
+    const response = await query({
+      query: QUERY_USER_SYSTEMS,
+      variables: {
+        user: user,
+      },
+    });
+    let systems = response.data.getSystemsByUser.map((row) => {
+      return new System(
+        row._id,
+        row.user,
+        row.name,
+        row.host,
+        row.sap_user,
+        row.sap_password,
+        row.ngrok_active,
+        row.ngrok_api_token,
+        row.ngrok_tunnel
+      );
+    });
+    return systems;
   }
 }
