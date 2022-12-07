@@ -1,12 +1,20 @@
-import SystemApplication from "systems/domain/application/systemApplication";
+import SystemApplication from "systems/domain/application/SystemApplication";
 
-export default class SystemController {
-  private _systemApplication: SystemApplication;
+export class SystemController {
+  _systemApplication: SystemApplication;
 
   constructor() {
     this._systemApplication = new SystemApplication();
   }
-  getUserSystems(user: String) {
-    this._systemApplication.getUserSystems(user);
+  getUserSystems(user: String): void {
+    this._systemApplication
+      .getUserSystems(user)
+      .then((data) => {
+        console.log(data);
+      })
+      .catch((error) => {
+        console.log("Errores--> ");
+        console.log(error);
+      });
   }
 }

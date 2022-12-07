@@ -13,9 +13,16 @@ function createIsomorphLink() {
   });
 }
 
-export function apolloClient() {
+function createApolloClient() {
   return new ApolloClient({
     link: createIsomorphLink(),
     cache: new InMemoryCache(),
   });
+}
+
+export function initializeApollo() {
+  const _apolloClient = apolloClient ?? createApolloClient();
+  if (!apolloClient) apolloClient = _apolloClient;
+
+  return _apolloClient;
 }

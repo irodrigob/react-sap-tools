@@ -5,9 +5,9 @@ export default class System {
   readonly host: String;
   readonly sap_user: String;
   readonly sap_password: String;
-  readonly ngrok_active: String;
-  readonly ngrok_api_token: String;
-  readonly ngrok_tunnel: String;
+  readonly ngrok_active: String | undefined;
+  readonly ngrok_api_token: String | undefined;
+  readonly ngrok_tunnel: String | undefined;
   constructor(
     _id: String,
     user: String,

@@ -1,11 +1,7 @@
 import System from "systems/domain/entities/system";
 import SystemRepositoryInterface from "systems/domain/interfaces/systemRepository";
-import {
-  useLazyQuery,
-  gql,
-  ApolloConsumer,
-  useApolloClient,
-} from "@apollo/client";
+import { gql, ApolloClient } from "@apollo/client";
+import { initializeApollo } from "graphql/client";
 
 export const MAIN_SYSTEMS_FIELDS = gql`
   fragment MainSystemsFields on Systems {
@@ -58,15 +54,18 @@ export const MUTATION_DELETE_SYSTEM = gql`
 `;
 
 export default class SystemRepository implements SystemRepositoryInterface {
+  private _apolloClient: ApolloClient<any>;
+  constructor() {
+    this._apolloClient = initializeApollo();
+  }
   async getUserSystems(user: String): Promise<System[]> {
-    const { query } = useApolloClient();
-    const response = await query({
+    const response = await this._apolloClient.query({
       query: QUERY_USER_SYSTEMS,
       variables: {
-        user: user,
+        user1: user,
       },
     });
-    let systems = response.data.getSystemsByUser.map((row) => {
+    return response.data.getSystemsByUser.map((row: any) => {
       return new System(
         row._id,
         row.user,
@@ -79,6 +78,5 @@ export default class SystemRepository implements SystemRepositoryInterface {
         row.ngrok_tunnel
       );
     });
-    return systems;
   }
 }

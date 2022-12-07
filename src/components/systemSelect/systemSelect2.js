@@ -5,6 +5,7 @@ import { Input, SuggestionItem, Popover } from "@ui5/webcomponents-react";
 import { useSession } from "auth/authProvider";
 import { useTranslations } from "translations/i18nContext";
 import { useGlobalData } from "context/globalDataContext";
+import { SystemController } from "systems/infraestructure/controller/SystemController.ts";
 import useSystems from "hooks/useSystems";
 import DropdownIcon from "./dropdownIcon";
 import ComboSystemList from "./comboSystemList";
@@ -23,6 +24,7 @@ export default function SystemSelect2(props) {
   const [openComboSystemList, setOpenComboSystemList] = useState(false);
   const [systemValue, setSystemValue] = useState("");
   const [systemID, setSystemID] = useState("");
+  const systemController = new SystemController();
 
   /*************************************
    * Efectos
@@ -38,6 +40,7 @@ export default function SystemSelect2(props) {
   useEffect(() => {
     if (session?.email) {
       srvGetUserSystems();
+      systemController.getUserSystems(session.email);
     }
   }, [session]);
 
