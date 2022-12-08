@@ -2,7 +2,7 @@ import { ApolloError, ServerError } from "@apollo/client";
 import { GraphQLError } from "graphql";
 import ErrorBase, { ErrorBaseProps } from "./ErrorBase";
 export default class ErrorGraphql extends ErrorBase {
-  static create(oErrorGraphQL: ApolloError) {
+  static create(oErrorGraphQL: ApolloError): ErrorGraphql {
     let valores: ErrorBaseProps;
 
     // Error en la llamada al servicio. Se produce el servicio peta y da un HTTP 400 o similares.
@@ -26,6 +26,12 @@ export default class ErrorGraphql extends ErrorBase {
         messages: oErrorGraphQL.graphQLErrors.map(
           (sRow: GraphQLError) => sRow.message
         ),
+      });
+    } else {
+      return new ErrorGraphql({
+        networkError: false,
+        singleMessage: oErrorGraphQL.message,
+        messages: [],
       });
     }
   }

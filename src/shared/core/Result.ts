@@ -1,14 +1,14 @@
+import ErrorGraphql from "shared/errors/ErrorGraphql";
+
+export type errorTypes = string | ErrorGraphql | null | undefined;
+
 export class Result<T> {
   public isSuccess: boolean;
   public isFailure: boolean;
-  private _error: T | string | null | undefined;
+  private _error: errorTypes;
   private _value: T | null | undefined;
 
-  public constructor(
-    isSuccess: boolean,
-    error?: T | string | null,
-    value?: T | null
-  ) {
+  public constructor(isSuccess: boolean, error?: errorTypes, value?: T | null) {
     if (isSuccess && error) {
       throw new Error(
         "InvalidOperation: A result cannot be successful and contain an error"
@@ -46,7 +46,7 @@ export class Result<T> {
     return new Result<U>(true, null, value);
   }
 
-  public static fail<U>(error: string): Result<U> {
+  public static fail<U>(error: string | ErrorGraphql): Result<U> {
     return new Result<U>(false, error);
   }
 
