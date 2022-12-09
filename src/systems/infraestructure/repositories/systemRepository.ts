@@ -1,10 +1,8 @@
+import { gql, ApolloClient } from "@apollo/client";
 import System from "systems/domain/entities/system";
 import SystemRepositoryInterface from "systems/domain/interfaces/systemRepository";
-import { gql, ApolloClient, ApolloError } from "@apollo/client";
 import { initializeApollo } from "graphql/client";
-import { Result } from "shared/core/Result";
-import { responseSystemRepoArray } from "systems/domain/interfaces/systemRepository";
-import ErrorGraphql from "shared/errors/ErrorGraphql";
+
 import { SystemDTO } from "systems/infraestructure/dto/systemDTO";
 
 export const MAIN_SYSTEMS_FIELDS = gql`
@@ -63,31 +61,27 @@ export default class SystemRepository implements SystemRepositoryInterface {
   constructor() {
     this._apolloClient = initializeApollo();
   }
-  async getUserSystems(user: String): Promise<responseSystemRepoArray> {
-    try {
-      const response = await this._apolloClient.query({
-        query: QUERY_USER_SYSTEMS,
-        variables: {
-          user: user,
-        },
-      });
+  // responseSystemRepoArray
+  async getUserSystems(user: String): Promise<System[]> {
+    const response = await this._apolloClient.query({
+      query: QUERY_USER_SYSTEMS,
+      variables: {
+        user: user,
+      },
+    });
 
-      let tt = response.data.getSystemsByUser.map((row: SystemDTO) => {
-        return new System(
-          row._id,
-          row.user,
-          row.name,
-          row.host,
-          row.sap_user,
-          row.sap_password,
-          row.ngrok_active,
-          row.ngrok_api_token,
-          row.ngrok_tunnel
-        );
-      });
-      return Result.ok<System[]>(tt);
-    } catch (error) {
-      return Result.fail(ErrorGraphql.create(error as ApolloError));
-    }
+    return response.data.getSystemsByUser.map((row: SystemDTO) => {
+      return new System(
+        row._id,
+        row.user,
+        row.name,
+        row.host,
+        row.sap_user,
+        row.sap_password,
+        row.ngrok_active,
+        row.ngrok_api_token,
+        row.ngrok_tunnel
+      );
+    });
   }
 }
