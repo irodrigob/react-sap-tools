@@ -40,11 +40,15 @@ export default function SystemSelect2(props) {
   useEffect(() => {
     if (session?.email) {
       srvGetUserSystems();
-      systemController.getUserSystems(session.email).then((response) => {
+      /*  systemController.getUserSystems(session.email).then((response) => {
         console.log(response);
-      });
+      });*/
     }
   }, [session]);
+
+  useEffect(() => {
+    console.log(session);
+  }, []);
 
   useEffect(() => {
     if (systemID != "") {

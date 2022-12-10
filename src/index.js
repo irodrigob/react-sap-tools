@@ -12,6 +12,7 @@ import { GlobalProvider } from "context/globalDataContext";
 import { SAPProvider } from "context/sapDataContext";
 import { AuthProvider } from "./auth/authProvider";
 import { I18nProvider } from "./translations/i18nContext";
+import I18nProviderTS from "./translations/i18nContextTS";
 import store from "./reduxStore/store";
 import App from "./App";
 import "./translations/i18n";
@@ -30,25 +31,27 @@ const apolloClient = initializeApollo();
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <React.StrictMode>
-    <I18nProvider>
-      <Provider store={store}>
-        <ApolloProvider client={apolloClient}>
-          <AuthProvider client_id={process.env.REACT_APP_GOOGLE_CLIENT_ID}>
-            <GlobalProvider>
-              <SAPProvider>
-                <BrowserRouter>
-                  <ThemeProviderMaterial theme={theme}>
-                    <ThemeProvider>
-                      <App />
-                      <ToastContainer />
-                    </ThemeProvider>
-                  </ThemeProviderMaterial>
-                </BrowserRouter>
-              </SAPProvider>
-            </GlobalProvider>
-          </AuthProvider>
-        </ApolloProvider>
-      </Provider>
-    </I18nProvider>
+    <I18nProviderTS>
+      <I18nProvider>
+        <Provider store={store}>
+          <ApolloProvider client={apolloClient}>
+            <AuthProvider client_id={process.env.REACT_APP_GOOGLE_CLIENT_ID}>
+              <GlobalProvider>
+                <SAPProvider>
+                  <BrowserRouter>
+                    <ThemeProviderMaterial theme={theme}>
+                      <ThemeProvider>
+                        <App />
+                        <ToastContainer />
+                      </ThemeProvider>
+                    </ThemeProviderMaterial>
+                  </BrowserRouter>
+                </SAPProvider>
+              </GlobalProvider>
+            </AuthProvider>
+          </ApolloProvider>
+        </Provider>
+      </I18nProvider>
+    </I18nProviderTS>
   </React.StrictMode>
 );

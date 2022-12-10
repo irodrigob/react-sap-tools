@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { GOOGLE_URL_SCRIPT } from "../constants";
+import { GOOGLE_URL_SCRIPT } from "auth/constants";
 
 /**
  * Función que adjunta un script al documento. Lo hace a través de un promise para saber cuando
