@@ -8,11 +8,11 @@ import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { ThemeProvider } from "@ui5/webcomponents-react";
 import { ThemeProvider as ThemeProviderMaterial } from "@mui/material/styles";
-import { GlobalProvider } from "context/globalDataContext";
+import GlobalProvider from "context/globalDataContext";
+import SystemProvider from "systems/context/systemContext";
 import { SAPProvider } from "context/sapDataContext";
 import { AuthProvider } from "./auth/authProvider";
-import { I18nProvider } from "./translations/i18nContext";
-import I18nProviderTS from "./translations/i18nContextTS";
+import I18nProvider from "translations/i18nContext";
 import store from "./reduxStore/store";
 import App from "./App";
 import "./translations/i18n";
@@ -31,12 +31,12 @@ const apolloClient = initializeApollo();
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <React.StrictMode>
-    <I18nProviderTS>
-      <I18nProvider>
-        <Provider store={store}>
-          <ApolloProvider client={apolloClient}>
-            <AuthProvider client_id={process.env.REACT_APP_GOOGLE_CLIENT_ID}>
-              <GlobalProvider>
+    <I18nProvider>
+      <Provider store={store}>
+        <ApolloProvider client={apolloClient}>
+          <AuthProvider client_id={process.env.REACT_APP_GOOGLE_CLIENT_ID}>
+            <GlobalProvider>
+              <SystemProvider>
                 <SAPProvider>
                   <BrowserRouter>
                     <ThemeProviderMaterial theme={theme}>
@@ -47,11 +47,11 @@ root.render(
                     </ThemeProviderMaterial>
                   </BrowserRouter>
                 </SAPProvider>
-              </GlobalProvider>
-            </AuthProvider>
-          </ApolloProvider>
-        </Provider>
-      </I18nProvider>
-    </I18nProviderTS>
+              </SystemProvider>
+            </GlobalProvider>
+          </AuthProvider>
+        </ApolloProvider>
+      </Provider>
+    </I18nProvider>
   </React.StrictMode>
 );

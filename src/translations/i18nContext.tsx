@@ -7,9 +7,7 @@ interface i18nContextInterface {
   language: string;
   getI18nText:(sText:string,variables:object)=>string
 }
-const defaultState = {
-  defaultLanguage: "ES",
-};
+
 // El Partial indica que no es necesario indicar todos los valores.
 const TranslationContext =
   createContext<Partial<i18nContextInterface>>({});
@@ -19,7 +17,7 @@ interface Props {
 }
 
 
-const I18nProviderTS: FC<Props> = (props) => {
+const I18nProvider: FC<Props> = (props) => {
   const { children } = props;
   const [defaultLanguage, setDefaultLanguage] = useState("es");
   const { t } = useTranslation();
@@ -42,6 +40,6 @@ const I18nProviderTS: FC<Props> = (props) => {
 
 };
 
-export default I18nProviderTS;
+export default I18nProvider;
 
 export const useTranslations = () => useContext(TranslationContext);

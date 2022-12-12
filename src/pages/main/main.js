@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import { Text } from "@ui5/webcomponents-react";
 import Grid from "@mui/material/Unstable_Grid2";
-import { useTranslations } from "../../translations/i18nContext";
+import { useTranslations } from "translations/i18nContext";
 
 export default function Main(props) {
   const { getI18nText } = useTranslations();

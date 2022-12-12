@@ -278,88 +278,74 @@ export default function DialogSystemList(props) {
         />
       }
     >
-      <CustomAnalyticTable
-        columns={columns}
-        data={systemsList}
-        editable={{
-          onRowUpdate: (newData, oldData) => {
-            let toastID = showToast(
-              getI18nText("editSystem.saveInProcess", {
-                newSystem: newData.name,
-              }),
-              MESSAGE.TYPE.INFO
-            );
-            setToastID(toastID);
+      {Array.isArray(systemsList) && (
+        <CustomAnalyticTable
+          columns={columns}
+          data={systemsList}
+          editable={{
+            onRowUpdate: (newData, oldData) => {
+              let toastID = showToast(
+                getI18nText("editSystem.saveInProcess", {
+                  newSystem: newData.name,
+                }),
+                MESSAGE.TYPE.INFO
+              );
+              setToastID(toastID);
 
-            newData.host = formatterHost(newData.host);
+              newData.host = formatterHost(newData.host);
 
-            // Si el password nuevo y el original son distintos es que lo ha cambio y hay que cifrarlo.
-            // En caso contrario se deja el mismo porque ya esta cifrado.
-            if (newData.sap_password != oldData.sap_password)
-              newData.sap_password = encryptText(newData.sap_password);
+              // Si el password nuevo y el original son distintos es que lo ha cambio y hay que cifrarlo.
+              // En caso contrario se deja el mismo porque ya esta cifrado.
+              if (newData.sap_password != oldData.sap_password)
+                newData.sap_password = encryptText(newData.sap_password);
 
-            if (newData.ngrok_active) {
-              if (newData.ngrok_tunnel != "" && newData.ngrok_tunnel != null)
-                newData.ngrok_tunnel = formatterHost(newData.ngrok_tunnel);
+              if (newData.ngrok_active) {
+                if (newData.ngrok_tunnel != "" && newData.ngrok_tunnel != null)
+                  newData.ngrok_tunnel = formatterHost(newData.ngrok_tunnel);
 
-              if (newData.ngrok_api_token != oldData.ngrok_api_token)
-                newData.ngrok_api_token = encryptText(newData.ngrok_api_token);
-            } else {
-              newData.ngrok_api_token = "";
-              newData.ngrok_tunnel = "";
-            }
+                if (newData.ngrok_api_token != oldData.ngrok_api_token)
+                  newData.ngrok_api_token = encryptText(
+                    newData.ngrok_api_token
+                  );
+              } else {
+                newData.ngrok_api_token = "";
+                newData.ngrok_tunnel = "";
+              }
 
-            return updateSystemFunction({
-              variables: {
-                id: newData._id,
-                input: {
-                  user: newData.user,
-                  name: newData.name,
-                  host: newData.host,
-                  sap_password: newData.sap_password,
-                  sap_user: newData.sap_user,
-                  ngrok_active: newData.ngrok_active,
-                  ngrok_api_token: newData.ngrok_api_token,
-                  ngrok_tunnel: newData.ngrok_tunnel,
+              return updateSystemFunction({
+                variables: {
+                  id: newData._id,
+                  input: {
+                    user: newData.user,
+                    name: newData.name,
+                    host: newData.host,
+                    sap_password: newData.sap_password,
+                    sap_user: newData.sap_user,
+                    ngrok_active: newData.ngrok_active,
+                    ngrok_api_token: newData.ngrok_api_token,
+                    ngrok_tunnel: newData.ngrok_tunnel,
+                  },
                 },
-              },
-            });
-          },
-          onRowDelete: (oldData) => {
-            let toastID = showToast(
-              getI18nText("editSystem.deleteInProcess", {
-                newSystem: oldData.name,
-              }),
-              MESSAGE.TYPE.INFO
-            );
-            setToastID(toastID);
+              });
+            },
+            onRowDelete: (oldData) => {
+              let toastID = showToast(
+                getI18nText("editSystem.deleteInProcess", {
+                  newSystem: oldData.name,
+                }),
+                MESSAGE.TYPE.INFO
+              );
+              setToastID(toastID);
 
-            return deleteSystemFunction({
-              variables: {
-                id: oldData._id,
-              },
-            });
-          },
-          onRowValidation: (newData, column, value) => {
-            switch (column) {
-              case "host":
-                if (!validateHost(value))
-                  return [
-                    {
-                      column: column,
-                      validations: [
-                        {
-                          state: ValueState.Error,
-                          message: getI18nText(
-                            "editSystem.msgErrorHostInvalid"
-                          ),
-                        },
-                      ],
-                    },
-                  ];
-                break;
-              case "ngrok_tunnel":
-                if (newData.ngrok_active) {
+              return deleteSystemFunction({
+                variables: {
+                  id: oldData._id,
+                },
+              });
+            },
+            onRowValidation: (newData, column, value) => {
+              switch (column) {
+                case "host":
                   if (!validateHost(value))
                     return [
                       {
@@ -374,24 +360,42 @@ export default function DialogSystemList(props) {
                         ],
                       },
                     ];
-                } else {
-                  return [{ value: "" }];
-                }
-                break;
-              case "ngrok_active":
-                if (!value)
-                  return [
-                    { column: "ngrok_api_token", value: "" },
-                    { column: "ngrok_tunnel", value: "" },
-                  ];
-                break;
-              case "ngrok_api_token":
-                if (!newData.ngrok_active) return [{ value: "" }];
-                break;
-            }
-          },
-        }}
-      />
+                  break;
+                case "ngrok_tunnel":
+                  if (newData.ngrok_active) {
+                    if (!validateHost(value))
+                      return [
+                        {
+                          column: column,
+                          validations: [
+                            {
+                              state: ValueState.Error,
+                              message: getI18nText(
+                                "editSystem.msgErrorHostInvalid"
+                              ),
+                            },
+                          ],
+                        },
+                      ];
+                  } else {
+                    return [{ value: "" }];
+                  }
+                  break;
+                case "ngrok_active":
+                  if (!value)
+                    return [
+                      { column: "ngrok_api_token", value: "" },
+                      { column: "ngrok_tunnel", value: "" },
+                    ];
+                  break;
+                case "ngrok_api_token":
+                  if (!newData.ngrok_active) return [{ value: "" }];
+                  break;
+              }
+            },
+          }}
+        />
+      )}
     </Dialog>
   );
 }

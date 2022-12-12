@@ -47,10 +47,6 @@ export default function SystemSelect2(props) {
   }, [session]);
 
   useEffect(() => {
-    console.log(session);
-  }, []);
-
-  useEffect(() => {
     if (systemID != "") {
       let row = systemsList.find((row) => row._id == systemID);
       if (row) {

@@ -8,7 +8,7 @@ import {
 } from "@ui5/webcomponents-react";
 import Grid from "@mui/material/Grid";
 import "@ui5/webcomponents-icons/dist/locked";
-import { useTranslations } from "../../translations/i18nContext";
+import { useTranslations } from "translations/i18nContext";
 
 export default function VerifyLogin() {
   const { getI18nText } = useTranslations();

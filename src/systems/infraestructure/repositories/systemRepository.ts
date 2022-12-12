@@ -61,7 +61,7 @@ export default class SystemRepository implements SystemRepositoryInterface {
   constructor() {
     this._apolloClient = initializeApollo();
   }
-  // responseSystemRepoArray
+
   async getUserSystems(user: String): Promise<System[]> {
     const response = await this._apolloClient.query({
       query: QUERY_USER_SYSTEMS,

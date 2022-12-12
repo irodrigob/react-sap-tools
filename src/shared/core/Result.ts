@@ -6,9 +6,13 @@ export class Result<T> {
   public isSuccess: boolean;
   public isFailure: boolean;
   private _error: errorTypes;
-  private _value: T | null | undefined;
+  private _value: T | undefined;
 
-  public constructor(isSuccess: boolean, error?: errorTypes, value?: T | null) {
+  public constructor(
+    isSuccess: boolean,
+    error?: errorTypes,
+    value?: T | undefined
+  ) {
     if (isSuccess && error) {
       throw new Error(
         "InvalidOperation: A result cannot be successful and contain an error"
@@ -28,12 +32,12 @@ export class Result<T> {
     Object.freeze(this);
   }
 
-  public getValue(): T | undefined | null {
-    if (!this.isSuccess) {
+  public getValue(): T | undefined {
+    /*if (!this.isSuccess) {
       throw new Error(
         "Can't get the value of an error result. Use 'errorValue' instead."
       );
-    }
+    }*/
 
     return this._value;
   }
@@ -43,7 +47,7 @@ export class Result<T> {
   }
 
   public static ok<U>(value?: U): Result<U> {
-    return new Result<U>(true, null, value);
+    return new Result<U>(true, undefined, value);
   }
 
   public static fail<U>(error: string | ErrorGraphql): Result<U> {

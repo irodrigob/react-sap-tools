@@ -28,16 +28,17 @@ export default function ComboSystemList(props) {
           handlerIitemClick(e.detail.item.dataset.value);
         }}
       >
-        {systemsList.map((row) => {
-          let bSystemSelected = isSystemSelected(row._id);
-          return (
-            <StandardListItem key={row._id} data-value={row._id}>
-              {bSystemSelected
-                ? formatterSystemNameSelected(row.name)
-                : row.name}
-            </StandardListItem>
-          );
-        })}
+        {Array.isArray(systemsList) &&
+          systemsList.map((row) => {
+            let bSystemSelected = isSystemSelected(row._id);
+            return (
+              <StandardListItem key={row._id} data-value={row._id}>
+                {bSystemSelected
+                  ? formatterSystemNameSelected(row.name)
+                  : row.name}
+              </StandardListItem>
+            );
+          })}
       </List>
       <Bar
         design="Footer"
@@ -45,7 +46,11 @@ export default function ComboSystemList(props) {
           <Button
             style={{ marginTop: "1rem" }}
             icon="activities"
-            disabled={systemsList.length > 0 ? false : true}
+            disabled={
+              Array.isArray(systemsList) && systemsList.length > 0
+                ? false
+                : true
+            }
             onClick={() => {
               setOpenSystemList(true);
             }}
