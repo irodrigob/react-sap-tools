@@ -5,7 +5,7 @@ import { useTranslation,TFunction,Translation } from "react-i18next";
 interface i18nContextInterface {
   defaultLanguage: string;
   language: string;
-  getI18nText:(sText:string,variables:object)=>string
+  getI18nText:(sText:string,variables?:object)=>string
 }
 
 // El Partial indica que no es necesario indicar todos los valores.

@@ -9,8 +9,9 @@ import System from "systems/domain/entities/system";
 type systemsType=System[]
 
 interface systemContextInterface {
+ 
   systemsList: systemsType|null;
-  setSystemsList:(value:System[])=>void;
+  setSystemsList?:(value:System[]|undefined)=>void;
   systemSelected: object;
   setSystemSelected:(value:object)=>void;
   systemsReaded:boolean;
@@ -21,6 +22,7 @@ interface systemContextInterface {
   setShowListApps:(value:boolean)=>void;
   loadingListApps:boolean;
   setLoadingListApps:(value:boolean)=>void;
+ 
 }
 
 // Aquí se crea el contexto. Que se se declará en el fichero ráiz "_app.js" para que los datos sean globales
@@ -37,7 +39,7 @@ const SystemProvider:FC<Props>=(props)=> {
    ************************************/
 
   const {children}=props
-  const [systemsList, setSystemsList] = useState<systemsType>([]);
+  const [systemsList, setSystemsList] = useState<systemsType>();
   const [systemSelected, setSystemSelected] = useState({});
   const [systemsReaded, setSystemsReaded] = useState(false);
   const [connectedToSystem, setConnectedToSystem] = useState(false);
@@ -50,12 +52,11 @@ const SystemProvider:FC<Props>=(props)=> {
   /*************************************
    * Efectos
    ************************************/
-
+//
   return (
     <SystemContext.Provider
       value={{
-        systemsList,
-        setSystemSelected,
+        systemsList,        
         systemSelected,
         systemsReaded,
         setSystemsReaded,
