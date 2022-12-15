@@ -10,8 +10,8 @@ type systemsType=System[]
 
 interface systemContextInterface {
  
-  systemsList: systemsType|null;
-  setSystemsList?:(value:System[]|undefined)=>void;
+  systemsList: systemsType;
+  setSystemsList:(value:systemsType)=>void;
   systemSelected: object;
   setSystemSelected:(value:object)=>void;
   systemsReaded:boolean;
@@ -26,7 +26,21 @@ interface systemContextInterface {
 }
 
 // Aquí se crea el contexto. Que se se declará en el fichero ráiz "_app.js" para que los datos sean globales
-const SystemContext = createContext<Partial<systemContextInterface>>({});
+const SystemContext = createContext<systemContextInterface>({
+  systemsList: [],
+  setSystemsList:(value:systemsType)=>{},
+  systemSelected: {},
+  setSystemSelected:(value:object)=>{},
+  systemsReaded:false,
+  setSystemsReaded:(value:boolean)=>{},
+  connectedToSystem:false,
+  setConnectedToSystem:(value:boolean)=>{},
+  showListApps:false,
+  setShowListApps:(value:boolean)=>{},
+  loadingListApps:false,
+  setLoadingListApps:(value:boolean)=>{},
+ 
+});
 
 interface Props {
   children: React.ReactNode;
@@ -39,7 +53,7 @@ const SystemProvider:FC<Props>=(props)=> {
    ************************************/
 
   const {children}=props
-  const [systemsList, setSystemsList] = useState<systemsType>();
+  const [systemsList, setSystemsList] = useState<systemsType>([]);
   const [systemSelected, setSystemSelected] = useState({});
   const [systemsReaded, setSystemsReaded] = useState(false);
   const [connectedToSystem, setConnectedToSystem] = useState(false);
@@ -57,12 +71,13 @@ const SystemProvider:FC<Props>=(props)=> {
     <SystemContext.Provider
       value={{
         systemsList,        
+        setSystemsList,
         systemSelected,
+        setSystemSelected,
         systemsReaded,
         setSystemsReaded,
         connectedToSystem,
-        setConnectedToSystem,
-        setSystemsList,
+        setConnectedToSystem,        
         showListApps,
         setShowListApps,
         loadingListApps,

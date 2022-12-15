@@ -21,8 +21,7 @@ const SystemSelectContainer:FC<Props> = () => {
   const systemController = new SystemController();
   const [openComboSystemList, setOpenComboSystemList] = useState(false);
   const [loadingSystems,setLoadingSystems]=useState(true)
-  let valores;
-
+  
   /*************************************
    * Efectos
    ************************************/
@@ -31,7 +30,7 @@ const SystemSelectContainer:FC<Props> = () => {
       systemController.getUserSystems(session.email).then((response) => {
         setLoadingSystems(false)
         if (response.isSuccess) {
-          setSystemsList?.(response.getValue());
+          setSystemsList((response.getValue() as System[]));
         }
       });
     }

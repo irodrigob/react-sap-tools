@@ -5,12 +5,17 @@ import { useTranslation,TFunction,Translation } from "react-i18next";
 interface i18nContextInterface {
   defaultLanguage: string;
   language: string;
-  getI18nText:(sText:string,variables?:object)=>string
+  getI18nText:(sText:string,variables?:object)=>string;  
 }
 
 // El Partial indica que no es necesario indicar todos los valores.
 const TranslationContext =
-  createContext<Partial<i18nContextInterface>>({});
+  createContext<i18nContextInterface>({
+    defaultLanguage: "",
+    language: "",
+    getI18nText:(sText:string,variables?:object):string=>{return ""}
+    
+  });
 
 interface Props {
   children: React.ReactNode;
@@ -20,8 +25,8 @@ interface Props {
 const I18nProvider: FC<Props> = (props) => {
   const { children } = props;
   const [defaultLanguage, setDefaultLanguage] = useState("es");
-  const { t } = useTranslation();
- 
+  const { t } = useTranslation();  
+
     /*************************************
    * Funciones
    ************************************/

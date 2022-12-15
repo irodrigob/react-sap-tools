@@ -13,6 +13,7 @@ import SelectApp from "./selectApp/selectApp";
 import { useGlobalData } from "context/globalDataContext";
 import UserAvatar from "./userAvatar";
 import SystemSelect2 from "components/systemSelect/systemSelect2";
+import SystemSelectContainer from "systems/infraestructure/frontend/components/systemSelectContainer";
 import { useSession } from "auth/authProvider";
 import { useTranslations } from "translations/i18nContext";
 
@@ -47,7 +48,7 @@ export default function AppTopToolbar() {
                     <SelectApp />
                   </Grid>
                   <Grid item>
-                    <SystemSelect2 />
+                    <SystemSelectContainer />
                   </Grid>
                 </Grid>
               </Grid>
