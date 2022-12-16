@@ -1,11 +1,11 @@
 export interface SystemDTO {
-  _id: String;
-  user: String;
-  name: String;
-  host: String;
-  sap_user: String;
-  sap_password: String;
-  ngrok_active: String | undefined;
-  ngrok_api_token: String | undefined;
-  ngrok_tunnel: String | undefined;
+  _id: string;
+  user: string;
+  name: string;
+  host: string;
+  sap_user: string;
+  sap_password: string;
+  ngrok_active?: string;
+  ngrok_api_token?: string;
+  ngrok_tunnel?: string;
 }

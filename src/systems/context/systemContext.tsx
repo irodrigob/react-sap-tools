@@ -25,7 +25,6 @@ interface systemContextInterface {
  
 }
 
-// Aquí se crea el contexto. Que se se declará en el fichero ráiz "_app.js" para que los datos sean globales
 const SystemContext = createContext<systemContextInterface>({
   systemsList: [],
   setSystemsList:(value:systemsType)=>{},
