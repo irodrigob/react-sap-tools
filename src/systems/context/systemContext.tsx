@@ -1,59 +1,52 @@
-import React, {
-  useState,
-  createContext,  
-  useContext,  
-  FC
-} from "react";
+import React, { useState, createContext, useContext, FC } from "react";
 import System from "systems/domain/entities/system";
 
-type systemsType=System[]
+type systemsType = System[];
+
+const DEFAULT_SYSTEM = new System("", "", "", "", "", "");
 
 interface systemContextInterface {
- 
   systemsList: systemsType;
-  setSystemsList:(value:systemsType)=>void;
-  systemSelected: object;
-  setSystemSelected:(value:object)=>void;
-  systemsReaded:boolean;
-  setSystemsReaded:(value:boolean)=>void;
-  connectedToSystem:boolean;
-  setConnectedToSystem:(value:boolean)=>void;
-  showListApps:boolean;
-  setShowListApps:(value:boolean)=>void;
-  loadingListApps:boolean;
-  setLoadingListApps:(value:boolean)=>void;
- 
+  setSystemsList: (value: systemsType) => void;
+  systemSelected: System;
+  setSystemSelected: (value: System) => void;
+  systemsReaded: boolean;
+  setSystemsReaded: (value: boolean) => void;
+  connectedToSystem: boolean;
+  setConnectedToSystem: (value: boolean) => void;
+  showListApps: boolean;
+  setShowListApps: (value: boolean) => void;
+  loadingListApps: boolean;
+  setLoadingListApps: (value: boolean) => void;
 }
 
 const SystemContext = createContext<systemContextInterface>({
   systemsList: [],
-  setSystemsList:(value:systemsType)=>{},
-  systemSelected: {},
-  setSystemSelected:(value:object)=>{},
-  systemsReaded:false,
-  setSystemsReaded:(value:boolean)=>{},
-  connectedToSystem:false,
-  setConnectedToSystem:(value:boolean)=>{},
-  showListApps:false,
-  setShowListApps:(value:boolean)=>{},
-  loadingListApps:false,
-  setLoadingListApps:(value:boolean)=>{},
- 
+  setSystemsList: (value: systemsType) => {},
+  systemSelected: DEFAULT_SYSTEM,
+  setSystemSelected: (value: System) => {},
+  systemsReaded: false,
+  setSystemsReaded: (value: boolean) => {},
+  connectedToSystem: false,
+  setConnectedToSystem: (value: boolean) => {},
+  showListApps: false,
+  setShowListApps: (value: boolean) => {},
+  loadingListApps: false,
+  setLoadingListApps: (value: boolean) => {},
 });
 
 interface Props {
   children: React.ReactNode;
 }
 
-
-const SystemProvider:FC<Props>=(props)=> {
+const SystemProvider: FC<Props> = (props) => {
   /*************************************
    * Variables
    ************************************/
 
-  const {children}=props
+  const { children } = props;
   const [systemsList, setSystemsList] = useState<systemsType>([]);
-  const [systemSelected, setSystemSelected] = useState({});
+  const [systemSelected, setSystemSelected] = useState(DEFAULT_SYSTEM);
   const [systemsReaded, setSystemsReaded] = useState(false);
   const [connectedToSystem, setConnectedToSystem] = useState(false);
   const [showListApps, setShowListApps] = useState(false);
@@ -65,18 +58,18 @@ const SystemProvider:FC<Props>=(props)=> {
   /*************************************
    * Efectos
    ************************************/
-//
+  //
   return (
     <SystemContext.Provider
       value={{
-        systemsList,        
+        systemsList,
         setSystemsList,
         systemSelected,
         setSystemSelected,
         systemsReaded,
         setSystemsReaded,
         connectedToSystem,
-        setConnectedToSystem,        
+        setConnectedToSystem,
         showListApps,
         setShowListApps,
         loadingListApps,
@@ -86,7 +79,7 @@ const SystemProvider:FC<Props>=(props)=> {
       {children}
     </SystemContext.Provider>
   );
-}
+};
 
-export default SystemProvider
+export default SystemProvider;
 export const useSystemData = () => useContext(SystemContext);

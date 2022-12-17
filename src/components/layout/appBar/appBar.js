@@ -12,8 +12,7 @@ import useMessageManager from "components/messageManager/useMessageManager";
 import SelectApp from "./selectApp/selectApp";
 import { useGlobalData } from "context/globalDataContext";
 import UserAvatar from "./userAvatar";
-import SystemSelect2 from "components/systemSelect/systemSelect2";
-import SystemSelectContainer from "systems/infraestructure/frontend/components/systemSelectContainer";
+import SystemSelectContainer from "systems/infraestructure/frontend/components/systemSelect/systemSelectContainer";
 import { useSession } from "auth/authProvider";
 import { useTranslations } from "translations/i18nContext";
 
