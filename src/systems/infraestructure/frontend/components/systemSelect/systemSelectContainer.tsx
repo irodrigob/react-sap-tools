@@ -88,8 +88,13 @@ const SystemSelectContainer: FC<Props> = () => {
         onAfterClose={() => {
           setOpenComboSystemList(false);
         }}
-        systemList={systemsList}
-        handlerSystemSelected={(systemSelected: System) => {}}
+        systemsList={systemsList}
+        handlerSystemSelected={(systemSelected: string) => {
+          let row = systemsList.find((row) => row._id == systemSelected);
+          if (row) {
+            processSelectedSystem(row);
+          }
+        }}
       />
     </>
   );
