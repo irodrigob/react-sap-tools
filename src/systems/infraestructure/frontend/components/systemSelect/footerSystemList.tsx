@@ -7,10 +7,11 @@ import System from "systems/domain/entities/system";
 
 interface Props {
   systemsList: System[];
+  handlerOpenAddSystem: () => void;
 }
 
 const FooterSystemList: FC<Props> = (props) => {
-  const { systemsList } = props;
+  const { systemsList, handlerOpenAddSystem } = props;
   const { getI18nText } = useTranslations();
 
   return (
@@ -36,6 +37,7 @@ const FooterSystemList: FC<Props> = (props) => {
           icon="add"
           onClick={() => {
             //setOpenAddSystem(true);
+            handlerOpenAddSystem();
           }}
         >
           {getI18nText("systemSelect.btnNewSystem")}

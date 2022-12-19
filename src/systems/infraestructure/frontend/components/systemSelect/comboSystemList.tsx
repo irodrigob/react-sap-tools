@@ -19,11 +19,18 @@ interface Props {
   onAfterClose: () => void;
   systemsList: System[];
   handlerSystemSelected: (systemSelected: string) => void;
+  handlerOpenAddSystem: () => void;
 }
 
 const ComboSystemList: FC<Props> = (props) => {
-  const { onAfterClose, open, opener, handlerSystemSelected, systemsList } =
-    props;
+  const {
+    onAfterClose,
+    open,
+    opener,
+    handlerSystemSelected,
+    systemsList,
+    handlerOpenAddSystem,
+  } = props;
   const { getI18nText } = useTranslations();
   const { isSystemSelected } = useSystems();
 
@@ -76,7 +83,10 @@ const ComboSystemList: FC<Props> = (props) => {
             );
           })}
       </List>
-      <FooterSystemList systemsList={systemsList} />
+      <FooterSystemList
+        systemsList={systemsList}
+        handlerOpenAddSystem={handlerOpenAddSystem}
+      />
     </Popover>
   );
 };

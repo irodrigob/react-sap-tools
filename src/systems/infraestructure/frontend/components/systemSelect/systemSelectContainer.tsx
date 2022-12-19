@@ -17,6 +17,7 @@ import System from "systems/domain/entities/system";
 import useSystems from "systems/infraestructure/frontend/hooks/useSystems";
 import { showToast, MESSAGE } from "utils/general/message";
 import ComboSystemList from "systems/infraestructure/frontend/components/systemSelect/comboSystemList";
+import DialogAddSystem from "systems/infraestructure/frontend/components/dialogAddSystem/dialogAddSystemContainer";
 
 interface Props {
   children: React.ReactNode;
@@ -29,6 +30,7 @@ const SystemSelectContainer: FC<Props> = () => {
   const [openComboSystemList, setOpenComboSystemList] = useState(false);
   const [loadingSystems, setLoadingSystems] = useState(true);
   const { processSelectedSystem } = useSystems();
+  const [openAddSystem, setOpenAddSystem] = useState(false);
   const systemController = new SystemController();
 
   /*************************************
@@ -94,6 +96,15 @@ const SystemSelectContainer: FC<Props> = () => {
           if (row) {
             processSelectedSystem(row);
           }
+        }}
+        handlerOpenAddSystem={() => {
+          setOpenAddSystem(true);
+        }}
+      />
+      <DialogAddSystem
+        open={openAddSystem}
+        onCloseButton={() => {
+          setOpenAddSystem(false);
         }}
       />
     </>
