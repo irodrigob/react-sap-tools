@@ -1,6 +1,6 @@
 import { ApolloError, ServerError } from "@apollo/client";
 import { GraphQLError } from "graphql";
-import ErrorBase, { ErrorBaseProps } from "./ErrorBase";
+import ErrorBase, { ErrorBaseProps } from "shared/errors/ErrorBase";
 export default class ErrorGraphql extends ErrorBase {
   static create(oErrorGraphQL: ApolloError): ErrorGraphql {
     let valores: ErrorBaseProps;
