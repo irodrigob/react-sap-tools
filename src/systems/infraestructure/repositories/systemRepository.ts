@@ -1,9 +1,12 @@
 import { gql, ApolloClient } from "@apollo/client";
 import System from "systems/domain/entities/system";
-import SystemRepositoryInterface from "systems/domain/interfaces/systemRepository";
+import SystemRepositoryInterface from "systems/domain/interfaces/systemRepositoryInterface";
 import { initializeApollo } from "graphql/client";
 
-import { SystemDTO } from "systems/infraestructure/dto/systemDTO";
+import type {
+  newSystemDTO,
+  SystemDTO,
+} from "systems/infraestructure/dto/systemDTO";
 
 export const MAIN_SYSTEMS_FIELDS = gql`
   fragment MainSystemsFields on Systems {
@@ -83,5 +86,8 @@ export default class SystemRepository implements SystemRepositoryInterface {
         row.ngrok_tunnel
       );
     });
+  }
+  async saveNewSystem(newSystem: newSystemDTO): Promise<System> {
+    return new System("", "", "", "", "", "", false, "", "");
   }
 }

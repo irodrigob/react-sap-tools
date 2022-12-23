@@ -8,6 +8,7 @@ import {
   CheckBox,
 } from "@ui5/webcomponents-react";
 import TextField from "@mui/material/TextField";
+import { useSession } from "auth/authProvider";
 import { useForm, Controller } from "react-hook-form";
 import { useTranslations } from "translations/i18nContext";
 import FooterDialog from "systems/infraestructure/frontend/components/dialogAddSystem/footerDialog";
@@ -15,6 +16,16 @@ import { SystemController } from "systems/infraestructure/controller/SystemContr
 import SystemFormatters from "systems/utils/formatters";
 import Encrypt from "shared/utils/encrypt/Encrypt";
 import System from "systems/domain/entities/system";
+
+type FormValues = {
+  name: string;
+  host: string;
+  sap_user: string;
+  sap_password: string;
+  ngrok_active: boolean;
+  ngrok_api_token: string;
+  ngrok_tunnel: string;
+};
 
 interface Props {
   open: boolean;
@@ -30,7 +41,8 @@ const DialogAddSystem: FC<Props> = (props) => {
     reset,
     watch,
     formState: { errors },
-  } = useForm();
+  } = useForm<FormValues>();
+  const { session } = useSession();
   const [btnSaveDisabled, setBtnSaveDisabled] = useState(false);
   const systemController = new SystemController();
   const watchNgrokActive = watch("ngrok_active");
@@ -38,8 +50,20 @@ const DialogAddSystem: FC<Props> = (props) => {
   /*************************************
    * Funciones
    ************************************/
-  const onSubmitForm = (data: System | any) => {
-    //let newSystem = new System( )
+  const onSubmitForm = (data: FormValues) => {
+    let newSystem = System.new(
+      session.email,
+      data.name,
+      SystemFormatters.formatterHost(data.host),
+      data.sap_user,
+      data.sap_password != "" ? Encrypt.encryptText(data.sap_password) : "",
+      data.ngrok_active,
+      data.ngrok_active && data.ngrok_api_token != ""
+        ? Encrypt.encryptText(data.ngrok_api_token)
+        : "",
+      data.ngrok_active ? SystemFormatters.formatterHost(data.ngrok_tunnel) : ""
+    );
+    console.log(newSystem);
   };
 
   return (

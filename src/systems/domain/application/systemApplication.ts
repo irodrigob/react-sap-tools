@@ -1,7 +1,7 @@
 import { ApolloError } from "@apollo/client";
 import SystemRepository from "systems/infraestructure/repositories/systemRepository";
 import System from "systems/domain/entities/system";
-import { responseSystemRepoArray } from "systems/domain/interfaces/systemRepository";
+import type { responseSystemRepoArray } from "systems/infraestructure/types/types";
 import { Result } from "shared/core/Result";
 import ErrorGraphql from "shared/errors/ErrorGraphql";
 

@@ -1,7 +1,11 @@
 import SystemApplication from "systems/domain/application/SystemApplication";
-import { responseSystemRepoArray } from "systems/domain/interfaces/systemRepository";
+import type {
+  responseSystemRepoArray,
+  responseNewSystemRepo,
+} from "systems/infraestructure/types/types";
 import SystemApplicationValidations from "systems/domain/validations/SystemApplicationValidations";
-
+import System from "systems/domain/entities/system";
+import type { newSystemDTO } from "systems/infraestructure/dto/systemDTO";
 export class SystemController {
   protected _systemApplication: SystemApplication;
   protected _systemValidations: SystemApplicationValidations;
@@ -27,4 +31,10 @@ export class SystemController {
   validateHost(host: string): boolean {
     return this._systemValidations.validateHost(host);
   }
+  /**
+   * Grabación de nuevo sistema
+   * @param newSystem | Nuevo sistema
+   * @returns Promisa con el resultado del proceso
+   */
+  saveNewSystem(newSystem: newSystemDTO): Promise<responseNewSystemRepo> {}
 }
