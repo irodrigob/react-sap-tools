@@ -13,8 +13,10 @@ import SuggestionSystemList from "systems/infraestructure/frontend/components/sy
 import { useTranslations } from "translations/i18nContext";
 import { SystemController } from "systems/infraestructure/controller/SystemController";
 import { useSystemData } from "systems/context/systemContext";
+import { responseSystemRepoArray } from "systems/infraestructure/types/general";
 import System from "systems/domain/entities/system";
 import useSystems from "systems/infraestructure/frontend/hooks/useSystems";
+import ErrorGraphql from "shared/errors/ErrorGraphql";
 import { showToast, MESSAGE } from "utils/general/message";
 import ComboSystemList from "systems/infraestructure/frontend/components/systemSelect/comboSystemList";
 import DialogAddSystem from "systems/infraestructure/frontend/components/dialogAddSystem/dialogAddSystemContainer";
@@ -42,12 +44,23 @@ const SystemSelectContainer: FC<Props> = () => {
    ************************************/
   useEffect(() => {
     if (session?.email) {
-      systemController.getUserSystems(session.email).then((response) => {
-        setLoadingSystems(false);
-        if (response.isSuccess) {
-          setSystemsList(response.getValue() as System[]);
-        }
-      });
+      systemController
+        .getUserSystems(session.email)
+        .then((response: responseSystemRepoArray) => {
+          setLoadingSystems(false);
+          if (response.isSuccess) {
+            setSystemsList(response.getValue() as System[]);
+          } else if (response.isFailure) {
+            showToast(
+              getI18nText("editSystem.errorCallServiceNew", {
+                errorService: (
+                  response.getErrorValue() as ErrorGraphql
+                ).getError().singleMessage,
+              }),
+              MESSAGE.TYPE.ERROR
+            );
+          }
+        });
     }
   }, [session]);
 

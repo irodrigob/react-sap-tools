@@ -16,6 +16,7 @@ import { SystemController } from "systems/infraestructure/controller/SystemContr
 import SystemFormatters from "systems/utils/formatters";
 import Encrypt from "shared/utils/encrypt/Encrypt";
 import System from "systems/domain/entities/system";
+import type { SystemDTO } from "systems/infraestructure/dto/systemDTO";
 
 type FormValues = {
   name: string;
@@ -51,7 +52,7 @@ const DialogAddSystem: FC<Props> = (props) => {
    * Funciones
    ************************************/
   const onSubmitForm = (data: FormValues) => {
-    let newSystem = System.new(
+    let newSystem = SystemDTO(
       session.email,
       data.name,
       SystemFormatters.formatterHost(data.host),
@@ -63,7 +64,7 @@ const DialogAddSystem: FC<Props> = (props) => {
         : "",
       data.ngrok_active ? SystemFormatters.formatterHost(data.ngrok_tunnel) : ""
     );
-    console.log(newSystem);
+    systemController.createNewSystem();
   };
 
   return (

@@ -29,26 +29,4 @@ export default class System {
     this.ngrok_api_token = ngrok_api_token;
     this.ngrok_tunnel = ngrok_tunnel;
   }
-  static new(
-    user: string,
-    name: string,
-    host: string,
-    sap_user: string,
-    sap_password: string,
-    ngrok_active: boolean = false,
-    ngrok_api_token?: string,
-    ngrok_tunnel?: string
-  ) {
-    return new System(
-      "",
-      user,
-      name,
-      host,
-      sap_user,
-      sap_password,
-      ngrok_active,
-      ngrok_api_token,
-      ngrok_tunnel
-    );
-  }
 }

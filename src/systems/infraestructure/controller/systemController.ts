@@ -2,14 +2,15 @@ import SystemApplication from "systems/domain/application/SystemApplication";
 import type {
   responseSystemRepoArray,
   responseNewSystemRepo,
-} from "systems/infraestructure/types/types";
+} from "systems/infraestructure/types/general";
+import SystemRepository from "systems/infraestructure/repositories/systemRepository";
 import SystemApplicationValidations from "systems/domain/validations/SystemApplicationValidations";
 import System from "systems/domain/entities/system";
 import type { newSystemDTO } from "systems/infraestructure/dto/systemDTO";
+
 export class SystemController {
   protected _systemApplication: SystemApplication;
   protected _systemValidations: SystemApplicationValidations;
-  //protected _systemFormmatters:
 
   constructor() {
     this._systemApplication = new SystemApplication();
@@ -36,5 +37,7 @@ export class SystemController {
    * @param newSystem | Nuevo sistema
    * @returns Promisa con el resultado del proceso
    */
-  saveNewSystem(newSystem: newSystemDTO): Promise<responseNewSystemRepo> {}
+  createNewSystem(newSystem: newSystemDTO): Promise<responseNewSystemRepo> {
+    return this._systemApplication.createNewSystem(newSystem);
+  }
 }
