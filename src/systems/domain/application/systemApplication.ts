@@ -30,6 +30,11 @@ export default class SystemApplication {
       );
     }
   }
+  /**
+   * Crea un nuevo sistema
+   * @param newSystem | Crea un nuevo sistema
+   * @returns | Promesa con el nuevo sistema
+   */
   async createNewSystem(
     newSystem: newSystemDTO
   ): Promise<responseNewSystemRepo> {

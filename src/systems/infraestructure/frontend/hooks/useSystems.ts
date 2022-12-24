@@ -1,9 +1,11 @@
 import { useCallback } from "react";
 import System from "systems/domain/entities/system";
 import { useSystemData } from "systems/context/systemContext";
+import { firstBy } from "thenby";
 
 export default function useSystems() {
-  const { setSystemSelected, systemSelected } = useSystemData();
+  const { setSystemSelected, systemSelected, systemsList, setSystemsList } =
+    useSystemData();
   /**
    * Proceso que se lanza cuando se selecciona un sistema
    * @param(System) systemSelected - Sistema seleccionado
@@ -30,5 +32,21 @@ export default function useSystems() {
     [systemSelected]
   );
 
-  return { processSelectedSystem, isSystemSelected };
+  /**
+   * Función que añade un sistema al modelo de datos
+   * @param sSystem | Estructura con los datos del sistema
+   */
+  const addSystem = useCallback(
+    (sSystem: System) => {
+      let aSystemsAux = [...systemsList];
+      aSystemsAux.push(sSystem);
+      // Ordeno el array para que quede igual de ordenado como cuando se graban los datos
+      // por primera vez
+      aSystemsAux = aSystemsAux.sort(firstBy("name"));
+      setSystemsList(aSystemsAux);
+    },
+    [systemsList]
+  );
+
+  return { processSelectedSystem, isSystemSelected, addSystem };
 }

@@ -91,14 +91,16 @@ export default class SystemRepository implements SystemRepositoryInterface {
     const response = await this._apolloClient.mutate({
       mutation: MUTATION_NEW_SYSTEM,
       variables: {
-        user: newSystem.user,
-        name: newSystem.name,
-        host: newSystem.host,
-        sap_password: newSystem.sap_password,
-        sap_user: newSystem.sap_user,
-        ngrok_active: newSystem.ngrok_active,
-        ngrok_api_token: newSystem.ngrok_api_token,
-        ngrok_tunnel: newSystem.ngrok_tunnel,
+        input: {
+          user: newSystem.user,
+          name: newSystem.name,
+          host: newSystem.host,
+          sap_password: newSystem.sap_password,
+          sap_user: newSystem.sap_user,
+          ngrok_active: newSystem.ngrok_active,
+          ngrok_api_token: newSystem.ngrok_api_token,
+          ngrok_tunnel: newSystem.ngrok_tunnel,
+        },
       },
     });
     let newSystemResponse = response.data.newSystem as SystemDTO;

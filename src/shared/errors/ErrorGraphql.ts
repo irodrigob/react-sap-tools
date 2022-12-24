@@ -12,12 +12,12 @@ export default class ErrorGraphql extends ErrorBase {
       return new ErrorGraphql({
         networkError: true,
         HTTPStatusCode: networkError.statusCode,
-        singleMessage: networkError.result?.errors[0],
-        messages: networkError.result?.errors[0].message
+        singleMessage: networkError.result?.errors[0].message
           ? networkError.result.errors[0].message
           : networkError.result?.message
           ? networkError.result.message
           : oErrorGraphQL.message,
+        messages: networkError.result?.errors,
       });
     } else if (oErrorGraphQL.graphQLErrors) {
       return new ErrorGraphql({
