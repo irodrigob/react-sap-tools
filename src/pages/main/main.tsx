@@ -3,7 +3,7 @@ import { Text } from "@ui5/webcomponents-react";
 import Grid from "@mui/material/Unstable_Grid2";
 import { useTranslations } from "translations/i18nContext";
 
-export default function Main(props) {
+export default function Main() {
   const { getI18nText } = useTranslations();
 
   useEffect(() => {
@@ -18,7 +18,7 @@ export default function Main(props) {
       justifyContent="center"
       style={{ minHeight: "40vh" }}
     >
-      <Grid item xs={6} style={{ marginTop: "2rem" }}>
+      <Grid xs={6} sx={{ marginTop: "2rem" }}>
         <Text>{getI18nText("app.instructions1")}</Text>
         <br></br>
         <br></br>

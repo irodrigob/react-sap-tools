@@ -22,7 +22,7 @@ import ComboSystemList from "systems/infraestructure/frontend/components/systemS
 import DialogAddSystem from "systems/infraestructure/frontend/components/dialogAddSystem/dialogAddSystemContainer";
 
 interface Props {
-  children: React.ReactNode;
+  //children: React.ReactNode;
 }
 
 const SystemSelectContainer: FC<Props> = () => {

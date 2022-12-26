@@ -1,11 +1,10 @@
-import { useRef, useState } from "react";
+import { FC, useRef, useState } from "react";
 import { Popover } from "@ui5/webcomponents-react";
 import { Avatar } from "@ui5/webcomponents-react";
-import { useSession } from "../../../auth/authProvider";
-import MenuProfile from "./menuProfile";
+import { useSession } from "auth/authProvider";
+import MenuProfile from "main/frontend/layout/appBar/userAvatar/menuProfile";
 
-export default function UserAvatar(props) {
-  const menuProfileRef = useRef(null);
+const UserAvatarContainer: FC = () => {
   const [openMenu, setOpenMenu] = useState(false);
   const { session } = useSession();
   return (
@@ -32,4 +31,6 @@ export default function UserAvatar(props) {
       </Popover>
     </>
   );
-}
+};
+
+export default UserAvatarContainer;
