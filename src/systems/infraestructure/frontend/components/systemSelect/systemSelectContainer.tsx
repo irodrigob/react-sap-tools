@@ -20,6 +20,7 @@ import ErrorGraphql from "shared/errors/ErrorGraphql";
 import { showToast, MESSAGE } from "utils/general/message";
 import ComboSystemList from "systems/infraestructure/frontend/components/systemSelect/comboSystemList";
 import DialogAddSystem from "systems/infraestructure/frontend/components/dialogAddSystem/dialogAddSystemContainer";
+import DialogSystemListContainer from "systems/infraestructure/frontend/components/dialogSystemList/dialogSystemListContainer";
 
 interface Props {
   //children: React.ReactNode;
@@ -33,6 +34,7 @@ const SystemSelectContainer: FC<Props> = () => {
   const [loadingSystems, setLoadingSystems] = useState(true);
   const { processSelectedSystem } = useSystems();
   const [openAddSystem, setOpenAddSystem] = useState(false);
+  const [openDialogSystemList, setOpenDialogSystemList] = useState(false);
   const systemController = new SystemController();
 
   /*************************************
@@ -113,11 +115,20 @@ const SystemSelectContainer: FC<Props> = () => {
         handlerOpenAddSystem={() => {
           setOpenAddSystem(true);
         }}
+        handlerOpenSystemList={() => {
+          setOpenDialogSystemList(true);
+        }}
       />
       <DialogAddSystem
         open={openAddSystem}
         onCloseButton={() => {
           setOpenAddSystem(false);
+        }}
+      />
+      <DialogSystemListContainer
+        open={openDialogSystemList}
+        onCloseButton={() => {
+          setOpenDialogSystemList(false);
         }}
       />
     </>

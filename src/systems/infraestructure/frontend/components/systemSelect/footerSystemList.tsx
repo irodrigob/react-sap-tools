@@ -8,10 +8,11 @@ import System from "systems/domain/entities/system";
 interface Props {
   systemsList: System[];
   handlerOpenAddSystem: () => void;
+  handlerOpenSystemList: () => void;
 }
 
 const FooterSystemList: FC<Props> = (props) => {
-  const { systemsList, handlerOpenAddSystem } = props;
+  const { systemsList, handlerOpenAddSystem, handlerOpenSystemList } = props;
   const { getI18nText } = useTranslations();
 
   return (
@@ -25,7 +26,7 @@ const FooterSystemList: FC<Props> = (props) => {
             Array.isArray(systemsList) && systemsList.length > 0 ? false : true
           }
           onClick={() => {
-            //setOpenSystemList(true);
+            handlerOpenSystemList();
           }}
         >
           {getI18nText("systemSelect.btnViewSystems")}
@@ -36,7 +37,6 @@ const FooterSystemList: FC<Props> = (props) => {
           style={{ marginTop: "1rem" }}
           icon="add"
           onClick={() => {
-            //setOpenAddSystem(true);
             handlerOpenAddSystem();
           }}
         >

@@ -20,6 +20,7 @@ interface Props {
   systemsList: System[];
   handlerSystemSelected: (systemSelected: string) => void;
   handlerOpenAddSystem: () => void;
+  handlerOpenSystemList: () => void;
 }
 
 const ComboSystemList: FC<Props> = (props) => {
@@ -30,6 +31,7 @@ const ComboSystemList: FC<Props> = (props) => {
     handlerSystemSelected,
     systemsList,
     handlerOpenAddSystem,
+    handlerOpenSystemList,
   } = props;
   const { getI18nText } = useTranslations();
   const { isSystemSelected } = useSystems();
@@ -86,6 +88,7 @@ const ComboSystemList: FC<Props> = (props) => {
       <FooterSystemList
         systemsList={systemsList}
         handlerOpenAddSystem={handlerOpenAddSystem}
+        handlerOpenSystemList={handlerOpenSystemList}
       />
     </Popover>
   );
