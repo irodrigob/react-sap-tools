@@ -26,9 +26,11 @@ export default function CellActions(props) {
     <FlexBox>
       {!row.original[INTERNAL_FIELDS_DATA.EDITING] && (
         <span style={{ marginRight: "0.5rem" }}>
-          {instance.cell.column[COLUMN_PROPERTIES.CELL_ORIGINAL_ACTIONS].Cell(
-            instance
-          )}
+          {typeof instance.cell.column[COLUMN_PROPERTIES.CELL_ORIGINAL_ACTIONS]
+            .Cell === "function" &&
+            instance.cell.column[COLUMN_PROPERTIES.CELL_ORIGINAL_ACTIONS].Cell(
+              instance
+            )}
         </span>
       )}
 
