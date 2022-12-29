@@ -4,6 +4,8 @@ import System from "systems/domain/entities/system";
 import type {
   responseSystemRepoArray,
   responseNewSystemRepo,
+  responseSystemRepo,
+  responseDeleteSystemRepo,
 } from "systems/infraestructure/types/general";
 import { Result } from "shared/core/Result";
 import ErrorGraphql from "shared/errors/ErrorGraphql";
@@ -33,7 +35,7 @@ export default class SystemApplication {
   /**
    * Crea un nuevo sistema
    * @param newSystem | Crea un nuevo sistema
-   * @returns | Promesa con el nuevo sistema
+   * @returns | Promesa con el resultado o error del nuevo sistema
    */
   async createNewSystem(
     newSystem: newSystemDTO
@@ -41,6 +43,36 @@ export default class SystemApplication {
     try {
       let data = await this._systemReposity.saveNewSystem(newSystem);
       return Result.ok<System>(data);
+    } catch (error) {
+      return Result.fail<ErrorGraphql>(
+        ErrorGraphql.create(error as ApolloError)
+      );
+    }
+  }
+  /**
+   * Actualiza un sistema
+   * @param system | Sistema a actualizar
+   * @returns Promesa con el resultado o error del sistema actualizado
+   */
+  async updateSystem(system: System): Promise<responseSystemRepo> {
+    try {
+      let data = await this._systemReposity.updateSystem(system);
+      return Result.ok<System>(data);
+    } catch (error) {
+      return Result.fail<ErrorGraphql>(
+        ErrorGraphql.create(error as ApolloError)
+      );
+    }
+  }
+  /**
+   * Borra un sistema
+   * @param system | Sistema a actualizar
+   * @returns Promesa con el resultado o error del sistema actualizado
+   */
+  async deleteSystem(IDsystem: string): Promise<responseDeleteSystemRepo> {
+    try {
+      let data = await this._systemReposity.deleteSystem(IDsystem);
+      return Result.ok<string>(data);
     } catch (error) {
       return Result.fail<ErrorGraphql>(
         ErrorGraphql.create(error as ApolloError)

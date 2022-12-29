@@ -2,8 +2,9 @@ import SystemApplication from "systems/domain/application/SystemApplication";
 import type {
   responseSystemRepoArray,
   responseNewSystemRepo,
+  responseDeleteSystemRepo,
+  responseSystemRepo,
 } from "systems/infraestructure/types/general";
-import SystemRepository from "systems/infraestructure/repositories/systemRepository";
 import SystemApplicationValidations from "systems/domain/validations/SystemApplicationValidations";
 import System from "systems/domain/entities/system";
 import type { newSystemDTO } from "systems/infraestructure/dto/systemDTO";
@@ -39,5 +40,21 @@ export class SystemController {
    */
   createNewSystem(newSystem: newSystemDTO): Promise<responseNewSystemRepo> {
     return this._systemApplication.createNewSystem(newSystem);
+  }
+  /**
+   * Actualiza un sistema
+   * @param system | Sistema a actualizar
+   * @returns  Promesa con el resultado o error del sistema actualizado
+   */
+  async updateSystem(system: System): Promise<responseSystemRepo> {
+    return this._systemApplication.updateSystem(system);
+  }
+  /**
+   * Borra un sistema
+   * @param system | Sistema a actualizar
+   * @returns  Promesa con el resultado o error del sistema borrado
+   */
+  async deleteSystem(IDsystem: string): Promise<responseDeleteSystemRepo> {
+    return this._systemApplication.deleteSystem(IDsystem);
   }
 }

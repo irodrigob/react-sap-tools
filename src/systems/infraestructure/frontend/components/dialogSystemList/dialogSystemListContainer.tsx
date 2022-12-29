@@ -1,10 +1,11 @@
 import { useState, FC } from "react";
-import { Dialog, Button, FlexBox } from "@ui5/webcomponents-react";
+import { Dialog, Button, FlexBox, ValueState } from "@ui5/webcomponents-react";
 import FooterDialog from "systems/infraestructure/frontend/components/dialogSystemList/footerDialog";
 import { useTranslations } from "translations/i18nContext";
 import useDialogSystemList from "./useDialogSystemList";
 import CustomAnalyticTable from "components/customAnalyticTable/CustomAnalyticTable";
 import { useSystemData } from "systems/context/systemContext";
+import { SystemController } from "systems/infraestructure/controller/SystemController";
 
 interface Props {
   open: boolean;
@@ -14,8 +15,9 @@ interface Props {
 const DialogSystemListContainer: FC<Props> = (props) => {
   const { onCloseButton, open } = props;
   const { getI18nText } = useTranslations();
-  const { columns } = useDialogSystemList();
+  const { columns, rowValidations, rowUpdate } = useDialogSystemList();
   const { systemsList } = useSystemData();
+  const systemController = new SystemController();
   return (
     <Dialog
       open={open}
@@ -29,7 +31,18 @@ const DialogSystemListContainer: FC<Props> = (props) => {
       }
     >
       {Array.isArray(systemsList) && (
-        <CustomAnalyticTable columns={columns} data={systemsList} />
+        <CustomAnalyticTable
+          columns={columns}
+          data={systemsList}
+          editable={{
+            onRowUpdate: (newData: any, oldData: any) => {
+              return rowUpdate(newData, oldData);
+            },
+            onRowValidation: (newData: any, column: string, value: any) => {
+              return rowValidations(newData, column, value);
+            },
+          }}
+        />
       )}
     </Dialog>
   );

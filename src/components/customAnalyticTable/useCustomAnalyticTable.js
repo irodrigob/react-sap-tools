@@ -459,16 +459,16 @@ export default function useCustomAnalyticTable() {
                   getTabix(instance)
                 ),
                 getTabix(instance),
-                ANALYTIC_TABLE.ROW_HIGHLIGHT.NONE
+                ValueState.None
               )
             );
           })
           .catch((reason) => {
             setTableValues(
               addMessage(instance.data, getTabix(instance), {
-                ...DEFAULT_ROW_MESSAGE,
+                column: "",
                 state: ValueState.Error,
-                message: reason,
+                message: reason.message,
               })
             );
           });

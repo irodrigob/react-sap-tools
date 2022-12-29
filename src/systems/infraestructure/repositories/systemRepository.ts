@@ -116,4 +116,43 @@ export default class SystemRepository implements SystemRepositoryInterface {
       newSystemResponse.ngrok_tunnel
     );
   }
+  async updateSystem(system: System): Promise<System> {
+    const response = await this._apolloClient.mutate({
+      mutation: MUTATION_UPDATE_SYSTEM,
+      variables: {
+        id: system._id,
+        input: {
+          user: system.user,
+          name: system.name,
+          host: system.host,
+          sap_password: system.sap_password,
+          sap_user: system.sap_user,
+          ngrok_active: system.ngrok_active,
+          ngrok_api_token: system.ngrok_api_token,
+          ngrok_tunnel: system.ngrok_tunnel,
+        },
+      },
+    });
+    let updatedSystem = response.data.updateSystem as System;
+    return new System(
+      updatedSystem._id,
+      updatedSystem.user,
+      updatedSystem.name,
+      updatedSystem.host,
+      updatedSystem.sap_user,
+      updatedSystem.sap_password,
+      updatedSystem.ngrok_active,
+      updatedSystem.ngrok_api_token,
+      updatedSystem.ngrok_tunnel
+    );
+  }
+  async deleteSystem(IDsystem: string): Promise<string> {
+    const response = await this._apolloClient.mutate({
+      mutation: MUTATION_DELETE_SYSTEM,
+      variables: {
+        id: IDsystem,
+      },
+    });
+    return response.data.deleteSystem._id;
+  }
 }

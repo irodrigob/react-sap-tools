@@ -40,14 +40,17 @@ export default function useDataValidations() {
       ];
 
       // La validación de campo obligatoria devolverá una estructura plana simple
-      if (instance.cell.column.required === true)
-        rowValidations[0].validations = [fieldMandatory(instance, cellValue)];
+      if (instance.cell.column.required === true) {
+        let resultFieldMandatory = fieldMandatory(instance, cellValue);
+        if (resultFieldMandatory)
+          rowValidations[0].validations = [resultFieldMandatory];
+      }
 
       if (
+        rowValidations[0].validations.length == 0 ||
         rowValidations[0].validations.findIndex(
           (row) => row.state == ValueState.None
-        ) != -1 ||
-        rowValidations[0].validations.length == 0
+        ) != -1
       ) {
         // Siguientes validaciones
         if (typeof customCellValidation === "function") {
@@ -115,7 +118,7 @@ export default function useDataValidations() {
           "customAnalyticTable.localization.validations.fieldMandatory"
         ),
       };
-    else return DEFAULT_SINGLE_VALIDATION;
+    //else return DEFAULT_SINGLE_VALIDATION;
   }, []);
 
   return { rowValidations };

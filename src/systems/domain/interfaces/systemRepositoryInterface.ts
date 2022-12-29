@@ -16,4 +16,16 @@ export default interface SystemRepositoryInterface {
    * @returns Promesa con el sistema creado
    */
   saveNewSystem(newSystem: newSystemDTO): Promise<System>;
+  /**
+   * Actualiza un sistema
+   * @param system | Sistema a actualizar
+   * @returns Promesa con el sistema actualizado
+   */
+  updateSystem(system: System): Promise<System>;
+  /**
+   * Borra un sistema
+   * @param IDsystem | ID del sistema a borrar
+   * @returns Promesa con el sistema borrado
+   */
+  deleteSystem(IDsystem: string): Promise<string>;
 }
