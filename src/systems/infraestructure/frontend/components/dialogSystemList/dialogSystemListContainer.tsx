@@ -15,7 +15,8 @@ interface Props {
 const DialogSystemListContainer: FC<Props> = (props) => {
   const { onCloseButton, open } = props;
   const { getI18nText } = useTranslations();
-  const { columns, rowValidations, rowUpdate } = useDialogSystemList();
+  const { columns, rowValidations, rowUpdate, rowDelete } =
+    useDialogSystemList();
   const { systemsList } = useSystemData();
   const systemController = new SystemController();
   return (
@@ -37,6 +38,9 @@ const DialogSystemListContainer: FC<Props> = (props) => {
           editable={{
             onRowUpdate: (newData: any, oldData: any) => {
               return rowUpdate(newData, oldData);
+            },
+            onRowDelete: (oldData: any) => {
+              return rowDelete(oldData);
             },
             onRowValidation: (newData: any, column: string, value: any) => {
               return rowValidations(newData, column, value);

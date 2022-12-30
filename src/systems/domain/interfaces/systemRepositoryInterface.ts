@@ -27,5 +27,5 @@ export default interface SystemRepositoryInterface {
    * @param IDsystem | ID del sistema a borrar
    * @returns Promesa con el sistema borrado
    */
-  deleteSystem(IDsystem: string): Promise<string>;
+  deleteSystem(IDsystem: string): Promise<System>;
 }

@@ -2,7 +2,6 @@ import SystemApplication from "systems/domain/application/SystemApplication";
 import type {
   responseSystemRepoArray,
   responseNewSystemRepo,
-  responseDeleteSystemRepo,
   responseSystemRepo,
 } from "systems/infraestructure/types/general";
 import SystemApplicationValidations from "systems/domain/validations/SystemApplicationValidations";
@@ -54,7 +53,7 @@ export class SystemController {
    * @param system | Sistema a actualizar
    * @returns  Promesa con el resultado o error del sistema borrado
    */
-  async deleteSystem(IDsystem: string): Promise<responseDeleteSystemRepo> {
+  async deleteSystem(IDsystem: string): Promise<responseSystemRepo> {
     return this._systemApplication.deleteSystem(IDsystem);
   }
 }

@@ -3,7 +3,7 @@ import System from "systems/domain/entities/system";
 
 type systemsType = System[];
 
-const DEFAULT_SYSTEM = new System("", "", "", "", "", "");
+export const DEFAULT_SYSTEM = new System("", "", "", "", "", "");
 
 interface systemContextInterface {
   systemsList: systemsType;

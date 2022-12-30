@@ -5,7 +5,6 @@ import type {
   responseSystemRepoArray,
   responseNewSystemRepo,
   responseSystemRepo,
-  responseDeleteSystemRepo,
 } from "systems/infraestructure/types/general";
 import { Result } from "shared/core/Result";
 import ErrorGraphql from "shared/errors/ErrorGraphql";
@@ -69,10 +68,10 @@ export default class SystemApplication {
    * @param system | Sistema a actualizar
    * @returns Promesa con el resultado o error del sistema actualizado
    */
-  async deleteSystem(IDsystem: string): Promise<responseDeleteSystemRepo> {
+  async deleteSystem(IDsystem: string): Promise<responseSystemRepo> {
     try {
       let data = await this._systemReposity.deleteSystem(IDsystem);
-      return Result.ok<string>(data);
+      return Result.ok<System>(data);
     } catch (error) {
       return Result.fail<ErrorGraphql>(
         ErrorGraphql.create(error as ApolloError)
