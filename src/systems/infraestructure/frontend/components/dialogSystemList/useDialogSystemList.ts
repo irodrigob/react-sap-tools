@@ -1,8 +1,7 @@
 import { useCallback, useEffect, useState } from "react";
 import { ValueState, FlexBox, Button } from "@ui5/webcomponents-react";
 import { useTranslations } from "translations/i18nContext";
-import IconInteractive from "shared/components/iconInteractive";
-import CellAction from "./cellContents";
+import CellActions from "systems/infraestructure/frontend/components/dialogSystemList/cellActions";
 import useSystems from "systems/infraestructure/frontend/hooks/useSystems";
 import { SystemController } from "systems/infraestructure/controller/SystemController";
 import { RowValidations } from "shared/types/validation";
@@ -24,8 +23,8 @@ export default function useDialogSystemList() {
    ************************************/
   useEffect(() => {
     setColumns([
-      /*  {
-        Cell: CellAction,
+      {
+        Cell: CellActions,
         Header: "Actions",
         accessor: "actions",
         disableFilters: true,
@@ -34,7 +33,7 @@ export default function useDialogSystemList() {
         disableSortBy: true,
         numberIcons: 1,
         id: "actions",
-      },*/
+      },
       {
         Header: getI18nText("systems.labelName"),
         accessor: "name",
@@ -242,7 +241,6 @@ export default function useDialogSystemList() {
               MESSAGE.TYPE.SUCCCES
             );
 
-            // updateSystem(updatedSystem); // Actualización del modelo interno
             deleteSystem(deletedSystem._id);
             resolve("");
           } else if (response.isFailure) {

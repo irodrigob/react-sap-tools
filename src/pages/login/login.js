@@ -9,7 +9,7 @@ import {
 import Grid from "@mui/material/Grid";
 import "@ui5/webcomponents-icons/dist/locked";
 import { GoogleButtonLogin } from "../../auth/components/googleButtonLogin";
-import { useTranslations } from "../../translations/OLDi18nContext";
+import { useTranslations } from "translations/i18nContext";
 
 export default function Login() {
   const { getI18nText } = useTranslations();
