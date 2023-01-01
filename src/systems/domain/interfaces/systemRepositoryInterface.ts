@@ -1,6 +1,5 @@
 import System from "systems/domain/entities/system";
 import type { newSystemDTO } from "systems/infraestructure/dto/systemDTO";
-import { Result } from "shared/core/Result";
 
 export default interface SystemRepositoryInterface {
   /**
