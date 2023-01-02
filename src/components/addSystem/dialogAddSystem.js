@@ -329,7 +329,7 @@ export default function DialogAddSystem(props) {
                 fieldState: { error },
               }) => (
                 <TextField
-                  label={getI18nText("systems.labelNgrokTunnel")}
+                  label={getI18nText("systems.labelConnectionTunnel")}
                   variant="filled"
                   value={value}
                   onChange={onChange}

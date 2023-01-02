@@ -5,7 +5,7 @@ import type {
   responseSystemRepoArray,
   responseNewSystemRepo,
   responseSystemRepo,
-} from "systems/infraestructure/types/general";
+} from "systems/infraestructure/types/repository";
 import { Result } from "shared/core/Result";
 import ErrorGraphql from "shared/errors/ErrorGraphql";
 import type { newSystemDTO } from "systems/infraestructure/dto/systemDTO";

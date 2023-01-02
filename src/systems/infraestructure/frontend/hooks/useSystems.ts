@@ -1,8 +1,8 @@
 import { useCallback } from "react";
 import { useNavigate } from "react-router-dom";
+import { firstBy } from "thenby";
 import System from "systems/domain/entities/system";
 import { useSystemData, DEFAULT_SYSTEM } from "systems/context/systemContext";
-import { firstBy } from "thenby";
 
 export default function useSystems() {
   const { setSystemSelected, systemSelected, systemsList, setSystemsList } =

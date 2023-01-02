@@ -157,9 +157,9 @@ export default function DialogSystemList(props) {
         type: "Password",
       },
       {
-        Header: getI18nText("systems.labelNgrokTunnel"),
+        Header: getI18nText("systems.labelConnectionTunnel"),
         accessor: "ngrok_tunnel",
-        headerTooltip: getI18nText("systems.labelNgrokTunnel"),
+        headerTooltip: getI18nText("systems.labelConnectionTunnel"),
         edit: true,
         required: false,
         width: 300,

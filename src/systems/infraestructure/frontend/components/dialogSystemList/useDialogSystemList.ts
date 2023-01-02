@@ -1,15 +1,15 @@
 import { useCallback, useEffect, useState } from "react";
-import { ValueState, FlexBox, Button } from "@ui5/webcomponents-react";
+import { ValueState } from "@ui5/webcomponents-react";
 import { useTranslations } from "translations/i18nContext";
 import CellActions from "systems/infraestructure/frontend/components/dialogSystemList/cellActions";
 import useSystems from "systems/infraestructure/frontend/hooks/useSystems";
 import { SystemController } from "systems/infraestructure/controller/SystemController";
 import { RowValidations } from "shared/types/validation";
-import { showToast, MESSAGE, closeToast } from "utils/general/message";
+import { showToast, MESSAGE } from "utils/general/message";
 import SystemFormatters from "systems/utils/formatters";
 import Encrypt from "shared/utils/encrypt/Encrypt";
 import System from "systems/domain/entities/system";
-import type { responseSystemRepo } from "systems/infraestructure/types/general";
+import type { responseSystemRepo } from "systems/infraestructure/types/repository";
 import ErrorGraphql from "shared/errors/ErrorGraphql";
 
 export default function useDialogSystemList() {
@@ -86,9 +86,9 @@ export default function useDialogSystemList() {
         type: "Password",
       },
       {
-        Header: getI18nText("systems.labelNgrokTunnel"),
-        accessor: "ngrok_tunnel",
-        headerTooltip: getI18nText("systems.labelNgrokTunnel"),
+        Header: getI18nText("systems.labelConnectionTunnel"),
+        accessor: "connection_tunnel",
+        headerTooltip: getI18nText("systems.labelConnectionTunnel"),
         edit: true,
         required: false,
         width: 300,
@@ -119,7 +119,7 @@ export default function useDialogSystemList() {
               },
             ] as RowValidations;
           break;
-        case "ngrok_tunnel":
+        case "connection_tunnel":
           if (newData.ngrok_active) {
             if (!systemController.validateHost(value))
               return [
@@ -142,7 +142,7 @@ export default function useDialogSystemList() {
           if (!value)
             return [
               { column: "ngrok_api_token", value: "" },
-              { column: "ngrok_tunnel", value: "" },
+              { column: "connection_tunnel", value: "" },
             ] as RowValidations;
           break;
         case "ngrok_api_token":
@@ -157,7 +157,7 @@ export default function useDialogSystemList() {
   /**
    * Actualización de datos
    */
-  const rowUpdate = useCallback((newData: any, oldData: any): Promise<any> => {
+  const rowUpdate = (newData: any, oldData: any): Promise<any> => {
     showToast(
       getI18nText("editSystem.saveInProcess", {
         newSystem: newData.name,
@@ -183,9 +183,9 @@ export default function useDialogSystemList() {
               ? Encrypt.encryptText(newData.ngrok_api_token)
               : newData.ngrok_api_token,
             newData.ngrok_active &&
-            newData.ngrok_tunnel != "" &&
-            newData.ngrok_tunnel != null
-              ? SystemFormatters.formatterHost(newData.ngrok_tunnel)
+            newData.connection_tunnel != "" &&
+            newData.connection_tunnel != null
+              ? SystemFormatters.formatterHost(newData.connection_tunnel)
               : ""
           )
         )
@@ -214,12 +214,12 @@ export default function useDialogSystemList() {
           }
         });
     });
-  }, []);
+  };
 
   /**
    * Borrado de una fila
    */
-  const rowDelete = useCallback((oldData: any) => {
+  const rowDelete = (oldData: any) => {
     showToast(
       getI18nText("editSystem.deleteInProcess", {
         newSystem: oldData.name,
@@ -257,7 +257,7 @@ export default function useDialogSystemList() {
           }
         });
     });
-  }, []);
+  };
 
   return { columns, rowValidations, rowUpdate, rowDelete };
 }

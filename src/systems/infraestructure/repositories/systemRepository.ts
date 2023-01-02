@@ -1,7 +1,7 @@
-import { gql, ApolloClient } from "@apollo/client";
+import { gql } from "@apollo/client";
 import System from "systems/domain/entities/system";
 import SystemRepositoryInterface from "systems/domain/interfaces/systemRepositoryInterface";
-import { initializeApollo } from "graphql/client";
+import graphQLRepository from "shared/infraestructure/repository/graphQLRepository";
 
 import type {
   newSystemDTO,
@@ -58,16 +58,14 @@ export const MUTATION_DELETE_SYSTEM = gql`
   ${MAIN_SYSTEMS_FIELDS}
 `;
 
-export default class SystemRepository implements SystemRepositoryInterface {
-  private _apolloClient: ApolloClient<any>;
-
-  constructor() {
-    this._apolloClient = initializeApollo();
-  }
-
+export default class SystemRepository
+  extends graphQLRepository
+  implements SystemRepositoryInterface
+{
   async getUserSystems(user: String): Promise<System[]> {
     const response = await this._apolloClient.query({
       query: QUERY_USER_SYSTEMS,
+      fetchPolicy: "network-only",
       variables: {
         user: user,
       },
@@ -129,7 +127,7 @@ export default class SystemRepository implements SystemRepositoryInterface {
           sap_user: system.sap_user,
           ngrok_active: system.ngrok_active,
           ngrok_api_token: system.ngrok_api_token,
-          ngrok_tunnel: system.ngrok_tunnel,
+          ngrok_tunnel: system.connection_tunnel,
         },
       },
     });
@@ -143,7 +141,7 @@ export default class SystemRepository implements SystemRepositoryInterface {
       updatedSystem.sap_password,
       updatedSystem.ngrok_active,
       updatedSystem.ngrok_api_token,
-      updatedSystem.ngrok_tunnel
+      updatedSystem.connection_tunnel
     );
   }
   async deleteSystem(IDsystem: string): Promise<System> {
@@ -163,7 +161,7 @@ export default class SystemRepository implements SystemRepositoryInterface {
       deletedSystem.sap_password,
       deletedSystem.ngrok_active,
       deletedSystem.ngrok_api_token,
-      deletedSystem.ngrok_tunnel
+      deletedSystem.connection_tunnel
     );
   }
 }

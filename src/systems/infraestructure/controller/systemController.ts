@@ -3,7 +3,7 @@ import type {
   responseSystemRepoArray,
   responseNewSystemRepo,
   responseSystemRepo,
-} from "systems/infraestructure/types/general";
+} from "systems/infraestructure/types/repository";
 import SystemApplicationValidations from "systems/domain/validations/SystemApplicationValidations";
 import System from "systems/domain/entities/system";
 import type { newSystemDTO } from "systems/infraestructure/dto/systemDTO";
@@ -30,7 +30,8 @@ export class SystemController {
    * @returns Si es valido, o no.
    */
   validateHost(host: string): boolean {
-    return this._systemValidations.validateHost(host);
+    if (host.length > 0) return this._systemValidations.validateHost(host);
+    else return true;
   }
   /**
    * Grabación de nuevo sistema

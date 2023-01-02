@@ -52,7 +52,7 @@
         "labelSAPPassword": "Password SAP",
         "labelNgrokActive": "Tunel por Ngrok",
         "labelNgrokApiToken": "API Token",
-        "labelNgrokTunnel": "URL Tunel",
+        "labelConnectionTunnel": "URL Tunel",
         "labelActions": "Acciones",
         "btnClose": "Cerrar"
     },
@@ -60,8 +60,12 @@
         "title": "Listado de sistemas",
         "btnTxtSave": "Cerrar",
         "tunneling": {
-            "noActive": "Acción valida solo para sistemas con la opción tunel ngrok activada",
-            "updateTunel": "Tunel actualizado"
+            "noActiveTunnel": "Acción valida solo para sistemas con la opción tunel ngrok activada",
+            "updateTunel": "Tunel actualizado",
+            "noAPIToken": "No hay token de conexión introducido",
+            "noTunnelsConnected": "No hay tuneles establecidos",
+            "noTunnelSystemSelected": "No hay tunel activo para el sistema seleccionado",
+            "errorGetTunnels": "Se ha producido el siguiente error al leer los tuneles {{errorService}}"
         }
     },
     "drawersApps": {

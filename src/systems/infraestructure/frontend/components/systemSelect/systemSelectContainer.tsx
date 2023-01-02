@@ -13,7 +13,7 @@ import SuggestionSystemList from "systems/infraestructure/frontend/components/sy
 import { useTranslations } from "translations/i18nContext";
 import { SystemController } from "systems/infraestructure/controller/SystemController";
 import { useSystemData } from "systems/context/systemContext";
-import { responseSystemRepoArray } from "systems/infraestructure/types/general";
+import { responseSystemRepoArray } from "systems/infraestructure/types/repository";
 import System from "systems/domain/entities/system";
 import useSystems from "systems/infraestructure/frontend/hooks/useSystems";
 import ErrorGraphql from "shared/errors/ErrorGraphql";

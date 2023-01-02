@@ -7,7 +7,7 @@ export default class System {
   readonly sap_password: string;
   readonly ngrok_active?: boolean;
   readonly ngrok_api_token?: string;
-  readonly ngrok_tunnel?: string;
+  readonly connection_tunnel?: string;
   constructor(
     _id: string,
     user: string,
@@ -17,7 +17,7 @@ export default class System {
     sap_password: string,
     ngrok_active?: boolean,
     ngrok_api_token?: string | undefined,
-    ngrok_tunnel?: string | undefined
+    connection_tunnel?: string | undefined
   ) {
     this._id = _id;
     this.user = user;
@@ -27,6 +27,6 @@ export default class System {
     this.sap_password = sap_password;
     this.ngrok_active = ngrok_active;
     this.ngrok_api_token = ngrok_api_token;
-    this.ngrok_tunnel = ngrok_tunnel;
+    this.connection_tunnel = connection_tunnel;
   }
 }

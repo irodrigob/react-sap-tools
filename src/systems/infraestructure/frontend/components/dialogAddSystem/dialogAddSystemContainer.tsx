@@ -11,7 +11,7 @@ import TextField from "@mui/material/TextField";
 import { useSession } from "auth/authProvider";
 import { useForm, Controller } from "react-hook-form";
 import { useTranslations } from "translations/i18nContext";
-import { responseNewSystemRepo } from "systems/infraestructure/types/general";
+import { responseNewSystemRepo } from "systems/infraestructure/types/repository";
 import FooterDialog from "systems/infraestructure/frontend/components/dialogAddSystem/footerDialog";
 import { SystemController } from "systems/infraestructure/controller/SystemController";
 import SystemFormatters from "systems/utils/formatters";
@@ -321,7 +321,7 @@ const DialogAddSystem: FC<Props> = (props) => {
                   fieldState: { error },
                 }) => (
                   <TextField
-                    label={getI18nText("systems.labelNgrokTunnel")}
+                    label={getI18nText("systems.labelConnectionTunnel")}
                     variant="filled"
                     value={value}
                     onChange={onChange}
