@@ -51,10 +51,24 @@ export class SystemController {
   }
   /**
    * Borra un sistema
-   * @param system | Sistema a actualizar
+   * @param IDsystem | ID de sistema a eliminar
    * @returns  Promesa con el resultado o error del sistema borrado
    */
   async deleteSystem(IDsystem: string): Promise<responseSystemRepo> {
     return this._systemApplication.deleteSystem(IDsystem);
+  }
+  /**
+   * Actualiza el tunel de conexión
+   * @param system | Sistema a actualizar
+   * @returns  Promesa con el resultado o error del tunel actualizado
+   */
+  async updateConnectionTunnel(
+    IDsystem: string,
+    connectionTunnel: string
+  ): Promise<responseSystemRepo> {
+    return this._systemApplication.updateConnectionTunnel(
+      IDsystem,
+      connectionTunnel
+    );
   }
 }

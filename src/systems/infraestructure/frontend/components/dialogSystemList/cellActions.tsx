@@ -3,9 +3,11 @@ import { FlexBox } from "@ui5/webcomponents-react";
 import "@ui5/webcomponents-icons/dist/upload-to-cloud";
 import IconInteractive from "shared/components/iconInteractive";
 import System from "systems/domain/entities/system";
+import { SystemController } from "systems/infraestructure/controller/SystemController";
 import { useTranslations } from "translations/i18nContext";
 import { showToast, MESSAGE } from "utils/general/message";
 import { useSystemData } from "systems/context/systemContext";
+import useSystems from "systems/infraestructure/frontend/hooks/useSystems";
 import TunnelController from "ngrokTunnel/infraestructure/controller/tunnelController";
 import ErrorGraphql from "shared/errors/ErrorGraphql";
 import Tunnel from "ngrokTunnel/domain/entities/tunnel";
@@ -18,6 +20,17 @@ const CellActions: FC<Props> = (instance: any) => {
   const { getI18nText } = useTranslations();
   const { systemsList } = useSystemData();
   const tunnelController = new TunnelController();
+  const systemController = new SystemController();
+  const { updateSystem } = useSystems();
+
+  const showErrorMessage = useCallback((error: ErrorGraphql) => {
+    showToast(
+      getI18nText("systemList.tunneling.errorGetTunnels", {
+        errorService: error.getError().singleMessage,
+      }),
+      MESSAGE.TYPE.ERROR
+    );
+  }, []);
 
   /**
    * Actualiza el tunel de conexión de un sistema
@@ -32,13 +45,28 @@ const CellActions: FC<Props> = (instance: any) => {
       );
       if (tunnels.isSuccess) {
         let tunnelsList = tunnels.getValue() as Tunnel[];
+        // Tiene que haber tuneles
         if (tunnelsList.length > 0) {
-          // Tiene que haber tuneles
           // Se mira que exista algún tunel para el sistema seleccionado
           let tunnelSystemSelected = tunnelsList.find(
             (row) => row.forwards_to.indexOf(system.host) != -1
           ) as Tunnel;
           if (tunnelSystemSelected) {
+            let resultUpdate = await systemController.updateConnectionTunnel(
+              system._id,
+              tunnelSystemSelected.public_url
+            );
+            // Si se actualiza correctamente se actualiza en el modelo de datos
+            if (resultUpdate.isSuccess) {
+              updateSystem(resultUpdate.getValue() as System);
+
+              showToast(
+                getI18nText("systemList.tunneling.connectionTunelUpdated"),
+                MESSAGE.TYPE.INFO
+              );
+            } else if (resultUpdate.isFailure) {
+              showErrorMessage(tunnels.getErrorValue() as ErrorGraphql);
+            }
           } else {
             showToast(
               getI18nText("systemList.tunneling.noTunnelSystemSelected"),
@@ -52,19 +80,13 @@ const CellActions: FC<Props> = (instance: any) => {
           );
         }
       } else if (tunnels.isFailure) {
-        let error = (tunnels.getErrorValue() as ErrorGraphql).getError();
-
-        showToast(
-          getI18nText("systemList.tunneling.errorGetTunnels", {
-            errorService: error.singleMessage,
-          }),
-          MESSAGE.TYPE.ERROR
-        );
+        showErrorMessage(tunnels.getErrorValue() as ErrorGraphql);
       }
-
-      //return new Promise((resolve, reject) => {});
+      // Devuelve un promise vacio porque la función tengo que ponerla en async para hacer los await porque no quiero
+      // encadenar llamadas. Es un guarrada no es limpio pero ahora mismo no quiero complicarme la vida.
+      return new Promise((resolve, reject) => {});
     },
-    []
+    [systemsList]
   );
 
   return (

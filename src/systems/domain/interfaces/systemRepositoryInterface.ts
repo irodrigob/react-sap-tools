@@ -26,11 +26,15 @@ export default interface SystemRepositoryInterface {
    * @param IDsystem | ID del sistema a borrar
    * @returns Promesa con el sistema borrado
    */
-  deleteSystem(IDsystem: string): Promise<System>;
+  deleteSystem(IDSystem: string): Promise<System>;
   /**
    * Actualiza el tunel de conexión
-   * @param system | Sistema a actualizar
+   * @param IDSystem | ID del sistema a borrar
+   * @param connectionTunnel | Tunel de conexión
    * @returns Promesa con el sistema actualizado
    */
-  //updateNgrok(system: System): Promise<System>;
+  updateConnectionTunnel(
+    IDSystem: string,
+    connectionTunnel: string
+  ): Promise<System>;
 }

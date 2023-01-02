@@ -78,4 +78,26 @@ export default class SystemApplication {
       );
     }
   }
+  /**
+   * Actualiza el tunel de conexión
+   * @param IDSystem | ID del sistema a borrar
+   * @param connectionTunnel | Tunel de conexión
+   * @returns Promesa con el sistema actualizado
+   */
+  async updateConnectionTunnel(
+    IDSystem: string,
+    connectionTunnel: string
+  ): Promise<responseSystemRepo> {
+    try {
+      let data = await this._systemReposity.updateConnectionTunnel(
+        IDSystem,
+        connectionTunnel
+      );
+      return Result.ok<System>(data);
+    } catch (error) {
+      return Result.fail<ErrorGraphql>(
+        ErrorGraphql.create(error as ApolloError)
+      );
+    }
+  }
 }

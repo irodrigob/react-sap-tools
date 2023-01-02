@@ -65,7 +65,8 @@
             "noAPIToken": "No hay token de conexión introducido",
             "noTunnelsConnected": "No hay tuneles establecidos",
             "noTunnelSystemSelected": "No hay tunel activo para el sistema seleccionado",
-            "errorGetTunnels": "Se ha producido el siguiente error al leer los tuneles {{errorService}}"
+            "errorGetTunnels": "Se ha producido el siguiente error al leer los tuneles {{errorService}}",
+            "connectionTunelUpdated": "Tunel de conexión actualizado"
         }
     },
     "drawersApps": {

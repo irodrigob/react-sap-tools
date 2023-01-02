@@ -49,6 +49,15 @@ export const MUTATION_UPDATE_SYSTEM = gql`
   ${MAIN_SYSTEMS_FIELDS}
 `;
 
+export const MUTATION_UPDATE_CONNECTION_TUNNEL = gql`
+  mutation Mutation($id: String!, $connectionTunnel: String) {
+    updateConnectionTunnel(id: $id, connectionTunnel: $connectionTunnel) {
+      ...MainSystemsFields
+    }
+  }
+  ${MAIN_SYSTEMS_FIELDS}
+`;
+
 export const MUTATION_DELETE_SYSTEM = gql`
   mutation Mutation($id: String!) {
     deleteSystem(id: $id) {
@@ -144,11 +153,11 @@ export default class SystemRepository
       updatedSystem.ngrok_tunnel
     );
   }
-  async deleteSystem(IDsystem: string): Promise<System> {
+  async deleteSystem(IDSystem: string): Promise<System> {
     const response = await this._apolloClient.mutate({
       mutation: MUTATION_DELETE_SYSTEM,
       variables: {
-        id: IDsystem,
+        id: IDSystem,
       },
     });
     let deletedSystem = response.data.deleteSystem as System;
@@ -162,6 +171,31 @@ export default class SystemRepository
       deletedSystem.ngrok_active,
       deletedSystem.ngrok_api_token,
       deletedSystem.connection_tunnel
+    );
+  }
+  async updateConnectionTunnel(
+    IDSystem: string,
+    connectionTunnel: string
+  ): Promise<System> {
+    const response = await this._apolloClient.mutate({
+      mutation: MUTATION_UPDATE_CONNECTION_TUNNEL,
+      variables: {
+        id: IDSystem,
+        connectionTunnel: connectionTunnel,
+      },
+    });
+
+    let updatedSystem = response.data.updateConnectionTunnel as SystemDTO;
+    return new System(
+      updatedSystem._id,
+      updatedSystem.user,
+      updatedSystem.name,
+      updatedSystem.host,
+      updatedSystem.sap_user,
+      updatedSystem.sap_password,
+      updatedSystem.ngrok_active,
+      updatedSystem.ngrok_api_token,
+      updatedSystem.ngrok_tunnel
     );
   }
 }
