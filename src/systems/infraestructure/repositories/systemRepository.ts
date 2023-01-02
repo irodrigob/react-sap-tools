@@ -131,7 +131,7 @@ export default class SystemRepository
         },
       },
     });
-    let updatedSystem = response.data.updateSystem as System;
+    let updatedSystem = response.data.updateSystem as SystemDTO;
     return new System(
       updatedSystem._id,
       updatedSystem.user,
@@ -141,7 +141,7 @@ export default class SystemRepository
       updatedSystem.sap_password,
       updatedSystem.ngrok_active,
       updatedSystem.ngrok_api_token,
-      updatedSystem.connection_tunnel
+      updatedSystem.ngrok_tunnel
     );
   }
   async deleteSystem(IDsystem: string): Promise<System> {
