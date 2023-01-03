@@ -1,6 +1,7 @@
 import { FC, useCallback } from "react";
 import { FlexBox } from "@ui5/webcomponents-react";
 import "@ui5/webcomponents-icons/dist/upload-to-cloud";
+import "@ui5/webcomponents-icons/dist/toaster-down";
 import IconInteractive from "shared/components/iconInteractive";
 import System from "systems/domain/entities/system";
 import { SystemController } from "systems/infraestructure/controller/SystemController";
@@ -88,35 +89,47 @@ const CellActions: FC<Props> = (instance: any) => {
     },
     [systemsList]
   );
+  /**
+   * Descarga
+   * @param host | Host donde hay que hacer el tunnel
+   */
+  const downloadLaunchTunnelConnection = useCallback((host: string) => {}, []);
 
   return (
     <FlexBox>
-      <IconInteractive
-        name="upload-to-cloud"
-        showTooltip={true}
-        onClick={() => {
-          if (instance.row.original.ngrok_active) {
-            if (instance.row.original.ngrok_api_token != "") {
-              updateSystemTunnel(instance.row.original._id);
-            } else {
-              showToast(
-                getI18nText("systemList.tunneling.noAPIToken"),
-                MESSAGE.TYPE.INFO
-              );
-            }
-
-            /* showToast(
-              getI18nText("systemList.tunneling.updateTunel"),
-              MESSAGE.TYPE.INFO
-            );*/
-          } else {
-            showToast(
-              getI18nText("systemList.tunneling.noActiveTunnel"),
-              MESSAGE.TYPE.INFO
-            );
-          }
-        }}
-      />
+      {instance.row.original.ngrok_active && (
+        <>
+          <IconInteractive
+            name="upload-to-cloud"
+            showTooltip={true}
+            onClick={() => {
+              if (instance.row.original.ngrok_api_token != "") {
+                updateSystemTunnel(instance.row.original._id);
+              } else {
+                showToast(
+                  getI18nText("systemList.tunneling.noAPIToken"),
+                  MESSAGE.TYPE.INFO
+                );
+              }
+            }}
+          />
+          <IconInteractive
+            name="toaster-down"
+            showTooltip={true}
+            sx={{ marginLeft: "1em" }}
+            onClick={() => {
+              if (instance.row.original.ngrok_api_token != "") {
+                updateSystemTunnel(instance.row.original._id);
+              } else {
+                showToast(
+                  getI18nText("systemList.tunneling.noAPIToken"),
+                  MESSAGE.TYPE.INFO
+                );
+              }
+            }}
+          />
+        </>
+      )}
     </FlexBox>
   );
 };

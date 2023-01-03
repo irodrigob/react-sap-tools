@@ -31,7 +31,7 @@ export default function useDialogSystemList() {
         disableGroupBy: true,
         disableResizing: true,
         disableSortBy: true,
-        numberIcons: 1,
+        numberIcons: 2,
         id: "actions",
       },
       {

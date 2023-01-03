@@ -26,4 +26,12 @@ export default class TunnelApplication {
       );
     }
   }
+  /**
+   * Devuelve el contenido para el fichero que lanza el tunnel
+   * @param host | Host donde hay que hacer el tunnel
+   * @returns String con el contenido a guardar en el fichero
+   */
+  getContentLaunchTunnel(host: string): string {
+    return `ngrok http ${host}`;
+  }
 }

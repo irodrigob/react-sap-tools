@@ -60,7 +60,6 @@
         "title": "Listado de sistemas",
         "btnTxtSave": "Cerrar",
         "tunneling": {
-            "noActiveTunnel": "Acción valida solo para sistemas con la opción tunel ngrok activada",
             "updateTunel": "Tunel actualizado",
             "noAPIToken": "No hay token de conexión introducido",
             "noTunnelsConnected": "No hay tuneles establecidos",
