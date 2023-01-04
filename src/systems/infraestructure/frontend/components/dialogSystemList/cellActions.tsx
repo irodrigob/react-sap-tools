@@ -2,7 +2,7 @@ import { FC, useCallback } from "react";
 import { FlexBox } from "@ui5/webcomponents-react";
 import "@ui5/webcomponents-icons/dist/upload-to-cloud";
 import "@ui5/webcomponents-icons/dist/toaster-down";
-import IconInteractive from "shared/components/iconInteractive";
+import IconInteractive from "shared/frontend/components/iconInteractive";
 import System from "systems/domain/entities/system";
 import { SystemController } from "systems/infraestructure/controller/SystemController";
 import { useTranslations } from "translations/i18nContext";
@@ -12,6 +12,7 @@ import useSystems from "systems/infraestructure/frontend/hooks/useSystems";
 import TunnelController from "ngrokTunnel/infraestructure/controller/tunnelController";
 import ErrorGraphql from "shared/errors/ErrorGraphql";
 import Tunnel from "ngrokTunnel/domain/entities/tunnel";
+import DownloadFile from "shared/utils/file/download";
 
 interface Props {
   valor: string;
@@ -93,7 +94,10 @@ const CellActions: FC<Props> = (instance: any) => {
    * Descarga
    * @param host | Host donde hay que hacer el tunnel
    */
-  const downloadLaunchTunnelConnection = useCallback((host: string) => {}, []);
+  const downloadLaunchTunnelConnection = useCallback((host: string) => {
+    let content = tunnelController.getContentLaunchTunnel(host);
+    DownloadFile.download("text/plain", "tunnel.bat", content);
+  }, []);
 
   return (
     <FlexBox>
@@ -118,14 +122,7 @@ const CellActions: FC<Props> = (instance: any) => {
             showTooltip={true}
             sx={{ marginLeft: "1em" }}
             onClick={() => {
-              if (instance.row.original.ngrok_api_token != "") {
-                updateSystemTunnel(instance.row.original._id);
-              } else {
-                showToast(
-                  getI18nText("systemList.tunneling.noAPIToken"),
-                  MESSAGE.TYPE.INFO
-                );
-              }
+              downloadLaunchTunnelConnection(instance.row.original.host);
             }}
           />
         </>

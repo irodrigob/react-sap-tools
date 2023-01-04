@@ -7,7 +7,7 @@ import {
   Ui5CustomEvent,
   InputDomRef,
 } from "@ui5/webcomponents-react";
-import DropdownIcon from "shared/components/dropdownIcon";
+import DropdownIcon from "shared/frontend/components/dropdownIcon";
 import { useSession } from "auth/authProvider";
 import SuggestionSystemList from "systems/infraestructure/frontend/components/systemSelect/suggestionSystemList";
 import { useTranslations } from "translations/i18nContext";
