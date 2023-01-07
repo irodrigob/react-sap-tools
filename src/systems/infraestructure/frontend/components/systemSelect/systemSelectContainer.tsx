@@ -1,12 +1,7 @@
 import { useEffect, FC, useState } from "react";
 import "@ui5/webcomponents-icons/dist/account";
 import "@ui5/webcomponents/dist/features/InputSuggestions.js";
-import {
-  Input,
-  Popover,
-  Ui5CustomEvent,
-  InputDomRef,
-} from "@ui5/webcomponents-react";
+import { Input, Ui5CustomEvent, InputDomRef } from "@ui5/webcomponents-react";
 import DropdownIcon from "shared/frontend/components/dropdownIcon";
 import { useSession } from "auth/authProvider";
 import SuggestionSystemList from "systems/infraestructure/frontend/components/systemSelect/suggestionSystemList";
