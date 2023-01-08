@@ -68,6 +68,12 @@
             "connectionTunelUpdated": "Tunel de conexión actualizado"
         }
     },
+    "systemConfiguration": {
+        "tunnelConfiguration": "Configuración del tunel",
+        "tunnelEdit": {
+            "title": "Editar configuración"
+        }
+    },
     "drawersApps": {
         "tooltipButtonClose": "Ocultar listado aplicaciones"
     },

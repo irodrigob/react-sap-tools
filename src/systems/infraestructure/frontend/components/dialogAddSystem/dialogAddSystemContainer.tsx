@@ -12,7 +12,8 @@ import { useSession } from "auth/authProvider";
 import { useForm, Controller } from "react-hook-form";
 import { useTranslations } from "translations/i18nContext";
 import { responseNewSystemRepo } from "systems/infraestructure/types/repository";
-import FooterDialog from "systems/infraestructure/frontend/components/dialogAddSystem/footerDialog";
+//import FooterDialog from "systems/infraestructure/frontend/components/dialogAddSystem/footerDialog";
+import FooterDialog from "shared/frontend/components/footerDialog";
 import { SystemController } from "systems/infraestructure/controller/SystemController";
 import SystemFormatters from "systems/utils/formatters";
 import Encrypt from "shared/utils/encrypt/Encrypt";
@@ -122,12 +123,14 @@ const DialogAddSystem: FC<Props> = (props) => {
       headerText={getI18nText("editSystem.titleAddSystem")}
       footer={
         <FooterDialog
-          onCloseButton={() => {
+          textStartButton={getI18nText("general.btnTxtSave")}
+          textEndButton={getI18nText("general.btnTxtCancel")}
+          onEndButton={() => {
             reset();
             onCloseButton();
           }}
-          onSaveButton={handleSubmit(onSubmitForm)}
-          btnSaveDisabled={btnSaveDisabled}
+          onStartButton={handleSubmit(onSubmitForm)}
+          disabledStartButton={btnSaveDisabled}
         />
       }
     >

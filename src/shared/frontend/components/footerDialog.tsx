@@ -10,14 +10,23 @@ import {
 import { useTranslations } from "translations/i18nContext";
 
 interface Props {
-  onCloseButton: () => void;
-  onSaveButton: () => void;
-  btnSaveDisabled: boolean;
+  onEndButton: () => void;
+  onStartButton: () => void;
+  disabledStartButton?: boolean;
+  textStartButton: string;
+  textEndButton: string;
   slot?: string;
 }
 
 const FooterDialog: FC<Props> = (props) => {
-  const { onCloseButton, onSaveButton, btnSaveDisabled, slot } = props;
+  const {
+    onStartButton,
+    onEndButton,
+    disabledStartButton,
+    slot,
+    textStartButton,
+    textEndButton,
+  } = props;
   const { getI18nText } = useTranslations();
 
   return (
@@ -27,15 +36,15 @@ const FooterDialog: FC<Props> = (props) => {
       startContent={
         <Button
           style={{ marginTop: "1rem" }}
-          onClick={onSaveButton}
-          disabled={btnSaveDisabled}
+          onClick={onStartButton}
+          disabled={disabledStartButton}
         >
-          {getI18nText("general.btnTxtSave")}
+          {textStartButton}
         </Button>
       }
       endContent={
-        <Button style={{ marginTop: "1rem" }} onClick={onCloseButton}>
-          {getI18nText("general.btnTxtCancel")}
+        <Button style={{ marginTop: "1rem" }} onClick={onEndButton}>
+          {textEndButton}
         </Button>
       }
       style={{

@@ -11,11 +11,10 @@ import GeneralHelp from "main/frontend/layout/appBar/generalHelp/generalHelp";
 import { MessageManagerButton } from "components/messageManager/messageManagerComponent";
 import useMessageManager from "components/messageManager/useMessageManager";
 import SelectApp from "components/layout/appBar/selectApp/selectApp";
-import { useGlobalData } from "context/globalDataContext";
 import UserAvatarContainer from "main/frontend/layout/appBar/userAvatar/userAvatarContainer";
 import SystemSelectContainer from "systems/infraestructure/frontend/components/systemSelect/systemSelectContainer";
 import { useSession } from "auth/authProvider";
-import IconInteractive from "shared/frontend/components/iconInteractive";
+import SystemConfigurationContainer from "systems/infraestructure/frontend/components/systemConfiguration/systemConfigurationContainer";
 
 interface Props {
   children: ReactNode;
@@ -46,16 +45,9 @@ const AppBarContainer: FC<Props> = (props) => {
                   <Grid item>
                     <FlexBox>
                       <SystemSelectContainer />
-                      <IconInteractive
-                        name="settings"
-                        sx={{
-                          marginLeft: "0.6rem",
-                          width: "1rem",
-                          height: "1rem%",
-                          marginTop: "0.66rem",
-                          color: "var(--sapButton_Lite_TextColor)",
-                        }}
-                      />
+                      <span style={{ marginLeft: "0.6rem" }}>
+                        <SystemConfigurationContainer />
+                      </span>
                     </FlexBox>
                   </Grid>
                 </Grid>

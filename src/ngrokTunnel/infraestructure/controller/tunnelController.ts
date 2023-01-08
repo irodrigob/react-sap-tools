@@ -1,4 +1,4 @@
-import { responseTunelRepoArray } from "ngrokTunnel/infraestructure/types/repository";
+import { responseTunnelRepoArray } from "ngrokTunnel/infraestructure/types/repository";
 import TunnelApplication from "ngrokTunnel/domain/application/tunnelApplication";
 
 export default class TunnelController {
@@ -12,7 +12,7 @@ export default class TunnelController {
    * @param apiToken | Token de conexión con la API
    * @returns | Promise con el resultado o error del proceso
    */
-  getTunnels(apiToken: string): Promise<responseTunelRepoArray> {
+  getTunnels(apiToken: string): Promise<responseTunnelRepoArray> {
     return this.tunnelApplication.getTunnels(apiToken);
   }
   /**

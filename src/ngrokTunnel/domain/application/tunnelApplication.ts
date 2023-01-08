@@ -1,6 +1,6 @@
 import { ApolloError } from "@apollo/client";
 import TunnelRepository from "ngrokTunnel/infraestructure/repositories/tunnelRepository";
-import { responseTunelRepoArray } from "ngrokTunnel/infraestructure/types/repository";
+import { responseTunnelRepoArray } from "ngrokTunnel/infraestructure/types/repository";
 import { Result } from "shared/core/Result";
 import ErrorGraphql from "shared/errors/ErrorGraphql";
 import Tunnel from "../entities/tunnel";
@@ -16,7 +16,7 @@ export default class TunnelApplication {
    * @param apiToken | Token de conexión con la API
    * @returns | Promise con el resultado o error del proceso
    */
-  async getTunnels(apiToken: string): Promise<responseTunelRepoArray> {
+  async getTunnels(apiToken: string): Promise<responseTunnelRepoArray> {
     try {
       let data = await this.tunnelRepository.getTunnels(apiToken);
       return Result.ok<Tunnel[]>(data);
