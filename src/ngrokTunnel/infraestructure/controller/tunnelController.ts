@@ -1,11 +1,18 @@
-import { responseTunnelRepoArray } from "ngrokTunnel/infraestructure/types/repository";
+import {
+  responseTunnelRepoArray,
+  responseTunnelConfigRepo,
+} from "ngrokTunnel/infraestructure/types/repository";
 import TunnelApplication from "ngrokTunnel/domain/application/tunnelApplication";
+import TunnelConfiguration from "ngrokTunnel/domain/entities/configuration";
+import TunnelConfigurationApplication from "ngrokTunnel/domain/application/configurationApplication";
 
 export default class TunnelController {
   protected tunnelApplication: TunnelApplication;
+  protected tunnelConfApplication: TunnelConfigurationApplication;
 
   constructor() {
     this.tunnelApplication = new TunnelApplication();
+    this.tunnelConfApplication = new TunnelConfigurationApplication();
   }
   /**
    * Devuelve la lista de tuneles activo
@@ -22,5 +29,23 @@ export default class TunnelController {
    */
   getContentLaunchTunnel(host: string): string {
     return this.tunnelApplication.getContentLaunchTunnel(host);
+  }
+  /**
+   * Devuelve la configuración del tunel del usuario
+   * @param user | Usuario
+   * @returns | Promise con el resultado o error del proceso
+   */
+  getConfiguration(user: string): Promise<responseTunnelConfigRepo> {
+    return this.tunnelConfApplication.getConfiguration(user);
+  }
+  /**
+   * Actualización de la configuración para el tunel
+   * @param configuration | Actualiza la configuración del tunel
+   * @returns | Promise con el resultado o error del proceso
+   */
+  async editConfiguration(
+    configuration: TunnelConfiguration
+  ): Promise<responseTunnelConfigRepo> {
+    return this.tunnelConfApplication.editConfiguration(configuration);
   }
 }
