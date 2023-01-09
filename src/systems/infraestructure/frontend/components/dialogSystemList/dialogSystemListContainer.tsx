@@ -5,7 +5,7 @@ import { useTranslations } from "translations/i18nContext";
 import useDialogSystemList from "./useDialogSystemList";
 import CustomAnalyticTable from "components/customAnalyticTable/CustomAnalyticTable";
 import { useSystemData } from "systems/context/systemContext";
-import { SystemController } from "systems/infraestructure/controller/SystemController";
+import SystemController from "systems/infraestructure/controller/SystemController";
 
 interface Props {
   open: boolean;

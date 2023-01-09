@@ -3,7 +3,7 @@ import { ValueState } from "@ui5/webcomponents-react";
 import { useTranslations } from "translations/i18nContext";
 import CellActions from "systems/infraestructure/frontend/components/dialogSystemList/cellActions";
 import useSystems from "systems/infraestructure/frontend/hooks/useSystems";
-import { SystemController } from "systems/infraestructure/controller/SystemController";
+import SystemController from "systems/infraestructure/controller/SystemController";
 import { RowValidations } from "shared/types/validation";
 import { showToast, MESSAGE } from "utils/general/message";
 import SystemFormatters from "systems/utils/formatters";

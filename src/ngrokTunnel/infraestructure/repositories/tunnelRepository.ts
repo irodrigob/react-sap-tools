@@ -4,6 +4,16 @@ import Tunnel from "ngrokTunnel/domain/entities/tunnel";
 import graphQLRepository from "shared/infraestructure/repository/graphQLRepository";
 import TunnelConfiguration from "ngrokTunnel/domain/entities/configuration";
 
+export const MAIN_TUNNEL_CONF_FIELDS = gql`
+  fragment MainConfigurationFields on TunnelConfiguration {
+    _id: String
+    user: String
+    provider: String
+    authToken: String
+    apiToken: String
+  }
+`;
+
 export const QUERY_TUNNELS = gql`
   query Query($apiToken: String!) {
     getTunnelsList(apiToken: $apiToken) {
@@ -19,13 +29,23 @@ export const QUERY_TUNNELS = gql`
 export const QUERY_CONFIGURATION = gql`
   query Query($user: String!) {
     getTunnelConfiguration(user: $user) {
-      _id
-      user
-      provider
-      authToken
-      apiToken
+      ...MainConfigurationFields
     }
   }
+  ${MAIN_TUNNEL_CONF_FIELDS}
+`;
+
+export const MUTATION_EDIT_CONFIGURATION = gql`
+  mutation Mutation(
+    $id: String!
+    $user: String!
+    $input: InputTunnelConfiguration
+  ) {
+    updateSystem(id: $id, user: $user, input: $input) {
+      ...MainConfigurationFields
+    }
+  }
+  ${MAIN_TUNNEL_CONF_FIELDS}
 `;
 
 export default class TunnelRepository
@@ -51,7 +71,7 @@ export default class TunnelRepository
       );
     });
   }
-  async getTunnelConfiguration(user: string): Promise<TunnelConfiguration> {
+  async getConfiguration(user: string): Promise<TunnelConfiguration> {
     const response = await this._apolloClient.query({
       query: QUERY_CONFIGURATION,
       fetchPolicy: "network-only",
@@ -60,13 +80,46 @@ export default class TunnelRepository
       },
     });
 
-    return response.data.getTunnelsList.map((row: any) => {
-      return new TunnelConfiguration(
-        row._id,
-        row.authToken,
-        row.apiToken,
-        row.provider
-      );
+    if (
+      Array.isArray(response.data.getTunnelsList) &&
+      response.data.getTunnelsList.length > 0
+    )
+      return response.data.getTunnelsList.map((row: any) => {
+        return new TunnelConfiguration(
+          row._id,
+          row.user,
+          row.authToken,
+          row.apiToken,
+          row.provider
+        );
+      });
+    else {
+      return new TunnelConfiguration("", "", "", "");
+    }
+  }
+  async editConfiguration(
+    configuration: TunnelConfiguration
+  ): Promise<TunnelConfiguration> {
+    const response = await this._apolloClient.mutate({
+      mutation: MUTATION_EDIT_CONFIGURATION,
+      variables: {
+        id: configuration._id,
+        user: configuration.user,
+        input: {
+          provider: configuration.provider,
+          authToken: configuration.authToken,
+          apiToken: configuration.apiToken,
+        },
+      },
     });
+    let updatedConf = response.data
+      .editTunnelConfiguration as TunnelConfiguration;
+    return new TunnelConfiguration(
+      updatedConf._id,
+      updatedConf.user,
+      updatedConf.authToken,
+      updatedConf.apiToken,
+      updatedConf.provider
+    );
   }
 }

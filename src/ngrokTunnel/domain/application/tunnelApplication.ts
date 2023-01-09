@@ -3,7 +3,7 @@ import TunnelRepository from "ngrokTunnel/infraestructure/repositories/tunnelRep
 import { responseTunnelRepoArray } from "ngrokTunnel/infraestructure/types/repository";
 import { Result } from "shared/core/Result";
 import ErrorGraphql from "shared/errors/ErrorGraphql";
-import Tunnel from "../entities/tunnel";
+import Tunnel from "ngrokTunnel/domain/entities/tunnel";
 
 export default class TunnelApplication {
   private tunnelRepository: TunnelRepository;

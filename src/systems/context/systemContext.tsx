@@ -1,9 +1,10 @@
 import React, { useState, createContext, useContext, FC } from "react";
 import System from "systems/domain/entities/system";
-
+import TunnelConfiguration from "ngrokTunnel/domain/entities/configuration";
 type systemsType = System[];
 
 export const DEFAULT_SYSTEM = new System("", "", "", "", "", "");
+export const DEFAULT_TUNNEL_CONF = new TunnelConfiguration("", "", "", "");
 
 interface systemContextInterface {
   systemsList: systemsType;
@@ -18,6 +19,8 @@ interface systemContextInterface {
   setShowListApps: (value: boolean) => void;
   loadingListApps: boolean;
   setLoadingListApps: (value: boolean) => void;
+  tunnelConfiguration: TunnelConfiguration;
+  setTunnelConfiguration: (value: TunnelConfiguration) => void;
 }
 
 const SystemContext = createContext<systemContextInterface>({
@@ -33,6 +36,8 @@ const SystemContext = createContext<systemContextInterface>({
   setShowListApps: (value: boolean) => {},
   loadingListApps: false,
   setLoadingListApps: (value: boolean) => {},
+  tunnelConfiguration: DEFAULT_TUNNEL_CONF,
+  setTunnelConfiguration: (value: TunnelConfiguration) => {},
 });
 
 interface Props {
@@ -51,6 +56,8 @@ const SystemProvider: FC<Props> = (props) => {
   const [connectedToSystem, setConnectedToSystem] = useState(false);
   const [showListApps, setShowListApps] = useState(false);
   const [loadingListApps, setLoadingListApps] = useState(false);
+  const [tunnelConfiguration, setTunnelConfiguration] =
+    useState<TunnelConfiguration>(DEFAULT_TUNNEL_CONF);
   /*************************************
    * Funciones
    ************************************/
@@ -74,6 +81,8 @@ const SystemProvider: FC<Props> = (props) => {
         setShowListApps,
         loadingListApps,
         setLoadingListApps,
+        tunnelConfiguration,
+        setTunnelConfiguration,
       }}
     >
       {children}

@@ -4,7 +4,7 @@ import "@ui5/webcomponents-icons/dist/upload-to-cloud";
 import "@ui5/webcomponents-icons/dist/toaster-down";
 import IconInteractive from "shared/frontend/components/iconInteractive";
 import System from "systems/domain/entities/system";
-import { SystemController } from "systems/infraestructure/controller/SystemController";
+import SystemController from "systems/infraestructure/controller/SystemController";
 import { useTranslations } from "translations/i18nContext";
 import { showToast, MESSAGE } from "utils/general/message";
 import { useSystemData } from "systems/context/systemContext";

@@ -14,7 +14,7 @@ import { useTranslations } from "translations/i18nContext";
 import { responseNewSystemRepo } from "systems/infraestructure/types/repository";
 //import FooterDialog from "systems/infraestructure/frontend/components/dialogAddSystem/footerDialog";
 import FooterDialog from "shared/frontend/components/footerDialog";
-import { SystemController } from "systems/infraestructure/controller/SystemController";
+import SystemController from "systems/infraestructure/controller/SystemController";
 import SystemFormatters from "systems/utils/formatters";
 import Encrypt from "shared/utils/encrypt/Encrypt";
 import { showToast, MESSAGE } from "utils/general/message";

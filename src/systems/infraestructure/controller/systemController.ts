@@ -8,7 +8,7 @@ import SystemApplicationValidations from "systems/domain/validations/SystemAppli
 import System from "systems/domain/entities/system";
 import type { newSystemDTO } from "systems/infraestructure/dto/systemDTO";
 
-export class SystemController {
+export default class SystemController {
   protected _systemApplication: SystemApplication;
   protected _systemValidations: SystemApplicationValidations;
 

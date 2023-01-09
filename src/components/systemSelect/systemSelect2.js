@@ -5,7 +5,7 @@ import { Input, SuggestionItem, Popover } from "@ui5/webcomponents-react";
 import { useSession } from "auth/authProvider";
 import { useTranslations } from "translations/i18nContext";
 import { useGlobalData } from "context/globalDataContext";
-import { SystemController } from "systems/infraestructure/controller/SystemController.ts";
+import SystemController from "systems/infraestructure/controller/SystemController.ts";
 import useSystems from "hooks/useSystems";
 import DropdownIcon from "./dropdownIcon";
 import ComboSystemList from "./comboSystemList";

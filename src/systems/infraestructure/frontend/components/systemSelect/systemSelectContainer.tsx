@@ -6,7 +6,8 @@ import DropdownIcon from "shared/frontend/components/dropdownIcon";
 import { useSession } from "auth/authProvider";
 import SuggestionSystemList from "systems/infraestructure/frontend/components/systemSelect/suggestionSystemList";
 import { useTranslations } from "translations/i18nContext";
-import { SystemController } from "systems/infraestructure/controller/SystemController";
+import SystemController from "systems/infraestructure/controller/SystemController";
+import TunnelController from "ngrokTunnel/infraestructure/controller/tunnelController";
 import { useSystemData } from "systems/context/systemContext";
 import { responseSystemRepoArray } from "systems/infraestructure/types/repository";
 import System from "systems/domain/entities/system";
@@ -16,6 +17,8 @@ import { showToast, MESSAGE } from "utils/general/message";
 import ComboSystemList from "systems/infraestructure/frontend/components/systemSelect/comboSystemList";
 import DialogAddSystem from "systems/infraestructure/frontend/components/dialogAddSystem/dialogAddSystemContainer";
 import DialogSystemListContainer from "systems/infraestructure/frontend/components/dialogSystemList/dialogSystemListContainer";
+import { responseTunnelConfigRepo } from "ngrokTunnel/infraestructure/types/repository";
+import TunnelConfiguration from "ngrokTunnel/domain/entities/configuration";
 
 interface Props {
   //children: React.ReactNode;
@@ -24,13 +27,19 @@ interface Props {
 const SystemSelectContainer: FC<Props> = () => {
   const { session } = useSession();
   const { getI18nText } = useTranslations();
-  const { setSystemsList, systemsList, systemSelected } = useSystemData();
+  const {
+    setSystemsList,
+    systemsList,
+    systemSelected,
+    setTunnelConfiguration,
+  } = useSystemData();
   const [openComboSystemList, setOpenComboSystemList] = useState(false);
   const [loadingSystems, setLoadingSystems] = useState(true);
   const { processSelectedSystem } = useSystems();
   const [openAddSystem, setOpenAddSystem] = useState(false);
   const [openDialogSystemList, setOpenDialogSystemList] = useState(false);
   const systemController = new SystemController();
+  const tunnelController = new TunnelController();
 
   /*************************************
    * Funciones
@@ -41,6 +50,7 @@ const SystemSelectContainer: FC<Props> = () => {
    ************************************/
   useEffect(() => {
     if (session?.email) {
+      // Lectura de los sistemas
       systemController
         .getUserSystems(session.email)
         .then((response: responseSystemRepoArray) => {
@@ -49,7 +59,26 @@ const SystemSelectContainer: FC<Props> = () => {
             setSystemsList(response.getValue() as System[]);
           } else if (response.isFailure) {
             showToast(
-              getI18nText("editSystem.errorCallServiceNew", {
+              getI18nText("systemSelect.errorCallServiceRead", {
+                errorService: (
+                  response.getErrorValue() as ErrorGraphql
+                ).getError().singleMessage,
+              }),
+              MESSAGE.TYPE.ERROR
+            );
+          }
+        });
+
+      // Lectura de la configuración de los tuneles para poder leer o facilitar
+      // el acceso a los sistemas.
+      tunnelController
+        .getConfiguration(session.email)
+        .then((response: responseTunnelConfigRepo) => {
+          if (response.isSuccess) {
+            setTunnelConfiguration(response.getValue() as TunnelConfiguration);
+          } else if (response.isFailure) {
+            showToast(
+              getI18nText("systemList.tunneling.errorCallServiceRead", {
                 errorService: (
                   response.getErrorValue() as ErrorGraphql
                 ).getError().singleMessage,
