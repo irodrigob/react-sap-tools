@@ -27,7 +27,7 @@ const CellActions: FC<Props> = (instance: any) => {
 
   const showErrorMessage = useCallback((error: ErrorGraphql) => {
     showToast(
-      getI18nText("systemList.tunneling.errorGetTunnels", {
+      getI18nText("tunneling.errorGetTunnels", {
         errorService: error.getError().singleMessage,
       }),
       MESSAGE.TYPE.ERROR
@@ -63,7 +63,7 @@ const CellActions: FC<Props> = (instance: any) => {
               updateSystem(resultUpdate.getValue() as System);
 
               showToast(
-                getI18nText("systemList.tunneling.connectionTunelUpdated"),
+                getI18nText("tunneling.connectionTunelUpdated"),
                 MESSAGE.TYPE.INFO
               );
             } else if (resultUpdate.isFailure) {
@@ -71,13 +71,13 @@ const CellActions: FC<Props> = (instance: any) => {
             }
           } else {
             showToast(
-              getI18nText("systemList.tunneling.noTunnelSystemSelected"),
+              getI18nText("tunneling.noTunnelSystemSelected"),
               MESSAGE.TYPE.INFO
             );
           }
         } else {
           showToast(
-            getI18nText("systemList.tunneling.noTunnelsConnected"),
+            getI18nText("tunneling.noTunnelsConnected"),
             MESSAGE.TYPE.INFO
           );
         }
@@ -111,7 +111,7 @@ const CellActions: FC<Props> = (instance: any) => {
                 updateSystemTunnel(instance.row.original._id);
               } else {
                 showToast(
-                  getI18nText("systemList.tunneling.noAPIToken"),
+                  getI18nText("tunneling.noAPIToken"),
                   MESSAGE.TYPE.INFO
                 );
               }

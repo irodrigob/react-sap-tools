@@ -78,7 +78,7 @@ const SystemSelectContainer: FC<Props> = () => {
             setTunnelConfiguration(response.getValue() as TunnelConfiguration);
           } else if (response.isFailure) {
             showToast(
-              getI18nText("systemList.tunneling.errorCallServiceRead", {
+              getI18nText("tunneling.errorCallServiceRead", {
                 errorService: (
                   response.getErrorValue() as ErrorGraphql
                 ).getError().singleMessage,

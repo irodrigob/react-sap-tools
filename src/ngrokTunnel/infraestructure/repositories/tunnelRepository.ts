@@ -4,16 +4,6 @@ import Tunnel from "ngrokTunnel/domain/entities/tunnel";
 import graphQLRepository from "shared/infraestructure/repository/graphQLRepository";
 import TunnelConfiguration from "ngrokTunnel/domain/entities/configuration";
 
-export const MAIN_TUNNEL_CONF_FIELDS = gql`
-  fragment MainConfigurationFields on TunnelConfiguration {
-    _id: String
-    user: String
-    provider: String
-    authToken: String
-    apiToken: String
-  }
-`;
-
 export const QUERY_TUNNELS = gql`
   query Query($apiToken: String!) {
     getTunnelsList(apiToken: $apiToken) {
@@ -29,10 +19,13 @@ export const QUERY_TUNNELS = gql`
 export const QUERY_CONFIGURATION = gql`
   query Query($user: String!) {
     getTunnelConfiguration(user: $user) {
-      ...MainConfigurationFields
+      _id
+      user
+      provider
+      authToken
+      apiToken
     }
   }
-  ${MAIN_TUNNEL_CONF_FIELDS}
 `;
 
 export const MUTATION_EDIT_CONFIGURATION = gql`
@@ -42,10 +35,13 @@ export const MUTATION_EDIT_CONFIGURATION = gql`
     $input: InputTunnelConfiguration
   ) {
     updateSystem(id: $id, user: $user, input: $input) {
-      ...MainConfigurationFields
+      _id
+      user
+      provider
+      authToken
+      apiToken
     }
   }
-  ${MAIN_TUNNEL_CONF_FIELDS}
 `;
 
 export default class TunnelRepository

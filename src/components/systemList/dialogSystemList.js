@@ -87,7 +87,7 @@ export default function DialogSystemList(props) {
                     );
                   } else {
                     showToast(
-                      getI18nText("systemList.tunneling.updateTunel"),
+                      getI18nText("tunneling.updateTunel"),
                       MESSAGE.TYPE.INFO
                     );
                   }
